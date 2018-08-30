@@ -18,7 +18,6 @@ out/
 build/
 gradlew
 gradlew.bat
-gradle.properties
 gradle-wrapper.*
 
 # Local configuration file (sdk path, etc)
