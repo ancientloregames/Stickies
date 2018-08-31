@@ -5,6 +5,7 @@ buildscript {
     ext.GRADLE_BUILD_VERSION = '3.1.4'
     ext.SUPPORT_VERSION = '28.0.0-rc01'
     ext.LIFECYCLE_VERSION = '1.1.1'
+    ext.ROOM_VERSION = '1.1.1'
 
     repositories {
         google()
