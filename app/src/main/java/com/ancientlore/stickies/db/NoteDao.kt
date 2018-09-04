@@ -1,6 +1,7 @@
 package com.ancientlore.stickies.db
 
 import android.arch.persistence.room.*
+import com.ancientlore.stickies.Note
 
 @Dao
 interface NoteDao {

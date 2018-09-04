@@ -15,5 +15,25 @@
 		tools:context=".MainActivity"
 		>
 
+		<include
+			layout="@layout/appbar"
+			android:id="@+id/appbar"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintBottom_toTopOf="@+id/alarmListView"
+			/>
+
+		<android.support.v7.widget.RecyclerView
+			android:id="@+id/alarmListView"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/appbar"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			tools:listitem="@layout/notes_list_item"
+			/>
+
 	</android.support.constraint.ConstraintLayout>
 </layout>

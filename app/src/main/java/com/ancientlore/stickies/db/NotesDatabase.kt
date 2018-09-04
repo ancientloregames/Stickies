@@ -4,6 +4,7 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import com.ancientlore.stickies.Note
 import com.ancientlore.stickies.SingletonHolder
 
 @Database(entities = [(Note::class)], version = 1)
