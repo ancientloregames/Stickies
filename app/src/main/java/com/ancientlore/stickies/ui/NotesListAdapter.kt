@@ -1,8 +1,10 @@
-package com.ancientlore.stickies
+package com.ancientlore.stickies.ui
 
 import android.content.Context
 import android.view.View
 import android.widget.TextView
+import com.ancientlore.stickies.R
+import com.ancientlore.stickies.model.Note
 
 class NotesListAdapter(context: Context, items: MutableList<Note>)
 	: BasicListAdapter<Note, NotesListAdapter.ViewHolder>(context, items) {
