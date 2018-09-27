@@ -1,7 +1,7 @@
 package com.ancientlore.stickies.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
+import android.content.Intent
 import com.ancientlore.stickies.MutableAdapter
 import com.ancientlore.stickies.db.NotesDatabase
 import com.ancientlore.stickies.model.Note
@@ -10,7 +10,7 @@ import java.util.concurrent.Executors
 
 class MainActivityViewModel(application: Application,
 							private val listAdapter: MutableAdapter<Note>)
-	: AndroidViewModel(application) {
+	: BasicViewModel(application) {
 
 	private val dbExec: ExecutorService = Executors.newSingleThreadExecutor { r -> Thread(r, "db_worker") }
 
@@ -25,5 +25,8 @@ class MainActivityViewModel(application: Application,
 			val notesList = db.getAll()
 			listAdapter.setItems(notesList)
 		}
+	}
+
+	override fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 	}
 }

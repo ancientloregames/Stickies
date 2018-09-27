@@ -1,6 +1,6 @@
 package com.ancientlore.stickies.ui
 
-import android.arch.lifecycle.ViewModel
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
@@ -9,9 +9,10 @@ import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import com.ancientlore.stickies.R
+import com.ancientlore.stickies.viewmodel.BasicViewModel
 import io.reactivex.subjects.PublishSubject
 
-abstract class BasicActivity<T: ViewDataBinding, V: ViewModel>: AppCompatActivity() {
+abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatActivity() {
 	private lateinit var viewDataBinding : T
 	protected lateinit var viewModel : V
 
@@ -42,6 +43,10 @@ abstract class BasicActivity<T: ViewDataBinding, V: ViewModel>: AppCompatActivit
 		super.onDestroy()
 	}
 
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		viewModel.handleActivityResult(requestCode, resultCode, data)
+	}
+
 	/**
 	 * Called before the initialization of the ViewModel
 	 */
@@ -55,7 +60,8 @@ abstract class BasicActivity<T: ViewDataBinding, V: ViewModel>: AppCompatActivit
 		supportActionBar?.title = getString(getTitleId())
 	}
 
-	private fun setupViewModel() {
+	@CallSuper
+	protected open fun setupViewModel() {
 		viewDataBinding.setLifecycleOwner(this)
 		viewModel = createViewModel()
 		viewDataBinding.setVariable(getBindingVariable(), viewModel)
