@@ -9,12 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.ancientlore.stickies.Bindable
 import com.ancientlore.stickies.Clickable
+import com.ancientlore.stickies.MutableAdapter
 
 abstract class BasicListAdapter<
 		P,
 		T: BasicListAdapter.ViewHolder<P>>
 			(context: Context, internal val items: MutableList<P>)
-	: RecyclerView.Adapter<T>() {
+	: RecyclerView.Adapter<T>(), MutableAdapter<P> {
 
 	interface Listener<P> {
 		fun onItemSelected(item: P)
@@ -26,6 +27,10 @@ abstract class BasicListAdapter<
 	abstract fun getViewHolderLayoutRes(viewType: Int): Int
 
 	abstract fun getViewHolder(layout: View): T
+
+	abstract fun isTheSame(first: P, second: P) : Boolean
+
+	abstract fun isUnique(item: P) : Boolean
 
 	private fun getViewHolderLayout(parent: ViewGroup, layoutRes: Int) = layoutInflater.inflate(layoutRes, parent,false)
 
@@ -47,34 +52,53 @@ abstract class BasicListAdapter<
 	}
 
 	@UiThread
-	fun addItem(newItem: P) {
-		items.add(newItem)
-		notifyItemInserted(itemCount - 1)
+	override fun setItems(newItems: List<P>) {
+		items.clear()
+		items.addAll(newItems)
+		notifyDataSetChanged()
 	}
 
 	@UiThread
-	fun updateItem(updatedItem: P) {
-		items.indexOfFirst { compareItems(it, updatedItem) }.takeIf { it != -1 }
-				?.let { index -> updateItemAt(index, updatedItem) }
-	}
-
-	@UiThread
-	fun deleteItem(itemToDelete: P): Boolean {
-		val index = items.indexOf(itemToDelete)
-		if (index != -1) {
-			items.removeAt(index)
-			notifyItemRemoved(index)
+	override fun addItem(newItem: P): Boolean {
+		if (isUnique(newItem)) {
+			items.add(newItem)
+			notifyItemInserted(itemCount - 1)
 			return true
 		}
+
 		return false
 	}
 
+	@UiThread
+	override fun updateItem(updatedItem: P): Boolean {
+		val position = getItemPosition(updatedItem)
+		if (position != -1) {
+			updateItemAt(position, updatedItem)
+			return true
+		}
+
+		return false
+	}
+
+	@UiThread
+	override fun deleteItem(itemToDelete: P): Boolean {
+		val position = getItemPosition(itemToDelete)
+		if (position != -1) {
+			items.removeAt(position)
+			notifyItemRemoved(position)
+			return true
+		}
+
+		return false
+	}
+
+	@UiThread
 	private fun updateItemAt(index: Int, updatedItem: P) {
 		items[index] = updatedItem
 		notifyItemChanged(index)
 	}
 
-	abstract fun compareItems(first: P, second: P) : Boolean
+	private fun getItemPosition(updatedItem: P) = items.indexOfFirst { isTheSame(it, updatedItem) }
 
 	abstract class ViewHolder<T>(itemView: View): RecyclerView.ViewHolder(itemView), Bindable<T>, Clickable {
 

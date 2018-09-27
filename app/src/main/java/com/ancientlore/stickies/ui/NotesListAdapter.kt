@@ -13,7 +13,9 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	override fun getViewHolder(layout: View) = ViewHolder(layout)
 
-	override fun compareItems(first: Note, second: Note) = first.id > second.id
+	override fun isTheSame(first: Note, second: Note) = first.id > second.id
+
+	override fun isUnique(item: Note) = items.none { it.id == item.id }
 
 	class ViewHolder(itemView: View): BasicListAdapter.ViewHolder<Note>(itemView) {
 
