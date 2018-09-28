@@ -1,38 +1,51 @@
 package com.ancientlore.stickies.viewmodel
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.ancientlore.stickies.MutableAdapter
-import com.ancientlore.stickies.db.NotesDatabase
-import com.ancientlore.stickies.model.Note
+import com.ancientlore.stickies.data.source.local.NotesDatabase
+import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.data.source.DataSource
+import com.ancientlore.stickies.data.source.NotesRepository
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 class MainActivityViewModel(application: Application,
 							private val listAdapter: MutableAdapter<Note>)
 	: BasicViewModel(application) {
 
 	companion object {
+		private const val TAG = "MainActivityViewModel"
+
 		private const val INTENT_ADD_NOTE = 101
 	}
 
-	private val dbExec: ExecutorService = Executors.newSingleThreadExecutor { r -> Thread(r, "db_worker") }
-
-	private val db = NotesDatabase.getInstance(application.baseContext).noteDao()
+	private val repository = NotesRepository
 
 	private val addNoteEvent = PublishSubject.create<Int>()
 
 	init {
+		initRepository(application.baseContext)
 		loadNotes()
 	}
 
+	private fun initRepository(context: Context) {
+		val db = NotesDatabase.getInstance(context)
+		repository.initLocalSource(db.notesDao())
+	}
+
 	private fun loadNotes() {
-		dbExec.submit {
-			val notesList = db.getAll()
-			listAdapter.setItems(notesList)
-		}
+		repository.getAll(object : DataSource.ListLoadedCallback<Note> {
+			override fun onSuccess(data: List<Note>) {
+				listAdapter.setItems(data)
+			}
+
+			override fun onFailure(error: Throwable) {
+				Log.w(TAG, error.message ?: "Some error occurred during the list loading")
+			}
+		})
 	}
 
 	override fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
