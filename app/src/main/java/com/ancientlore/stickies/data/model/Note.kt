@@ -1,4 +1,4 @@
-package com.ancientlore.stickies.model
+package com.ancientlore.stickies.data.model
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
