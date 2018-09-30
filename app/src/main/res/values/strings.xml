@@ -1,4 +1,7 @@
 <resources>
 	<string name="app_name">Stickies</string>
 	<string name="new_note">New Note</string>
+	
+	<string name="title">Title</string>
+	<string name="typeMessage">Type a message</string>
 </resources>
