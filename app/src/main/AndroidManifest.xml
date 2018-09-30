@@ -18,6 +18,8 @@
 		</activity>
 		<activity android:name=".ui.NoteActivity"
 			android:label="@string/new_note"/>
+		<activity android:name=".notedetail.NoteDetailActivity"
+				  android:label="@string/new_note"/>
 	</application>
 
 </manifest>
