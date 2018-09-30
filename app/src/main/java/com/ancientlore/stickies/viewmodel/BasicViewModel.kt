@@ -4,10 +4,13 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import com.ancientlore.stickies.data.source.NotesRepository
 import com.ancientlore.stickies.data.source.local.NotesDatabase
 
 abstract class BasicViewModel(application: Application): AndroidViewModel(application) {
+
+	private val uiHandler = Handler(application.mainLooper)
 
 	protected val repository = NotesRepository
 
@@ -21,4 +24,6 @@ abstract class BasicViewModel(application: Application): AndroidViewModel(applic
 		val db = NotesDatabase.getInstance(context)
 		repository.initLocalSource(db.notesDao())
 	}
+
+	protected fun runOnUiThread(action: Runnable) { uiHandler.post(action) }
 }
