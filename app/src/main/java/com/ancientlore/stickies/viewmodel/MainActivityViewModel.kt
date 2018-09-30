@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.util.Log
+import com.ancientlore.stickies.EmptyObject
 import com.ancientlore.stickies.MutableAdapter
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
@@ -18,12 +19,20 @@ class MainActivityViewModel(application: Application,
 	companion object {
 		private const val TAG = "MainActivityViewModel"
 
-		private const val INTENT_ADD_NOTE = 101
+		const val INTENT_ADD_NOTE = 101
+		const val INTENT_SHOW_NOTE = 102
 	}
 
-	private val addNoteEvent = PublishSubject.create<Int>()
+	private val addNoteEvent = PublishSubject.create<Any>()
 
-	init { loadNotes() }
+	private val showNoteEvent = PublishSubject.create<Long>()
+
+	init {
+		loadNotes()
+
+		listAdapter.onItemSelected()
+				.subscribe { showNoteEvent.onNext(it.id) }
+	}
 
 	override fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		when (requestCode) {
@@ -65,7 +74,9 @@ class MainActivityViewModel(application: Application,
 
 	private fun addListItem(item: Note) = runOnUiThread(Runnable { listAdapter.addItem(item) })
 
-	fun onAddNoteClicked() = addNoteEvent.onNext(INTENT_ADD_NOTE)
+	fun onAddNoteClicked() = addNoteEvent.onNext(EmptyObject)
 
-	fun onAddNote() = addNoteEvent as Observable<Int>
+	fun onAddNote() = addNoteEvent as Observable<*>
+
+	fun onShowNote() = showNoteEvent as Observable<Long>
 }
