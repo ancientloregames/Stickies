@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import com.ancientlore.stickies.Bindable
 import com.ancientlore.stickies.Clickable
 import com.ancientlore.stickies.MutableAdapter
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 
 abstract class BasicListAdapter<
 		P,
@@ -17,12 +19,9 @@ abstract class BasicListAdapter<
 			(context: Context, internal val items: MutableList<P>)
 	: RecyclerView.Adapter<T>(), MutableAdapter<P> {
 
-	interface Listener<P> {
-		fun onItemSelected(item: P)
-	}
-	var listener: Listener<P>? = null
-
 	private val layoutInflater = LayoutInflater.from(context)
+
+	private val itemSelectedEvent = PublishSubject.create<P>()
 
 	abstract fun getViewHolderLayoutRes(viewType: Int): Int
 
@@ -47,7 +46,7 @@ abstract class BasicListAdapter<
 		val item = items[index]
 		holder.bind(item)
 		holder.onClick(Runnable {
-			listener?.onItemSelected(item)
+			itemSelectedEvent.onNext(item)
 		})
 	}
 
@@ -91,6 +90,8 @@ abstract class BasicListAdapter<
 
 		return false
 	}
+
+	override fun onItemSelected() = itemSelectedEvent as Observable<P>
 
 	@UiThread
 	private fun updateItemAt(index: Int, updatedItem: P) {
