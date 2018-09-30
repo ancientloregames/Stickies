@@ -45,7 +45,7 @@ abstract class BasicListAdapter<
 	@CallSuper
 	override fun onBindViewHolder(holder: T, index: Int) {
 		val item = items[index]
-		holder.bind(items[index])
+		holder.bind(item)
 		holder.onClick(Runnable {
 			listener?.onItemSelected(item)
 		})

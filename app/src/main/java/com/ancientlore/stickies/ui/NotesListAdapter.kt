@@ -19,7 +19,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	class ViewHolder(itemView: View): BasicListAdapter.ViewHolder<Note>(itemView) {
 
-		private val titleView = itemView.findViewById<TextView>(R.id.title)
+		private val titleView = itemView.findViewById<TextView>(R.id.titleView)
 
 		override fun bind(data: Note) {
 			titleView.text = data.title
