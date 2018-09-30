@@ -15,7 +15,7 @@ abstract class BasicViewModel(application: Application): AndroidViewModel(applic
 		initRepository(application.baseContext)
 	}
 
-	abstract fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+	open fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { }
 
 	private fun initRepository(context: Context) {
 		val db = NotesDatabase.getInstance(context)
