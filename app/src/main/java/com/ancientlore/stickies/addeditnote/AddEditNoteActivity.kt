@@ -5,19 +5,19 @@ import android.content.Intent
 import com.ancientlore.stickies.BR
 import com.ancientlore.stickies.BasicActivity
 import com.ancientlore.stickies.R
-import com.ancientlore.stickies.databinding.ActivityNoteBinding
+import com.ancientlore.stickies.databinding.ActivityAddeditnoteBinding
 
-class NoteActivity : BasicActivity<ActivityNoteBinding, NoteActivityViewModel>() {
+class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNoteViewModel>() {
 
 	companion object {
 		const val EXTRA_NOTE_ID = "extra_note_id"
 	}
 
-	override fun getLayoutId() = R.layout.activity_note
+	override fun getLayoutId() = R.layout.activity_addeditnote
 
 	override fun getBindingVariable() = BR.viewModel
 
-	override fun createViewModel() = NoteActivityViewModel(application)
+	override fun createViewModel() = AddEditNoteViewModel(application)
 
 	override fun getTitleId() = R.string.new_note
 

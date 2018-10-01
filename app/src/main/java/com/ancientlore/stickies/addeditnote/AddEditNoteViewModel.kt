@@ -9,7 +9,7 @@ import com.ancientlore.stickies.data.source.DataSource
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class NoteActivityViewModel(application: Application): BasicViewModel(application) {
+class AddEditNoteViewModel(application: Application): BasicViewModel(application) {
 
 	companion object {
 		private const val TAG = "NoteActivityViewModel"

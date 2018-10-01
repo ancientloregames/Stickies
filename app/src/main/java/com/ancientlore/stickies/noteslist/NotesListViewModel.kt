@@ -9,12 +9,12 @@ import com.ancientlore.stickies.EmptyObject
 import com.ancientlore.stickies.MutableAdapter
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
-import com.ancientlore.stickies.addeditnote.NoteActivity
+import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class MainActivityViewModel(application: Application,
-							private val listAdapter: MutableAdapter<Note>)
+class NotesListViewModel(application: Application,
+						 private val listAdapter: MutableAdapter<Note>)
 	: BasicViewModel(application) {
 
 	companion object {
@@ -49,7 +49,7 @@ class MainActivityViewModel(application: Application,
 
 	private fun getIdAndLoadNote(data: Intent?) {
 		data?.run {
-			loadNote(getLongExtra(NoteActivity.EXTRA_NOTE_ID, 0))
+			loadNote(getLongExtra(AddEditNoteActivity.EXTRA_NOTE_ID, 0))
 		} ?: Log.w(TAG, "No note id in the NoteActivity data, finished with Success!")
 	}
 

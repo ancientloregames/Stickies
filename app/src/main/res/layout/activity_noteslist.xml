@@ -6,14 +6,14 @@
 	<data>
 		<variable
 			name="viewModel"
-			type="com.ancientlore.stickies.noteslist.MainActivityViewModel"
+			type="com.ancientlore.stickies.noteslist.NotesListViewModel"
 			/>
 		</data>
 	<android.support.constraint.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:background="@android:color/white"
-		tools:context=".noteslist.MainActivity"
+		tools:context=".noteslist.NotesListActivity"
 		>
 
 		<include
