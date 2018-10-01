@@ -1,11 +1,11 @@
-package com.ancientlore.stickies.ui
+package com.ancientlore.stickies.addeditnote
 
 import android.app.Activity
 import android.content.Intent
 import com.ancientlore.stickies.BR
+import com.ancientlore.stickies.BasicActivity
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.databinding.ActivityNoteBinding
-import com.ancientlore.stickies.viewmodel.NoteActivityViewModel
 
 class NoteActivity : BasicActivity<ActivityNoteBinding, NoteActivityViewModel>() {
 

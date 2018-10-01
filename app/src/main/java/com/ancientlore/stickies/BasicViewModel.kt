@@ -1,4 +1,4 @@
-package com.ancientlore.stickies.viewmodel
+package com.ancientlore.stickies
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

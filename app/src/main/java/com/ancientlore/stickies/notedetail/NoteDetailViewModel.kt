@@ -5,7 +5,7 @@ import android.databinding.ObservableField
 import android.util.Log
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
-import com.ancientlore.stickies.viewmodel.BasicViewModel
+import com.ancientlore.stickies.BasicViewModel
 
 class NoteDetailViewModel(application: Application, noteId: Long): BasicViewModel(application) {
 

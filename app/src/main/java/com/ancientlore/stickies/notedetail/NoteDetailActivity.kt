@@ -2,7 +2,7 @@ package com.ancientlore.stickies.notedetail
 
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.databinding.ActivityNotedetailBinding
-import com.ancientlore.stickies.ui.BasicActivity
+import com.ancientlore.stickies.BasicActivity
 import com.android.databinding.library.baseAdapters.BR
 
 class NoteDetailActivity: BasicActivity<ActivityNotedetailBinding, NoteDetailViewModel>() {

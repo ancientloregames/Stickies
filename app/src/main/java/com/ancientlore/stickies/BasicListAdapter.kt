@@ -1,4 +1,4 @@
-package com.ancientlore.stickies.ui
+package com.ancientlore.stickies
 
 import android.content.Context
 import android.support.annotation.CallSuper
@@ -7,9 +7,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ancientlore.stickies.Bindable
-import com.ancientlore.stickies.Clickable
-import com.ancientlore.stickies.MutableAdapter
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 

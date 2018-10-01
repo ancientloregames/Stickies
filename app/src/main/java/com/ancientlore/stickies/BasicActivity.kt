@@ -1,4 +1,4 @@
-package com.ancientlore.stickies.ui
+package com.ancientlore.stickies
 
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -8,8 +8,6 @@ import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
-import com.ancientlore.stickies.R
-import com.ancientlore.stickies.viewmodel.BasicViewModel
 import io.reactivex.subjects.PublishSubject
 
 abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatActivity() {

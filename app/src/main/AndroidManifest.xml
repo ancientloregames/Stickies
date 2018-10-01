@@ -9,14 +9,14 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-		<activity android:name=".ui.MainActivity">
+		<activity android:name=".noteslist.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity android:name=".ui.NoteActivity"
+		<activity android:name=".addeditnote.NoteActivity"
 			android:label="@string/new_note"/>
 		<activity android:name=".notedetail.NoteDetailActivity"
 				  android:label="@string/new_note"/>

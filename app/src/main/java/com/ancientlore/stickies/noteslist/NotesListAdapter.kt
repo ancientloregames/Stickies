@@ -1,8 +1,9 @@
-package com.ancientlore.stickies.ui
+package com.ancientlore.stickies.noteslist
 
 import android.content.Context
 import android.view.View
 import android.widget.TextView
+import com.ancientlore.stickies.BasicListAdapter
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
 

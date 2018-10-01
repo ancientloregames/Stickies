@@ -1,8 +1,9 @@
-package com.ancientlore.stickies.viewmodel
+package com.ancientlore.stickies.addeditnote
 
 import android.app.Application
 import android.databinding.ObservableField
 import android.util.Log
+import com.ancientlore.stickies.BasicViewModel
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
 import io.reactivex.Observable

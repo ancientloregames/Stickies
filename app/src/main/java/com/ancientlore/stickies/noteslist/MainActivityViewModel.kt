@@ -1,14 +1,15 @@
-package com.ancientlore.stickies.viewmodel
+package com.ancientlore.stickies.noteslist
 
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.util.Log
+import com.ancientlore.stickies.BasicViewModel
 import com.ancientlore.stickies.EmptyObject
 import com.ancientlore.stickies.MutableAdapter
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
-import com.ancientlore.stickies.ui.NoteActivity
+import com.ancientlore.stickies.addeditnote.NoteActivity
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 

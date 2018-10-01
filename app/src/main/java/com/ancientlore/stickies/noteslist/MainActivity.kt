@@ -1,12 +1,13 @@
-package com.ancientlore.stickies.ui
+package com.ancientlore.stickies.noteslist
 
 import android.content.Intent
 import android.os.Bundle
 import com.ancientlore.stickies.BR
+import com.ancientlore.stickies.BasicActivity
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.databinding.ActivityMainBinding
 import com.ancientlore.stickies.notedetail.NoteDetailActivity
-import com.ancientlore.stickies.viewmodel.MainActivityViewModel
+import com.ancientlore.stickies.addeditnote.NoteActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BasicActivity<ActivityMainBinding, MainActivityViewModel>() {
