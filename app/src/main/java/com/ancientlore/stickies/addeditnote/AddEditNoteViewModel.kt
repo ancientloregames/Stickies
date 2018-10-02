@@ -18,11 +18,32 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 	val titleField = ObservableField<String>("")
 	val messageField = ObservableField<String>("")
 
+	private var noteId: Long = 0
+
 	private val isValid get() = titleField.get()?.isNotEmpty() ?: false
 
-	private val note get() = Note(0, titleField.get()!!, messageField.get()!!)
+	private val note get() = Note(noteId, titleField.get()!!, messageField.get()!!)
 
 	private val onNoteAdded = PublishSubject.create<Long>()
+
+	constructor(application: Application, noteId: Long) : this(application) {
+		loadNote(noteId)
+	}
+
+	private fun loadNote(id: Long) {
+		repository.getItem(id, object : DataSource.ItemLoadedCallback<Note> {
+			override fun onSuccess(data: Note) = bind(data)
+			override fun onFailure(error: Throwable) {
+				Log.w(TAG, error.message ?: "Some error occurred during the loading of a note with id $id")
+			}
+		})
+	}
+
+	private fun bind(note: Note) {
+		noteId = note.id
+		titleField.set(note.title)
+		messageField.set(note.body)
+	}
 
 	private fun addNote() {
 		repository.insertItem(note, object : DataSource.ItemInsertedCallback {

@@ -11,13 +11,17 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 
 	companion object {
 		const val EXTRA_NOTE_ID = "extra_note_id"
+
+		private const val DUMMY_ID = -1L
 	}
 
 	override fun getLayoutId() = R.layout.activity_addeditnote
 
 	override fun getBindingVariable() = BR.viewModel
 
-	override fun createViewModel() = AddEditNoteViewModel(application)
+	override fun createViewModel() = getNoteId().takeIf { isValidId(it) }
+			?.let { AddEditNoteViewModel(application, it) }
+			?: AddEditNoteViewModel(application)
 
 	override fun getTitleId() = R.string.new_note
 
@@ -28,6 +32,10 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 				.takeUntil(destroyEvent)
 				.subscribe { finishWithResult(it) }
 	}
+
+	private fun getNoteId() = intent.getLongExtra(EXTRA_NOTE_ID, DUMMY_ID)
+
+	private fun isValidId(id: Long) = id != DUMMY_ID
 
 	private fun finishWithResult(newNoteId: Long) {
 		val intent = Intent().apply {
