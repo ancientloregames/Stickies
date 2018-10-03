@@ -9,13 +9,13 @@ import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.internal.disposables.ListCompositeDisposable
 
 abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatActivity() {
 	private lateinit var viewDataBinding : T
 	protected lateinit var viewModel : V
 
-	protected val destroyEvent = PublishSubject.create<Any>()
+	protected val subscriptions = ListCompositeDisposable()
 
 	@LayoutRes
 	abstract fun getLayoutId() : Int
@@ -37,7 +37,7 @@ abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatAc
 	}
 
 	override fun onDestroy() {
-		destroyEvent.onNext(Any())
+		subscriptions.dispose()
 
 		super.onDestroy()
 	}

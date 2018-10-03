@@ -37,17 +37,14 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	override fun setupViewModel() {
 		super.setupViewModel()
 
-		viewModel.onAddNote()
-				.takeUntil(destroyEvent)
-				.subscribe { startNoteAddition() }
+		subscriptions.add(viewModel.onAddNote()
+				.subscribe { startNoteAddition() })
 
-		viewModel.onShowNote()
-				.takeUntil(destroyEvent)
-				.subscribe { openNoteDetails(it) }
+		subscriptions.add(viewModel.onShowNote()
+				.subscribe { openNoteDetails(it) })
 
-		viewModel.onShowFilterMenu()
-				.takeUntil(destroyEvent)
-				.subscribe { showFilterMenu() }
+		subscriptions.add(viewModel.onShowFilterMenu()
+				.subscribe { showFilterMenu() })
 	}
 
 	private fun setupList() {

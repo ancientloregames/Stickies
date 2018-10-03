@@ -24,9 +24,8 @@ class NoteDetailActivity: BasicActivity<ActivityNotedetailBinding, NoteDetailVie
 	override fun setupViewModel() {
 		super.setupViewModel()
 
-		viewModel.onEditNote()
-				.takeUntil(destroyEvent)
-				.subscribe { openNoteEditor(it) }
+		subscriptions.add(viewModel.onEditNote()
+				.subscribe { openNoteEditor(it) })
 	}
 
 	private fun getNoteId() = intent.getLongExtra(EXTRA_NOTE_ID, 0)

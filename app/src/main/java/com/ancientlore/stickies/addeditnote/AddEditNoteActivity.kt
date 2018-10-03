@@ -28,9 +28,8 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 	override fun setupViewModel() {
 		super.setupViewModel()
 
-		viewModel.onNoteAdded()
-				.takeUntil(destroyEvent)
-				.subscribe { finishWithResult(it) }
+		subscriptions.add(viewModel.onNoteAdded()
+				.subscribe { finishWithResult(it) })
 	}
 
 	private fun getNoteId() = intent.getLongExtra(EXTRA_NOTE_ID, DUMMY_ID)
