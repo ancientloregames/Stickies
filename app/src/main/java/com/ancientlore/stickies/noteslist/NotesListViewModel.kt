@@ -7,9 +7,10 @@ import android.util.Log
 import com.ancientlore.stickies.BasicViewModel
 import com.ancientlore.stickies.EmptyObject
 import com.ancientlore.stickies.MutableAdapter
+import com.ancientlore.stickies.R
+import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
-import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
@@ -25,14 +26,22 @@ class NotesListViewModel(application: Application,
 	}
 
 	private val addNoteEvent = PublishSubject.create<Any>()
-
 	private val showNoteEvent = PublishSubject.create<Long>()
+	private val onShowFilterMenu = PublishSubject.create<Any>()
 
 	init {
 		loadNotes()
 
 		listAdapter.onItemSelected()
 				.subscribe { showNoteEvent.onNext(it.id) }
+	}
+
+	override fun handleOptionSelection(optionId: Int): Boolean {
+		when (optionId) {
+			R.id.filter -> onShowFilterMenu.onNext(EmptyObject)
+		}
+
+		return true
 	}
 
 	override fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -75,9 +84,17 @@ class NotesListViewModel(application: Application,
 
 	private fun addListItem(item: Note) = runOnUiThread(Runnable { listAdapter.addItem(item) })
 
+	fun handleFilterSelected(filterId: Int) : Boolean {
+		// TODO
+
+		return true
+	}
+
 	fun onAddNoteClicked() = addNoteEvent.onNext(EmptyObject)
 
 	fun onAddNote() = addNoteEvent as Observable<*>
 
 	fun onShowNote() = showNoteEvent as Observable<Long>
+
+	fun onShowFilterMenu() = onShowFilterMenu as Observable<*>
 }

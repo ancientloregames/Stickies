@@ -18,6 +18,8 @@ abstract class BasicViewModel(application: Application): AndroidViewModel(applic
 		initRepository(application.baseContext)
 	}
 
+	open fun handleOptionSelection(optionId: Int) = false
+
 	open fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { }
 
 	private fun initRepository(context: Context) {

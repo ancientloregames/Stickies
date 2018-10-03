@@ -5,4 +5,6 @@
 	
 	<string name="title">Title</string>
 	<string name="typeMessage">Type a message</string>
+	
+	<string name="filter">Filter</string>
 </resources>
