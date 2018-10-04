@@ -1,6 +1,7 @@
 package com.ancientlore.stickies.addeditnote
 
 import android.app.Application
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
 import com.ancientlore.stickies.BasicViewModel
@@ -17,12 +18,13 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 
 	val titleField = ObservableField<String>("")
 	val messageField = ObservableField<String>("")
+	val isImportant = ObservableBoolean(false)
 
 	private var noteId: Long = 0
 
 	private val isValid get() = titleField.get()?.isNotEmpty() ?: false
 
-	private val note get() = Note(noteId, titleField.get()!!, messageField.get()!!)
+	private val note get() = Note(noteId, titleField.get()!!, messageField.get()!!, isImportant.get())
 
 	private val onNoteAdded = PublishSubject.create<Long>()
 
@@ -43,6 +45,7 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 		noteId = note.id
 		titleField.set(note.title)
 		messageField.set(note.body)
+		isImportant.set(note.isImportant)
 	}
 
 	private fun addNote() {
@@ -61,6 +64,11 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 		if (isValid) {
 			addNote()
 		}
+	}
+
+	fun onImportantClicked() {
+		val wasImportant = isImportant.get()
+		isImportant.set(!wasImportant)
 	}
 
 	fun onNoteAdded() = onNoteAdded as Observable<Long>
