@@ -9,6 +9,9 @@ interface NotesDao {
 	@Query("SELECT * FROM notes")
 	fun getAll(): List<Note>
 
+	@Query("SELECT * FROM notes WHERE isImportant = 1")
+	fun getImportant(): List<Note>
+
 	@Query("SELECT * FROM notes WHERE id IN (:ids)")
 	fun loadAllByIds(ids: LongArray): List<Note>
 

@@ -21,6 +21,15 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		}
 	}
 
+	override fun getImportant(callback: DataSource.ListLoadedCallback<Note>) {
+		executor.submit {
+			dao.getImportant()
+					.takeIf { it.isNotEmpty() }
+					?.let { callback.onSuccess(it) }
+					?: callback.onFailure(Throwable("Database is empty"))
+		}
+	}
+
 	override fun getItem(id: Long, callback: DataSource.ItemLoadedCallback<Note>) {
 		executor.submit {
 			dao.findById(id)

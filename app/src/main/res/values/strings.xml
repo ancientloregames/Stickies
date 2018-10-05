@@ -7,4 +7,6 @@
 	<string name="typeMessage">Type a message</string>
 	
 	<string name="filter">Filter</string>
+	<string name="all">All</string>
+	<string name="important">Important</string>
 </resources>

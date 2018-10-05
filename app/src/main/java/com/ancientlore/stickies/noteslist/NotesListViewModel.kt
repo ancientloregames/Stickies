@@ -71,6 +71,15 @@ class NotesListViewModel(application: Application,
 		})
 	}
 
+	private fun loadImportantNotes() {
+		repository.getImportant(object : DataSource.ListLoadedCallback<Note> {
+			override fun onSuccess(data: List<Note>) = setListItems(data)
+			override fun onFailure(error: Throwable) {
+				Log.w(TAG, error.message ?: "Some error occurred during the important notes loading")
+			}
+		})
+	}
+
 	private fun loadNote(id: Long) {
 		repository.getItem(id, object : DataSource.ItemLoadedCallback<Note> {
 			override fun onSuccess(data: Note) = addListItem(data)
@@ -85,7 +94,10 @@ class NotesListViewModel(application: Application,
 	private fun addListItem(item: Note) = runOnUiThread(Runnable { listAdapter.addItem(item) })
 
 	fun handleFilterSelected(filterId: Int) : Boolean {
-		// TODO
+		when (filterId) {
+			R.id.all -> loadNotes()
+			R.id.important -> loadImportantNotes()
+		}
 
 		return true
 	}

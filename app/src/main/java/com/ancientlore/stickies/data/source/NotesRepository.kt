@@ -12,6 +12,10 @@ object NotesRepository: NotesSource {
 		localSource?.getAll(callback)
 	}
 
+	override fun getImportant(callback: DataSource.ListLoadedCallback<Note>) {
+		localSource?.getImportant(callback)
+	}
+
 	override fun getItem(id: Long, callback: DataSource.ItemLoadedCallback<Note>) {
 		localSource?.getItem(id, callback)
 	}
