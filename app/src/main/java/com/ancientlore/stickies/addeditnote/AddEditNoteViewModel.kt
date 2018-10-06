@@ -24,7 +24,7 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 
 	private val isValid get() = titleField.get()?.isNotEmpty() ?: false
 
-	private val note get() = Note(noteId, titleField.get()!!, messageField.get()!!, isImportant.get())
+	private val note get() = Note(noteId, System.currentTimeMillis(), titleField.get()!!, messageField.get()!!, isImportant.get())
 
 	private val onNoteAdded = PublishSubject.create<Long>()
 
