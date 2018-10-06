@@ -1,5 +1,6 @@
 package com.ancientlore.stickies
 
+import android.support.annotation.StringDef
 import io.reactivex.Observable
 
 interface MutableAdapter<T> {
@@ -7,5 +8,20 @@ interface MutableAdapter<T> {
 	fun addItem(newItem: T): Boolean
 	fun updateItem(updatedItem: T): Boolean
 	fun deleteItem(itemToDelete: T): Boolean
+
+	fun setSortDirection(@SortDirection direction: String)
+	fun switchSortDirection()
+	fun sort()
+
 	fun onItemSelected(): Observable<T>
+
+	@StringDef(SORT_NO, SORT_ASC, SORT_DESC)
+	@Retention(AnnotationRetention.SOURCE)
+	annotation class SortDirection
+
+	companion object {
+		const val SORT_NO = "no"
+		const val SORT_ASC = "asc"
+		const val SORT_DESC = "desc"
+	}
 }

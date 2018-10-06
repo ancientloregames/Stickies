@@ -11,6 +11,10 @@ import com.ancientlore.stickies.data.model.Note
 class NotesListAdapter(context: Context, items: MutableList<Note>)
 	: BasicListAdapter<Note, NotesListAdapter.ViewHolder>(context, items) {
 
+	private var timeComparator = Comparator<Note> { o1, o2 -> o1.timestamp.compareTo(o2.timestamp) }
+
+	init { setComparator(timeComparator) }
+
 	override fun getViewHolderLayoutRes(viewType: Int) = R.layout.notes_list_item
 
 	override fun getViewHolder(layout: View) = ViewHolder(layout)

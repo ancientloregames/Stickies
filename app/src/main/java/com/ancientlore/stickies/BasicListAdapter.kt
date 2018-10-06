@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 
 abstract class BasicListAdapter<
 		P,
@@ -18,6 +19,11 @@ abstract class BasicListAdapter<
 	: RecyclerView.Adapter<T>(), MutableAdapter<P> {
 
 	private val layoutInflater = LayoutInflater.from(context)
+
+	@field:MutableAdapter.SortDirection
+	private var sortDirection: String = MutableAdapter.SORT_NO
+
+	private var comparator = Comparator<P> { _, _ -> 0 }
 
 	private val itemSelectedEvent = PublishSubject.create<P>()
 
@@ -94,7 +100,32 @@ abstract class BasicListAdapter<
 		return false
 	}
 
+	override fun setSortDirection(direction: String) { sortDirection = direction }
+
+	override fun switchSortDirection() {
+		sortDirection = when(sortDirection) {
+			MutableAdapter.SORT_ASC -> MutableAdapter.SORT_DESC
+			MutableAdapter.SORT_DESC -> MutableAdapter.SORT_ASC
+			else -> MutableAdapter.SORT_ASC
+		}
+	}
+
+	override fun sort() {
+		val orderedComparator = when (sortDirection) {
+			MutableAdapter.SORT_DESC -> Collections.reverseOrder(comparator)
+			else -> comparator
+		}
+
+		val newList = items.toList()
+
+		Collections.sort(newList, orderedComparator)
+
+		setItems(newList)
+	}
+
 	override fun onItemSelected() = itemSelectedEvent as Observable<P>
+
+	protected fun setComparator(newComparator: Comparator<P>) { comparator = newComparator }
 
 	@UiThread
 	private fun updateItemAt(index: Int, updatedItem: P) {

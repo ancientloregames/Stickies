@@ -39,6 +39,7 @@ class NotesListViewModel(application: Application,
 	override fun handleOptionSelection(optionId: Int): Boolean {
 		when (optionId) {
 			R.id.filter -> onShowFilterMenu.onNext(EmptyObject)
+			R.id.sortDirection -> switchSortDirection()
 		}
 
 		return true
@@ -92,6 +93,11 @@ class NotesListViewModel(application: Application,
 	private fun setListItems(items: List<Note>) = runOnUiThread(Runnable { listAdapter.setItems(items) })
 
 	private fun addListItem(item: Note) = runOnUiThread(Runnable { listAdapter.addItem(item) })
+
+	private fun switchSortDirection() {
+		listAdapter.switchSortDirection()
+		listAdapter.sort()
+	}
 
 	fun handleFilterSelected(filterId: Int) : Boolean {
 		when (filterId) {
