@@ -15,7 +15,7 @@ import java.util.*
 class NotesListAdapter(context: Context, items: MutableList<Note>)
 	: BasicListAdapter<Note, NotesListAdapter.ViewHolder>(context, items) {
 
-	private var timeComparator = Comparator<Note> { o1, o2 -> o1.timestamp.compareTo(o2.timestamp) }
+	private var timeComparator = Comparator<Note> { o1, o2 -> o1.timeCreated.compareTo(o2.timeCreated) }
 	private var titleComparator = Comparator<Note> { o1, o2 -> o1.title.compareTo(o2.title) }
 
 	override fun getViewHolderLayoutRes(viewType: Int) = R.layout.notes_list_item
@@ -40,7 +40,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 		override fun bind(data: Note) {
 			titleView.text = data.title
-			dateView.text = DateFormat.getDateInstance(DateFormat.SHORT).format(Date(data.timestamp))
+			dateView.text = DateFormat.getDateInstance(DateFormat.SHORT).format(Date(data.timeCreated))
 		}
 	}
 
