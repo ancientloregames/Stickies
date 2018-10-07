@@ -20,8 +20,8 @@ abstract class BasicListAdapter<
 
 	private val layoutInflater = LayoutInflater.from(context)
 
-	@field:MutableAdapter.SortDirection
-	private var sortDirection: String = MutableAdapter.SORT_NO
+	@field:MutableAdapter.SortOrder
+	private var sortOrder: String = MutableAdapter.SORT_NO
 
 	private var comparator = Comparator<P> { _, _ -> 0 }
 
@@ -100,10 +100,10 @@ abstract class BasicListAdapter<
 		return false
 	}
 
-	override fun setSortDirection(direction: String) { sortDirection = direction }
+	override fun setSortOrder(order: String) { sortOrder = order }
 
-	override fun switchSortDirection() {
-		sortDirection = when(sortDirection) {
+	override fun switchSortOrder() {
+		sortOrder = when(sortOrder) {
 			MutableAdapter.SORT_ASC -> MutableAdapter.SORT_DESC
 			MutableAdapter.SORT_DESC -> MutableAdapter.SORT_ASC
 			else -> MutableAdapter.SORT_ASC
@@ -111,7 +111,7 @@ abstract class BasicListAdapter<
 	}
 
 	override fun sort() {
-		val orderedComparator = when (sortDirection) {
+		val orderedComparator = when (sortOrder) {
 			MutableAdapter.SORT_DESC -> Collections.reverseOrder(comparator)
 			else -> comparator
 		}

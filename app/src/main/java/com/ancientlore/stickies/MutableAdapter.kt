@@ -9,15 +9,15 @@ interface MutableAdapter<T> {
 	fun updateItem(updatedItem: T): Boolean
 	fun deleteItem(itemToDelete: T): Boolean
 
-	fun setSortDirection(@SortDirection direction: String)
-	fun switchSortDirection()
+	fun setSortOrder(@SortOrder order: String)
+	fun switchSortOrder()
 	fun sort()
 
 	fun onItemSelected(): Observable<T>
 
 	@StringDef(SORT_NO, SORT_ASC, SORT_DESC)
 	@Retention(AnnotationRetention.SOURCE)
-	annotation class SortDirection
+	annotation class SortOrder
 
 	companion object {
 		const val SORT_NO = "no"

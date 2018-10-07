@@ -95,7 +95,7 @@ class NotesListViewModel(application: Application,
 	private fun addListItem(item: Note) = runOnUiThread(Runnable { listAdapter.addItem(item) })
 
 	private fun switchSortDirection() {
-		listAdapter.switchSortDirection()
+		listAdapter.switchSortOrder()
 		listAdapter.sort()
 	}
 
