@@ -20,9 +20,6 @@ abstract class BasicListAdapter<
 
 	private val layoutInflater = LayoutInflater.from(context)
 
-	@field:MutableAdapter.SortOrder
-	private var sortOrder: String = MutableAdapter.SORT_NO
-
 	private var comparator = Comparator<P> { _, _ -> 0 }
 
 	private val itemSelectedEvent = PublishSubject.create<P>()
@@ -100,19 +97,9 @@ abstract class BasicListAdapter<
 		return false
 	}
 
-	override fun setSortOrder(order: String) { sortOrder = order }
-
-	override fun switchSortOrder() {
-		sortOrder = when(sortOrder) {
-			MutableAdapter.SORT_ASC -> MutableAdapter.SORT_DESC
-			MutableAdapter.SORT_DESC -> MutableAdapter.SORT_ASC
-			else -> MutableAdapter.SORT_ASC
-		}
-	}
-
-	override fun sort() {
-		val orderedComparator = when (sortOrder) {
-			MutableAdapter.SORT_DESC -> Collections.reverseOrder(comparator)
+	override fun sort(@SortOrder order: String) {
+		val orderedComparator = when (order) {
+			C.ORDER_DESC -> Collections.reverseOrder(comparator)
 			else -> comparator
 		}
 
