@@ -4,10 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.util.Log
-import com.ancientlore.stickies.BasicViewModel
-import com.ancientlore.stickies.EmptyObject
-import com.ancientlore.stickies.MutableAdapter
-import com.ancientlore.stickies.R
+import com.ancientlore.stickies.*
 import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
@@ -25,9 +22,12 @@ class NotesListViewModel(application: Application,
 		const val INTENT_SHOW_NOTE = 102
 	}
 
+	private var currentSortOrder = C.ORDER_ASC
+
 	private val addNoteEvent = PublishSubject.create<Any>()
 	private val showNoteEvent = PublishSubject.create<Long>()
 	private val onShowFilterMenu = PublishSubject.create<Any>()
+	private val onShowSortMenu = PublishSubject.create<String>()
 
 	init {
 		loadNotes()
@@ -39,7 +39,7 @@ class NotesListViewModel(application: Application,
 	override fun handleOptionSelection(optionId: Int): Boolean {
 		when (optionId) {
 			R.id.filter -> onShowFilterMenu.onNext(EmptyObject)
-			R.id.sortDirection -> switchSortDirection()
+			R.id.sort -> onShowSortMenu.onNext(currentSortOrder)
 		}
 
 		return true
@@ -94,11 +94,6 @@ class NotesListViewModel(application: Application,
 
 	private fun addListItem(item: Note) = runOnUiThread(Runnable { listAdapter.addItem(item) })
 
-	private fun switchSortDirection() {
-		listAdapter.switchSortOrder()
-		listAdapter.sort()
-	}
-
 	fun handleFilterSelected(filterId: Int) : Boolean {
 		when (filterId) {
 			R.id.all -> loadNotes()
@@ -108,6 +103,11 @@ class NotesListViewModel(application: Application,
 		return true
 	}
 
+	fun sort(@SortField field: String, @SortOrder order: String) {
+		currentSortOrder = order
+		listAdapter.sort(field, order)
+	}
+
 	fun onAddNoteClicked() = addNoteEvent.onNext(EmptyObject)
 
 	fun onAddNote() = addNoteEvent as Observable<*>
@@ -115,4 +115,6 @@ class NotesListViewModel(application: Application,
 	fun onShowNote() = showNoteEvent as Observable<Long>
 
 	fun onShowFilterMenu() = onShowFilterMenu as Observable<*>
+
+	fun onShowSortMenu() = onShowSortMenu as Observable<String>
 }

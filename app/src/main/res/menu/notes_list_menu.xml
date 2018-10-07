@@ -10,8 +10,8 @@
 		android:icon="@drawable/ic_filter"
 		app:showAsAction="ifRoom"/>
 	<item
-		android:id="@+id/sortDirection"
-		android:title="@string/sort_direction"
-		android:icon="@drawable/ic_sort_direction"
+		android:id="@+id/sort"
+		android:title="@string/sort"
+		android:icon="@drawable/ic_sort"
 		app:showAsAction="ifRoom"/>
 </menu>

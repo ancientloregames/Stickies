@@ -4,12 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.widget.PopupMenu
-import com.ancientlore.stickies.BR
-import com.ancientlore.stickies.BasicActivity
-import com.ancientlore.stickies.R
+import com.ancientlore.stickies.*
 import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
 import com.ancientlore.stickies.databinding.ActivityNoteslistBinding
 import com.ancientlore.stickies.notedetail.NoteDetailActivity
+import com.ancientlore.stickies.sortdialog.SortDialogFragment
 import kotlinx.android.synthetic.main.activity_noteslist.*
 
 class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewModel>() {
@@ -45,6 +44,9 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 
 		subscriptions.add(viewModel.onShowFilterMenu()
 				.subscribe { showFilterMenu() })
+
+		subscriptions.add(viewModel.onShowSortMenu()
+				.subscribe { showSortMenu(it) })
 	}
 
 	private fun setupList() {
@@ -73,5 +75,17 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 			putExtra(NoteDetailActivity.EXTRA_NOTE_ID, id)
 		}
 		startActivityForResult(intent, NotesListViewModel.INTENT_SHOW_NOTE)
+	}
+
+	private fun showSortMenu(@SortOrder currentSortOrder: String) {
+		val dialog = SortDialogFragment.newInstance(currentSortOrder)
+
+		dialog.listener = object : SortDialogFragment.Listener {
+			override fun onSortSelected(@SortField field: String, @SortOrder order: String) {
+				viewModel.sort(field, order)
+			}
+		}
+
+		dialog.show(supportFragmentManager, "SortDialog")
 	}
 }
