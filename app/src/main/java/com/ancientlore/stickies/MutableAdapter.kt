@@ -8,7 +8,7 @@ interface MutableAdapter<T> {
 	fun updateItem(updatedItem: T): Boolean
 	fun deleteItem(itemToDelete: T): Boolean
 
-	fun sort(@SortOrder order: String)
+	fun sort(@SortField field: String, @SortOrder order: String)
 
 	fun onItemSelected(): Observable<T>
 }

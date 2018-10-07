@@ -20,8 +20,6 @@ abstract class BasicListAdapter<
 
 	private val layoutInflater = LayoutInflater.from(context)
 
-	private var comparator = Comparator<P> { _, _ -> 0 }
-
 	private val itemSelectedEvent = PublishSubject.create<P>()
 
 	abstract fun getViewHolderLayoutRes(viewType: Int): Int
@@ -33,6 +31,8 @@ abstract class BasicListAdapter<
 	abstract fun isTheSame(first: P, second: P) : Boolean
 
 	abstract fun isUnique(item: P) : Boolean
+
+	abstract fun getSortComparator(@SortField sortField: String): Comparator<P>
 
 	private fun getViewHolderLayout(parent: ViewGroup, layoutRes: Int) = layoutInflater.inflate(layoutRes, parent,false)
 
@@ -97,7 +97,9 @@ abstract class BasicListAdapter<
 		return false
 	}
 
-	override fun sort(@SortOrder order: String) {
+	override fun sort(@SortField field: String, @SortOrder order: String) {
+		val comparator = getSortComparator(field)
+
 		val orderedComparator = when (order) {
 			C.ORDER_DESC -> Collections.reverseOrder(comparator)
 			else -> comparator
@@ -111,8 +113,6 @@ abstract class BasicListAdapter<
 	}
 
 	override fun onItemSelected() = itemSelectedEvent as Observable<P>
-
-	protected fun setComparator(newComparator: Comparator<P>) { comparator = newComparator }
 
 	@UiThread
 	private fun updateItemAt(index: Int, updatedItem: P) {
