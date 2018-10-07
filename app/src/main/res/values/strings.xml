@@ -2,12 +2,13 @@
 	<string name="app_name">Stickies</string>
 	<string name="new_note">New Note</string>
 	<string name="note_details">Note Details</string>
-	
-	<string name="title">Title</string>
+
+	<string name="typeTitle">Type a title</string>
 	<string name="typeMessage">Type a message</string>
-	
+
 	<string name="filter">Filter</string>
 	<string name="all">All</string>
+
 	<string name="important">Important</string>
 
 	<string name="sort">Sort</string>

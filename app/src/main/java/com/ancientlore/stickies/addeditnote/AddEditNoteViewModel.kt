@@ -5,6 +5,7 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
 import com.ancientlore.stickies.BasicViewModel
+import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
 import io.reactivex.Observable
@@ -30,6 +31,14 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 
 	constructor(application: Application, noteId: Long) : this(application) {
 		loadNote(noteId)
+	}
+
+	override fun handleOptionSelection(optionId: Int): Boolean {
+		when (optionId) {
+			R.id.important -> switchImportance()
+		}
+
+		return true
 	}
 
 	private fun loadNote(id: Long) {
@@ -60,15 +69,15 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 		})
 	}
 
+	private fun switchImportance() {
+		val wasImportant = isImportant.get()
+		isImportant.set(!wasImportant)
+	}
+
 	fun onSubmitClicked() {
 		if (isValid) {
 			addNote()
 		}
-	}
-
-	fun onImportantClicked() {
-		val wasImportant = isImportant.get()
-		isImportant.set(!wasImportant)
 	}
 
 	fun onNoteAdded() = onNoteAdded as Observable<Long>

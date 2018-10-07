@@ -2,6 +2,7 @@ package com.ancientlore.stickies.addeditnote
 
 import android.app.Activity
 import android.content.Intent
+import android.view.Menu
 import com.ancientlore.stickies.BR
 import com.ancientlore.stickies.BasicActivity
 import com.ancientlore.stickies.R
@@ -13,6 +14,12 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 		const val EXTRA_NOTE_ID = "extra_note_id"
 
 		private const val DUMMY_ID = -1L
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+		menuInflater.inflate(R.menu.note_addedit_menu, menu)
+
+		return true
 	}
 
 	override fun getLayoutId() = R.layout.activity_addeditnote

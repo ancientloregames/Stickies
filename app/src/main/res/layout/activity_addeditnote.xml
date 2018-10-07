@@ -14,6 +14,7 @@
 	<android.support.constraint.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:background="@color/stickyYellowLight"
 		tools:context=".noteslist.NotesListActivity"
 		>
 
@@ -29,13 +30,12 @@
 			android:id="@+id/titleFiledWrapper"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="8dp"
-			android:layout_marginLeft="16dp"
-			android:layout_marginRight="16dp"
+			android:padding="8dp"
+			android:background="@{viewModel.isImportant ? @color/stickyYellowDark : @color/stickyYellowLight}"
 			app:layout_constraintTop_toBottomOf="@+id/appbar"
 			app:layout_constraintBottom_toTopOf="@+id/messageField"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintEnd_toStartOf="@+id/checkBox"
+			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintVertical_chainStyle="spread_inside"
 			>
 			<android.support.design.widget.TextInputEditText
@@ -45,7 +45,7 @@
 				android:maxLines="1"
 				android:singleLine="true"
 				android:text="@={viewModel.titleField}"
-				android:hint="@string/title"
+				android:hint="@string/typeTitle"
 				/>
 		</android.support.design.widget.TextInputLayout>
 
@@ -53,9 +53,7 @@
 			android:id="@+id/messageField"
 			android:layout_width="0dp"
 			android:layout_height="0dp"
-			android:layout_marginTop="8dp"
-			android:layout_marginLeft="16dp"
-			android:layout_marginRight="16dp"
+			android:padding="8dp"
 			android:gravity="top"
 			android:background="@null"
 			android:inputType="textMultiLine"
@@ -65,7 +63,6 @@
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
-			android:layout_marginBottom="8dp"
 			/>
 
 		<android.support.design.widget.FloatingActionButton
@@ -75,25 +72,11 @@
 			android:layout_marginBottom="16dp"
 			android:layout_marginEnd="16dp"
 			android:layout_marginRight="16dp"
+			app:backgroundTint="@color/fabAddNote"
 			android:onClick="@{() -> viewModel.onSubmitClicked()}"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:srcCompat="@drawable/ic_done"
-			/>
-		<android.support.v7.widget.AppCompatImageView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/checkBox"
-			android:layout_marginEnd="8dp"
-			android:layout_marginRight="8dp"
-			android:layout_marginTop="8dp"
-			android:tint="@{viewModel.isImportant ? @color/importantNote : @color/importantNoteNot}"
-			android:onClick="@{() -> viewModel.onImportantClicked()}"
-			app:srcCompat="@drawable/ic_important"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/appbar"
-			app:layout_constraintStart_toEndOf="@+id/titleFiledWrapper"
-			app:layout_constraintBottom_toTopOf="@+id/messageField"
 			/>
 
 	</android.support.constraint.ConstraintLayout>
