@@ -36,6 +36,7 @@ class NoteDetailActivity: BasicActivity<ActivityNotedetailBinding, NoteDetailVie
 		val intent = Intent(this, AddEditNoteActivity::class.java). apply {
 			putExtra(AddEditNoteActivity.EXTRA_NOTE_ID, id)
 		}
-		startActivityForResult(intent, NoteDetailViewModel.INTENT_EDIT_NOTE)
+		startActivity(intent)
+		finish()
 	}
 }
