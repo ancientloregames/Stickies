@@ -17,9 +17,10 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".addeditnote.AddEditNoteActivity"
-			android:label="@string/new_note"/>
+				  android:label="@string/new_note"
+				  android:windowSoftInputMode="stateVisible|adjustResize"/>
 		<activity android:name=".notedetail.NoteDetailActivity"
-				  android:label="@string/new_note"/>
+				  android:label="@string/note_details"/>
 	</application>
 
 </manifest>
