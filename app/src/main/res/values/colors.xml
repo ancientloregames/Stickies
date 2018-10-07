@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="colorPrimary">#3F51B5</color>
-	<color name="colorPrimaryDark">#303F9F</color>
-	<color name="colorAccent">#FF4081</color>
-	
+	<color name="colorPrimary">#2794bc</color>
+	<color name="colorPrimaryDark">#207b9c</color>
+	<color name="colorAccent">#c10006</color>
+
+	<color name="fabAddNote">@android:color/holo_blue_light</color>
+
 	<color name="importantNote">#f00</color>
 	<color name="importantNoteNot">#ccc</color>
+
+	<color name="stickyYellowLight">#fff8bb</color>
+	<color name="stickyYellowDark">#ffe000</color>
+
+	<color name="stickyTitle">#333</color>
 </resources>

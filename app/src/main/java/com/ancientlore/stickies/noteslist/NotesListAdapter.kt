@@ -9,6 +9,8 @@ import com.ancientlore.stickies.C
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.SortField
 import com.ancientlore.stickies.data.model.Note
+import java.text.DateFormat
+import java.util.*
 
 class NotesListAdapter(context: Context, items: MutableList<Note>)
 	: BasicListAdapter<Note, NotesListAdapter.ViewHolder>(context, items) {
@@ -34,9 +36,11 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 	class ViewHolder(itemView: View): BasicListAdapter.ViewHolder<Note>(itemView) {
 
 		private val titleView = itemView.findViewById<TextView>(R.id.titleView)
+		private val dateView = itemView.findViewById<TextView>(R.id.dateView)
 
 		override fun bind(data: Note) {
 			titleView.text = data.title
+			dateView.text = DateFormat.getDateInstance(DateFormat.SHORT).format(Date(data.timestamp))
 		}
 	}
 
