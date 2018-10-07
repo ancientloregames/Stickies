@@ -9,5 +9,10 @@
 	<string name="filter">Filter</string>
 	<string name="all">All</string>
 	<string name="important">Important</string>
-	<string name="sort_direction">Sort direction</string>
+
+	<string name="sort">Sort</string>
+	<string name="sort_title">By title</string>
+	<string name="sort_date_creation">By date of creation</string>
+	<string name="order_asc">Ascending</string>
+	<string name="order_desc">Descending</string>
 </resources>
