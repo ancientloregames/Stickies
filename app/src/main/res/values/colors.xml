@@ -10,7 +10,7 @@
 	<color name="importantNoteNot">#ccc</color>
 
 	<color name="stickyYellowLight">#fff8bb</color>
-	<color name="stickyYellowDark">#ffe000</color>
+	<color name="stickyYellowDark">#f5da66</color>
 
 	<color name="stickyTitle">#333</color>
 </resources>

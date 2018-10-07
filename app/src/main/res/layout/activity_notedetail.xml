@@ -12,7 +12,7 @@
 	<android.support.constraint.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:background="@android:color/white"
+		android:background="@color/stickyYellowLight"
 		>
 
 		<include
@@ -24,18 +24,17 @@
 			app:layout_constraintBottom_toTopOf="@+id/titleView"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
+			android:visibility="gone"
 			/>
 
 		<android.support.v7.widget.AppCompatTextView
 			android:id="@+id/titleView"
 			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:maxLines="1"
-			android:singleLine="true"
-			android:layout_marginTop="8dp"
-			android:layout_marginLeft="16dp"
-			android:layout_marginRight="16dp"
+			android:layout_height="?attr/actionBarSize"
+			tools:layout_height="63dp"
 			android:text="@={viewModel.titleField}"
+			android:background="@color/stickyYellowDark"
+			style="@style/noteTitle"
 			app:layout_constraintTop_toBottomOf="@+id/appbar"
 			app:layout_constraintBottom_toTopOf="@+id/messageView"
 			app:layout_constraintStart_toStartOf="parent"
@@ -47,11 +46,10 @@
 			android:id="@+id/messageView"
 			android:layout_width="0dp"
 			android:layout_height="0dp"
-			android:layout_marginTop="8dp"
-			android:layout_marginBottom="8dp"
-			android:layout_marginLeft="16dp"
-			android:layout_marginRight="16dp"
 			android:text="@={viewModel.messageField}"
+			android:padding="8dp"
+			android:textSize="16sp"
+			android:textColor="@color/stickyTitle"
 			app:layout_constraintTop_toBottomOf="@+id/titleView"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +64,7 @@
 			android:layout_marginBottom="16dp"
 			android:layout_marginEnd="16dp"
 			android:layout_marginRight="16dp"
+			app:backgroundTint="@color/fabAddNote"
 			app:srcCompat="@drawable/ic_edit"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
