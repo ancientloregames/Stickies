@@ -22,15 +22,9 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 	val messageField = ObservableField<String>("")
 	val isImportant = ObservableBoolean(false)
 
-	private var noteId: Long = 0
+	private var editedNote: Note? = null
 
 	private val isValid get() = titleField.get()?.isNotEmpty() ?: false
-
-	private val note get() = Note(
-			timeCreated = System.currentTimeMillis(),
-			title = titleField.get()!!,
-			body = messageField.get()!!,
-			isImportant = isImportant.get())
 
 	private val onNoteAdded = PublishSubject.create<Long>()
 
@@ -56,18 +50,15 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 	}
 
 	private fun bind(note: Note) {
-		noteId = note.id
+		editedNote = note
 		titleField.set(note.title)
 		messageField.set(note.body)
 		isImportant.set(note.isImportant)
 	}
 
 	private fun addNote() {
-		repository.insertItem(note, object : DataSource.ItemInsertedCallback {
-			override fun onSuccess(id: Long) {
-				onNoteAdded.onNext(id)
-			}
-
+		repository.insertItem(composeNote(), object : DataSource.ItemInsertedCallback {
+			override fun onSuccess(id: Long) = onNoteAdded.onNext(id)
 			override fun onFailure(error: Throwable) {
 				Log.w(TAG, error.message ?: "Some error occurred during the insertion of the note to Db")
 			}
@@ -78,6 +69,27 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 		val wasImportant = isImportant.get()
 		isImportant.set(!wasImportant)
 	}
+
+	private fun composeNote() = editedNote?.let { composeNoteBasedOn(it) } ?: composeNewNote()
+
+	private fun composeNewNote() = Note(
+			timeCreated = System.currentTimeMillis(),
+			title = titleField.get()!!,
+			body = messageField.get()!!,
+			isImportant = isImportant.get())
+
+	private fun composeNoteBasedOn(note: Note) = Note(
+			id = note.id,
+			timeCreated = note.timeCreated,
+			timeUpdated = System.currentTimeMillis(),
+			timeNotify = note.timeCreated,
+			title = titleField.get()!!,
+			body = messageField.get()!!,
+			color = note.color,
+			icon = note.icon,
+			topic = note.topic,
+			isImportant = isImportant.get(),
+			isCompleted = note.isCompleted)
 
 	fun onSubmitClicked() {
 		if (isValid) {
