@@ -20,6 +20,9 @@ class NotesListViewModel(application: Application,
 
 		const val INTENT_ADD_NOTE = 101
 		const val INTENT_SHOW_NOTE = 102
+
+		const val OPTION_FILTER = "option_filter"
+		const val OPTION_SORT = "option_sort"
 	}
 
 	private var currentSortOrder = C.ORDER_ASC
@@ -36,12 +39,12 @@ class NotesListViewModel(application: Application,
 				.subscribe { showNoteEvent.onNext(it.id) }
 	}
 
-	override fun handleOptionSelection(optionId: Int): Boolean {
-		when (optionId) {
-			R.id.filter -> onShowFilterMenu.onNext(EmptyObject)
-			R.id.sort -> onShowSortMenu.onNext(currentSortOrder)
+	override fun handleOptionSelection(option: String): Boolean {
+		when (option) {
+			OPTION_FILTER -> onShowFilterMenu.onNext(EmptyObject)
+			OPTION_SORT -> onShowSortMenu.onNext(currentSortOrder)
+			else -> return false
 		}
-
 		return true
 	}
 

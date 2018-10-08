@@ -18,7 +18,7 @@ abstract class BasicViewModel(application: Application): AndroidViewModel(applic
 		initRepository(application.baseContext)
 	}
 
-	open fun handleOptionSelection(optionId: Int) = false
+	open fun handleOptionSelection(option: String) = false
 
 	open fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { }
 

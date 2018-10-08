@@ -3,11 +3,14 @@ package com.ancientlore.stickies.noteslist
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.PopupMenu
 import com.ancientlore.stickies.*
 import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
 import com.ancientlore.stickies.databinding.ActivityNoteslistBinding
 import com.ancientlore.stickies.notedetail.NoteDetailActivity
+import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_FILTER
+import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_SORT
 import com.ancientlore.stickies.sortdialog.SortDialogFragment
 import kotlinx.android.synthetic.main.activity_noteslist.*
 
@@ -25,6 +28,12 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		menuInflater.inflate(R.menu.notes_list_menu, menu)
 
 		return true
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+		R.id.filter -> viewModel.handleOptionSelection(OPTION_FILTER)
+		R.id.sort -> viewModel.handleOptionSelection(OPTION_SORT)
+		else -> super.onOptionsItemSelected(item)
 	}
 
 	override fun setupView(savedInstanceState: Bundle?) {

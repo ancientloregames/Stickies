@@ -3,9 +3,11 @@ package com.ancientlore.stickies.addeditnote
 import android.app.Activity
 import android.content.Intent
 import android.view.Menu
+import android.view.MenuItem
 import com.ancientlore.stickies.BR
 import com.ancientlore.stickies.BasicActivity
 import com.ancientlore.stickies.R
+import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_IMPRTANT
 import com.ancientlore.stickies.databinding.ActivityAddeditnoteBinding
 
 class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNoteViewModel>() {
@@ -20,6 +22,11 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 		menuInflater.inflate(R.menu.note_addedit_menu, menu)
 
 		return true
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+		R.id.important -> viewModel.handleOptionSelection(OPTION_IMPRTANT)
+		else -> super.onOptionsItemSelected(item)
 	}
 
 	override fun getLayoutId() = R.layout.activity_addeditnote

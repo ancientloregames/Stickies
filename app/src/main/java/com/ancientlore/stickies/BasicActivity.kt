@@ -8,7 +8,6 @@ import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
-import android.view.MenuItem
 import io.reactivex.internal.disposables.ListCompositeDisposable
 
 abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatActivity() {
@@ -41,8 +40,6 @@ abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatAc
 
 		super.onDestroy()
 	}
-
-	override fun onOptionsItemSelected(item: MenuItem) = viewModel.handleOptionSelection(item.itemId)
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		viewModel.handleActivityResult(requestCode, resultCode, data)
