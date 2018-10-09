@@ -16,6 +16,14 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 		private const val TAG = "NoteActivityViewModel"
 
 		const val OPTION_IMPRTANT = "option_important"
+
+		private const val NOTE_VALID = 0
+		const val ALERT_TITLE_EMPTY = 1
+		const val ALERT_TITLE_LONG = 2
+		const val ALERT_BODY_LONG = 3
+
+		const val TITLE_LIMIT = 256
+		const val BODY_LIMIT = 2048
 	}
 
 	val titleField = ObservableField<String>("")
@@ -24,9 +32,8 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 
 	private var editedNote: Note? = null
 
-	private val isValid get() = titleField.get()?.isNotEmpty() ?: false
-
 	private val onNoteAdded = PublishSubject.create<Long>()
+	private val onAlert = PublishSubject.create<Int>()
 
 	constructor(application: Application, noteId: Long) : this(application) {
 		loadNote(noteId)
@@ -39,6 +46,15 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 		}
 		return true
 	}
+
+	fun onSubmitClicked() {
+		if (isValid())
+			addNote()
+	}
+
+	fun observeNoteAdded() = onNoteAdded as Observable<Long>
+
+	fun observeAlert() = onAlert as Observable<Int>
 
 	private fun loadNote(id: Long) {
 		repository.getItem(id, object : DataSource.ItemLoadedCallback<Note> {
@@ -91,11 +107,19 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 			isImportant = isImportant.get(),
 			isCompleted = note.isCompleted)
 
-	fun onSubmitClicked() {
-		if (isValid) {
-			addNote()
+	private fun isValid(): Boolean {
+		val title = titleField.get()!!
+		val body = messageField.get()!!
+		val messageId = when {
+			title.isEmpty() -> ALERT_TITLE_EMPTY
+			title.length > TITLE_LIMIT -> ALERT_TITLE_LONG
+			body.length > BODY_LIMIT -> ALERT_BODY_LONG
+			else -> NOTE_VALID
 		}
-	}
 
-	fun onNoteAdded() = onNoteAdded as Observable<Long>
+		return if (messageId != NOTE_VALID) {
+			onAlert.onNext(messageId)
+			false
+		} else true
+	}
 }

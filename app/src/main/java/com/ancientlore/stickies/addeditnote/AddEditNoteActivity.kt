@@ -2,8 +2,10 @@ package com.ancientlore.stickies.addeditnote
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.ancientlore.stickies.BR
 import com.ancientlore.stickies.BasicActivity
 import com.ancientlore.stickies.R
@@ -13,6 +15,8 @@ import com.ancientlore.stickies.databinding.ActivityAddeditnoteBinding
 class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNoteViewModel>() {
 
 	companion object {
+		const val TAG = "AddEditNoteActivity"
+
 		const val EXTRA_NOTE_ID = "extra_note_id"
 
 		private const val DUMMY_ID = -1L
@@ -42,8 +46,11 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 	override fun setupViewModel() {
 		super.setupViewModel()
 
-		subscriptions.add(viewModel.onNoteAdded()
+		subscriptions.add(viewModel.observeNoteAdded()
 				.subscribe { finishWithResult(it) })
+
+		subscriptions.add(viewModel.observeAlert()
+				.subscribe { showAlert(getAlertMessage(it)) })
 	}
 
 	private fun getNoteId() = intent.getLongExtra(EXTRA_NOTE_ID, DUMMY_ID)
@@ -56,5 +63,17 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 		}
 		setResult(Activity.RESULT_OK, intent)
 		finish()
+	}
+
+	private fun showAlert(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+	private fun getAlertMessage(alertId: Int) = when (alertId) {
+		AddEditNoteViewModel.ALERT_TITLE_EMPTY -> getString(R.string.alert_note_title_empty)
+		AddEditNoteViewModel.ALERT_TITLE_LONG -> getString(R.string.alert_note_title_long)
+		AddEditNoteViewModel.ALERT_BODY_LONG -> getString(R.string.alert_note_body_long)
+		else -> {
+			Log.w(TAG, "Unknown alert message id!")
+			""
+		}
 	}
 }
