@@ -29,6 +29,9 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 
 	private var editedNote: Note? = null
 
+	private val noteTitle get() = titleField.get()!!
+	private val noteBody get() = messageField.get()!!
+
 	private val onNoteAdded = PublishSubject.create<Long>()
 	private val onAlert = PublishSubject.create<Int>()
 
@@ -99,18 +102,18 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 			isCompleted = note.isCompleted)
 
 	private fun isValid(): Boolean {
-		val title = titleField.get()!!
-		val body = messageField.get()!!
-		val messageId = when {
-			title.isEmpty() -> ALERT_TITLE_EMPTY
-			title.length > TITLE_LIMIT -> ALERT_TITLE_LONG
-			body.length > BODY_LIMIT -> ALERT_BODY_LONG
-			else -> NOTE_VALID
-		}
+		val messageId = getValidityMessageId()
 
 		return if (messageId != NOTE_VALID) {
 			onAlert.onNext(messageId)
 			false
 		} else true
+	}
+
+	private fun getValidityMessageId() = when {
+		noteTitle.isEmpty() -> ALERT_TITLE_EMPTY
+		noteTitle.length > TITLE_LIMIT -> ALERT_TITLE_LONG
+		noteBody.length > BODY_LIMIT -> ALERT_BODY_LONG
+		else -> NOTE_VALID
 	}
 }
