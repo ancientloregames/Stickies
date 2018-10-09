@@ -1,29 +1,25 @@
 package com.ancientlore.stickies.data.source
 
+import android.util.Log
+
 interface DataSource<DataModel> {
 
-	interface ListLoadedCallback<DataModel> {
-		fun onSuccess(data: List<DataModel>)
+	interface RequestCallback<DataModel> {
+		fun onSuccess(result: DataModel)
 		fun onFailure(error: Throwable)
 	}
 
-	interface ItemLoadedCallback<DataModel> {
-		fun onSuccess(data: DataModel)
-		fun onFailure(error: Throwable)
+	abstract class SimpleRequestCallback<DataModel>: RequestCallback<DataModel> {
+		override fun onFailure(error: Throwable) { Log.w("DataSource", error.message ?: "Some error accured during the request") }
 	}
 
-	interface ItemInsertedCallback {
-		fun onSuccess(id: Long)
-		fun onFailure(error: Throwable)
-	}
+	fun getAll(callback: RequestCallback<List<DataModel>>)
 
-	fun getAll(callback: ListLoadedCallback<DataModel>)
+	fun getImportant(callback: RequestCallback<List<DataModel>>)
 
-	fun getImportant(callback: ListLoadedCallback<DataModel>)
+	fun getItem(id: Long, callback: RequestCallback<DataModel>)
 
-	fun getItem(id: Long, callback: ItemLoadedCallback<DataModel>)
-
-	fun insertItem(item: DataModel, callback: ItemInsertedCallback)
+	fun insertItem(item: DataModel, callback: RequestCallback<Long>)
 
 	fun deleteAll()
 

@@ -3,7 +3,6 @@ package com.ancientlore.stickies.addeditnote
 import android.app.Application
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.util.Log
 import com.ancientlore.stickies.BasicViewModel
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
@@ -13,8 +12,6 @@ import io.reactivex.subjects.PublishSubject
 class AddEditNoteViewModel(application: Application): BasicViewModel(application) {
 
 	companion object {
-		private const val TAG = "NoteActivityViewModel"
-
 		const val OPTION_IMPRTANT = "option_important"
 
 		private const val NOTE_VALID = 0
@@ -57,11 +54,8 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 	fun observeAlert() = onAlert as Observable<Int>
 
 	private fun loadNote(id: Long) {
-		repository.getItem(id, object : DataSource.ItemLoadedCallback<Note> {
-			override fun onSuccess(data: Note) = bind(data)
-			override fun onFailure(error: Throwable) {
-				Log.w(TAG, error.message ?: "Some error occurred during the loading of a note with id $id")
-			}
+		repository.getItem(id, object : DataSource.SimpleRequestCallback<Note>() {
+			override fun onSuccess(result: Note) = bind(result)
 		})
 	}
 
@@ -73,11 +67,8 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 	}
 
 	private fun addNote() {
-		repository.insertItem(composeNote(), object : DataSource.ItemInsertedCallback {
-			override fun onSuccess(id: Long) = onNoteAdded.onNext(id)
-			override fun onFailure(error: Throwable) {
-				Log.w(TAG, error.message ?: "Some error occurred during the insertion of the note to Db")
-			}
+		repository.insertItem(composeNote(), object : DataSource.SimpleRequestCallback<Long>() {
+			override fun onSuccess(result: Long) = onNoteAdded.onNext(result)
 		})
 	}
 

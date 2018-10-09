@@ -67,29 +67,20 @@ class NotesListViewModel(application: Application,
 	}
 
 	private fun loadNotes() {
-		repository.getAll(object : DataSource.ListLoadedCallback<Note> {
-			override fun onSuccess(data: List<Note>) = setListItems(data)
-			override fun onFailure(error: Throwable) {
-				Log.w(TAG, error.message ?: "Some error occurred during the list loading")
-			}
+		repository.getAll(object : DataSource.SimpleRequestCallback<List<Note>>()  {
+			override fun onSuccess(result: List<Note>) = setListItems(result)
 		})
 	}
 
 	private fun loadImportantNotes() {
-		repository.getImportant(object : DataSource.ListLoadedCallback<Note> {
-			override fun onSuccess(data: List<Note>) = setListItems(data)
-			override fun onFailure(error: Throwable) {
-				Log.w(TAG, error.message ?: "Some error occurred during the important notes loading")
-			}
+		repository.getImportant(object : DataSource.SimpleRequestCallback<List<Note>>()  {
+			override fun onSuccess(result: List<Note>) = setListItems(result)
 		})
 	}
 
 	private fun loadNote(id: Long) {
-		repository.getItem(id, object : DataSource.ItemLoadedCallback<Note> {
-			override fun onSuccess(data: Note) = addListItem(data)
-			override fun onFailure(error: Throwable) {
-				Log.w(TAG, error.message ?: "Some error occurred during the loading of an item with id $id")
-			}
+		repository.getItem(id, object : DataSource.SimpleRequestCallback<Note>() {
+			override fun onSuccess(result: Note) = addListItem(result)
 		})
 	}
 

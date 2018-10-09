@@ -12,7 +12,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 
 	private val executor: ExecutorService = Executors.newSingleThreadExecutor { r -> Thread(r, "db_worker") }
 
-	override fun getAll(callback: DataSource.ListLoadedCallback<Note>) {
+	override fun getAll(callback: DataSource.RequestCallback<List<Note>>) {
 		executor.submit {
 			dao.getAll()
 					.takeIf { it.isNotEmpty() }
@@ -21,7 +21,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		}
 	}
 
-	override fun getImportant(callback: DataSource.ListLoadedCallback<Note>) {
+	override fun getImportant(callback: DataSource.RequestCallback<List<Note>>) {
 		executor.submit {
 			dao.getImportant()
 					.takeIf { it.isNotEmpty() }
@@ -30,7 +30,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		}
 	}
 
-	override fun getItem(id: Long, callback: DataSource.ItemLoadedCallback<Note>) {
+	override fun getItem(id: Long, callback: DataSource.RequestCallback<Note>) {
 		executor.submit {
 			dao.findById(id)
 					?.let { callback.onSuccess(it) }
@@ -38,7 +38,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		}
 	}
 
-	override fun insertItem(item: Note, callback: DataSource.ItemInsertedCallback) {
+	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>) {
 		executor.submit {
 			dao.insert(item)
 					.let { callback.onSuccess(it) }
