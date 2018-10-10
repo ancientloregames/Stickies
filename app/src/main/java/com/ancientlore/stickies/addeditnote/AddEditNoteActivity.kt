@@ -43,6 +43,11 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 
 	override fun getTitleId() = R.string.new_note
 
+	override fun setupActionBar() {
+		super.setupActionBar()
+		supportActionBar?.setDisplayShowTitleEnabled(false)
+	}
+
 	override fun setupViewModel() {
 		super.setupViewModel()
 

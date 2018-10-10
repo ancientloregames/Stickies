@@ -18,7 +18,8 @@
 		</activity>
 		<activity android:name=".addeditnote.AddEditNoteActivity"
 				  android:label="@string/new_note"
-				  android:windowSoftInputMode="stateVisible|adjustResize"/>
+				  android:windowSoftInputMode="stateVisible|adjustResize"
+				  android:theme="@style/AppTheme.NoteDetails"/>
 		<activity android:name=".notedetail.NoteDetailActivity"
 				  android:label="@string/note_details"
 				  android:theme="@style/AppTheme.NoteDetails"/>

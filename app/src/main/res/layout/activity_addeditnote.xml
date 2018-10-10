@@ -18,37 +18,59 @@
 		tools:context=".noteslist.NotesListActivity"
 		>
 
-		<include
-			layout="@layout/appbar"
+		<android.support.design.widget.AppBarLayout
 			android:id="@+id/appbar"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			/>
-
-		<android.support.design.widget.TextInputLayout
-			android:id="@+id/titleFiledWrapper"
 			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:padding="8dp"
-			android:background="@{viewModel.isImportant ? @color/stickyYellowDark : @color/stickyYellowLight}"
-			app:layout_constraintTop_toBottomOf="@+id/appbar"
+			android:layout_height="?attr/actionBarSize"
+			android:minHeight="?attr/actionBarSize"
+			android:theme="@style/AppTheme.AppBarOverlay"
+			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintBottom_toTopOf="@+id/messageField"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintVertical_chainStyle="spread_inside"
+			tools:layout_height="56dp"
+			tools:background="@color/stickyYellowDark"
 			>
-			<android.support.design.widget.TextInputEditText
-				android:id="@+id/titleField"
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/toolbar"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:maxLines="1"
-				android:singleLine="true"
-				android:text="@={viewModel.titleField}"
-				android:hint="@string/typeTitle"
-				android:inputType="textCapSentences"
-				/>
-		</android.support.design.widget.TextInputLayout>
+				android:layout_height="match_parent"
+				android:background="@{viewModel.isImportant ? @color/stickyYellowDarker : @color/stickyYellowDark}"
+				app:popupTheme="@style/AppTheme.PopupOverlay"
+				>
+
+				<android.support.design.widget.TextInputLayout
+					android:id="@+id/titleFiledWrapper"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					>
+					<android.support.design.widget.TextInputEditText
+						android:id="@+id/titleField"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:maxLines="1"
+						android:singleLine="true"
+						android:text="@={viewModel.titleField}"
+						android:hint="@string/typeTitle"
+						android:inputType="textCapSentences"
+						/>
+				</android.support.design.widget.TextInputLayout>
+			</android.support.v7.widget.Toolbar>
+
+		</android.support.design.widget.AppBarLayout>
+
+		<!--<android.support.v7.widget.AppCompatEditText-->
+			<!--android:id="@+id/titleField"-->
+			<!--android:layout_width="match_parent"-->
+			<!--android:layout_height="match_parent"-->
+			<!--android:maxLines="1"-->
+			<!--android:singleLine="true"-->
+			<!--android:text="@={viewModel.titleField}"-->
+			<!--android:hint="@string/typeTitle"-->
+			<!--android:inputType="textCapSentences"-->
+			<!--android:textColor="@color/stickyTitle"-->
+			<!--/>-->
 
 		<android.support.v7.widget.AppCompatEditText
 			android:id="@+id/messageField"
@@ -60,7 +82,7 @@
 			android:inputType="textMultiLine"
 			android:text="@={viewModel.messageField}"
 			android:hint="@string/typeMessage"
-			app:layout_constraintTop_toBottomOf="@+id/titleFiledWrapper"
+			app:layout_constraintTop_toBottomOf="@+id/appbar"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
