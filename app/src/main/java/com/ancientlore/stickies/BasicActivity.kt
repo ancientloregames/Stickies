@@ -9,6 +9,7 @@ import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import io.reactivex.internal.disposables.ListCompositeDisposable
+import kotlinx.android.synthetic.main.appbar.*
 
 abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatActivity() {
 	private lateinit var viewDataBinding : T
@@ -53,10 +54,8 @@ abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatAc
 		setupActionBar()
 	}
 
-	private fun setupActionBar() {
-		setSupportActionBar(findViewById(R.id.toolbar))
-		supportActionBar?.title = getString(getTitleId())
-	}
+	@CallSuper
+	protected open fun setupActionBar() = setSupportActionBar(toolbar)
 
 	@CallSuper
 	protected open fun setupViewModel() {

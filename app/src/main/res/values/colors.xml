@@ -11,6 +11,7 @@
 
 	<color name="stickyYellowLight">#fff8bb</color>
 	<color name="stickyYellowDark">#f5da66</color>
+	<color name="stickyYellowDarker">#d1b31c</color>
 
 	<color name="stickyTitle">#333</color>
 </resources>

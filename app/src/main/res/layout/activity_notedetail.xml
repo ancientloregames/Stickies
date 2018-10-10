@@ -15,32 +15,42 @@
 		android:background="@color/stickyYellowLight"
 		>
 
-		<include
-			layout="@layout/appbar"
+		<android.support.design.widget.AppBarLayout
 			android:id="@+id/appbar"
 			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			app:layout_constraintTop_toTopOf="parent"
-			app:layout_constraintBottom_toTopOf="@+id/titleView"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			android:visibility="gone"
-			/>
-
-		<android.support.v7.widget.AppCompatTextView
-			android:id="@+id/titleView"
-			android:layout_width="0dp"
 			android:layout_height="?attr/actionBarSize"
-			tools:layout_height="63dp"
-			android:text="@={viewModel.titleField}"
-			android:background="@color/stickyYellowDark"
-			style="@style/noteTitle"
-			app:layout_constraintTop_toBottomOf="@+id/appbar"
+			android:minHeight="?attr/actionBarSize"
+			android:theme="@style/AppTheme.AppBarOverlay"
+			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintBottom_toTopOf="@+id/messageView"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
-			tools:text="Note Title"
-			/>
+			tools:layout_height="56dp"
+			tools:background="@color/stickyYellowDark"
+			>
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/toolbar"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				app:popupTheme="@style/AppTheme.PopupOverlay"
+				>
+
+				<android.support.v7.widget.AppCompatTextView
+					android:id="@+id/titleView"
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent"
+					android:text="@={viewModel.titleField}"
+					app:layout_constraintTop_toBottomOf="@+id/appbar"
+					app:layout_constraintBottom_toTopOf="@+id/messageView"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent"
+					tools:text="Note Title"
+					style="@style/noteTitle"
+					/>
+			</android.support.v7.widget.Toolbar>
+
+		</android.support.design.widget.AppBarLayout>
 
 		<android.support.v7.widget.AppCompatTextView
 			android:id="@+id/messageView"
@@ -50,7 +60,7 @@
 			android:padding="8dp"
 			android:textSize="16sp"
 			android:textColor="@color/stickyTitle"
-			app:layout_constraintTop_toBottomOf="@+id/titleView"
+			app:layout_constraintTop_toBottomOf="@+id/appbar"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"

@@ -1,10 +1,10 @@
 package com.ancientlore.stickies.notedetail
 
 import android.content.Intent
-import com.ancientlore.stickies.R
-import com.ancientlore.stickies.databinding.ActivityNotedetailBinding
 import com.ancientlore.stickies.BasicActivity
+import com.ancientlore.stickies.R
 import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
+import com.ancientlore.stickies.databinding.ActivityNotedetailBinding
 import com.android.databinding.library.baseAdapters.BR
 
 class NoteDetailActivity: BasicActivity<ActivityNotedetailBinding, NoteDetailViewModel>() {
@@ -20,6 +20,11 @@ class NoteDetailActivity: BasicActivity<ActivityNotedetailBinding, NoteDetailVie
 	override fun createViewModel() = NoteDetailViewModel(application, getNoteId())
 
 	override fun getTitleId() = R.string.note_details
+
+	override fun setupActionBar() {
+		super.setupActionBar()
+		supportActionBar?.setDisplayShowTitleEnabled(false)
+	}
 
 	override fun setupViewModel() {
 		super.setupViewModel()

@@ -20,7 +20,8 @@
 				  android:label="@string/new_note"
 				  android:windowSoftInputMode="stateVisible|adjustResize"/>
 		<activity android:name=".notedetail.NoteDetailActivity"
-				  android:label="@string/note_details"/>
+				  android:label="@string/note_details"
+				  android:theme="@style/AppTheme.NoteDetails"/>
 	</application>
 
 </manifest>
