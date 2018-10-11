@@ -3,6 +3,7 @@
 	<string name="new_note">New Note</string>
 	<string name="note_details">Note Details</string>
 
+	<string name="title">Title</string>
 	<string name="typeTitle">Type a title</string>
 	<string name="typeMessage">Type a message</string>
 

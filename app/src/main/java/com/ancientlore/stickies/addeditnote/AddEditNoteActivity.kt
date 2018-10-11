@@ -2,6 +2,7 @@ package com.ancientlore.stickies.addeditnote
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -29,7 +30,7 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 	}
 
 	override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-		R.id.important -> viewModel.handleOptionSelection(OPTION_IMPRTANT)
+		R.id.important -> handleImportanceOption(item)
 		else -> super.onOptionsItemSelected(item)
 	}
 
@@ -80,5 +81,16 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 			Log.w(TAG, "Unknown alert message id!")
 			""
 		}
+	}
+
+	private fun handleImportanceOption(item: MenuItem): Boolean {
+		item.isChecked = !item.isChecked
+		item.icon = getImportanceOptionIcon(item.isChecked)
+		return viewModel.handleOptionSelection(OPTION_IMPRTANT)
+	}
+
+	private fun getImportanceOptionIcon(checked: Boolean) = when (checked) {
+		true -> ContextCompat.getDrawable(this, R.drawable.ic_important_on)
+		else -> ContextCompat.getDrawable(this, R.drawable.ic_important_off)
 	}
 }

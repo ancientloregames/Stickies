@@ -36,7 +36,6 @@
 				android:id="@+id/toolbar"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				android:background="@{viewModel.isImportant ? @color/stickyYellowDarker : @color/stickyYellowDark}"
 				app:popupTheme="@style/AppTheme.PopupOverlay"
 				>
 
@@ -44,6 +43,7 @@
 					android:id="@+id/titleFiledWrapper"
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:theme="@style/AppTheme.ActionBarTextInputLayout"
 					>
 					<android.support.design.widget.TextInputEditText
 						android:id="@+id/titleField"
@@ -52,25 +52,14 @@
 						android:maxLines="1"
 						android:singleLine="true"
 						android:text="@={viewModel.titleField}"
-						android:hint="@string/typeTitle"
+						android:hint="@string/title"
 						android:inputType="textCapSentences"
+						style="@style/AppTheme.ActionBarTextInput"
 						/>
 				</android.support.design.widget.TextInputLayout>
 			</android.support.v7.widget.Toolbar>
 
 		</android.support.design.widget.AppBarLayout>
-
-		<!--<android.support.v7.widget.AppCompatEditText-->
-			<!--android:id="@+id/titleField"-->
-			<!--android:layout_width="match_parent"-->
-			<!--android:layout_height="match_parent"-->
-			<!--android:maxLines="1"-->
-			<!--android:singleLine="true"-->
-			<!--android:text="@={viewModel.titleField}"-->
-			<!--android:hint="@string/typeTitle"-->
-			<!--android:inputType="textCapSentences"-->
-			<!--android:textColor="@color/stickyTitle"-->
-			<!--/>-->
 
 		<android.support.v7.widget.AppCompatEditText
 			android:id="@+id/messageField"
