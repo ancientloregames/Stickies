@@ -1,6 +1,7 @@
 package com.ancientlore.stickies.noteslist
 
 import android.content.Context
+import android.support.annotation.UiThread
 import android.support.v7.util.DiffUtil
 import android.view.View
 import android.widget.TextView
@@ -23,6 +24,13 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 	override fun getViewHolder(layout: View) = ViewHolder(layout)
 
 	override fun getDiffCallback(newItems: List<Note>) = DiffCallback(items, newItems)
+
+	@UiThread
+	override fun deleteItem(id: Long) = deleteItemAt(findPosition(id))
+
+	override fun findItem(id: Long) = items.find { it.id == id }
+
+	override fun findPosition(id: Long) = items.indexOfFirst { it.id == id }
 
 	override fun isTheSame(first: Note, second: Note) = first.id == second.id
 

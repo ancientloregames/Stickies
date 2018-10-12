@@ -115,10 +115,23 @@ abstract class BasicListAdapter<
 	override fun onItemSelected() = itemSelectedEvent as Observable<P>
 
 	@UiThread
+	protected fun deleteItemAt(position: Int): Boolean {
+		if (isValidPosition(position)) {
+			items.removeAt(position)
+			notifyItemRemoved(position)
+			return true
+		}
+
+		return false
+	}
+
+	@UiThread
 	private fun updateItemAt(index: Int, updatedItem: P) {
 		items[index] = updatedItem
 		notifyItemChanged(index)
 	}
+
+	private fun isValidPosition(position: Int) = position > -1 && position < items.size
 
 	private fun getItemPosition(updatedItem: P) = items.indexOfFirst { isTheSame(it, updatedItem) }
 
