@@ -67,9 +67,19 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		val popup = PopupMenu(this, findViewById(R.id.filter))
 		popup.menuInflater.inflate(R.menu.notes_list_filter_menu, popup.menu)
 
-		popup.setOnMenuItemClickListener { viewModel.handleFilterSelected(it.itemId) }
+		popup.setOnMenuItemClickListener { onFilterSelected(it.itemId) }
 
 		popup.show()
+	}
+
+	private fun onFilterSelected(itemId: Int): Boolean {
+		when (itemId) {
+			R.id.all -> viewModel.handleFilterSelection(NotesListViewModel.FILTER_ALL)
+			R.id.important -> viewModel.handleFilterSelection(NotesListViewModel.FILTER_IMPORTANT)
+			else -> return false
+		}
+
+		return true
 	}
 
 	private fun startNoteAddition() {

@@ -23,6 +23,9 @@ class NotesListViewModel(application: Application,
 
 		const val OPTION_FILTER = "option_filter"
 		const val OPTION_SORT = "option_sort"
+
+		const val FILTER_ALL = 0
+		const val FILTER_IMPORTANT = 1
 	}
 
 	private var currentSortOrder = C.ORDER_ASC
@@ -103,13 +106,13 @@ class NotesListViewModel(application: Application,
 
 	private fun deleteListItem(id: Long) = runOnUiThread(Runnable { listAdapter.deleteItem(id) })
 
-	fun handleFilterSelected(filterId: Int) : Boolean {
-		when (filterId) {
-			R.id.all -> loadNotes()
-			R.id.important -> loadImportantNotes()
+	fun handleFilterSelection(filter: Int) = when (filter) {
+		FILTER_ALL -> loadNotes()
+		FILTER_IMPORTANT -> loadImportantNotes()
+		else -> {
+			Log.w(TAG, "Unknown filter $filter")
+			Unit
 		}
-
-		return true
 	}
 
 	fun sort(@SortField field: String, @SortOrder order: String) {
