@@ -22,8 +22,6 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 
 	override fun createViewModel() = NotesListViewModel(application, getListAdapter())
 
-	override fun getTitleId() = R.string.app_name
-
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 		menuInflater.inflate(R.menu.notes_list_menu, menu)
 

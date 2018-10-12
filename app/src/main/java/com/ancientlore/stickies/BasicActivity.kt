@@ -24,9 +24,6 @@ abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatAc
 
 	abstract fun createViewModel() : V
 
-	@StringRes
-	abstract fun getTitleId() : Int
-
 	final override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		viewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())

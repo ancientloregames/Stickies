@@ -19,8 +19,6 @@ class NoteDetailActivity: BasicActivity<ActivityNotedetailBinding, NoteDetailVie
 
 	override fun createViewModel() = NoteDetailViewModel(application, getNoteId())
 
-	override fun getTitleId() = R.string.note_details
-
 	override fun setupActionBar() {
 		super.setupActionBar()
 		supportActionBar?.setDisplayShowTitleEnabled(false)
