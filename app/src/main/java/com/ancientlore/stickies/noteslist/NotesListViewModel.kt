@@ -51,19 +51,30 @@ class NotesListViewModel(application: Application,
 	override fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		when (requestCode) {
 			INTENT_ADD_NOTE -> handleNoteAdditionResult(resultCode, data)
+			INTENT_SHOW_NOTE -> handleShowNoteResult(resultCode, data)
 		}
 	}
 
-	private fun handleNoteAdditionResult(resultCode: Int, data: Intent?) {
-		when (resultCode) {
-			Activity.RESULT_OK -> getIdAndLoadNote(data)
-		}
+	private fun handleNoteAdditionResult(resultCode: Int, data: Intent?) = when (resultCode) {
+		Activity.RESULT_OK -> getIdAndLoadNote(data)
+		else -> Unit
+	}
+
+	private fun handleShowNoteResult(resultCode: Int, data: Intent?) = when (resultCode) {
+		Activity.RESULT_OK -> getIdAndDeleteNote(data)
+		else -> Unit
 	}
 
 	private fun getIdAndLoadNote(data: Intent?) {
 		data?.run {
 			loadNote(getLongExtra(AddEditNoteActivity.EXTRA_NOTE_ID, 0))
 		} ?: Log.w(TAG, "No note id in the NoteActivity data, finished with Success!")
+	}
+
+	private fun getIdAndDeleteNote(data: Intent?) {
+		data?.run {
+			deleteNote(getLongExtra(AddEditNoteActivity.EXTRA_NOTE_ID, 0))
+		}
 	}
 
 	private fun loadNotes() {
@@ -84,9 +95,13 @@ class NotesListViewModel(application: Application,
 		})
 	}
 
+	private fun deleteNote(id: Long) = deleteListItem(id)
+
 	private fun setListItems(items: List<Note>) = runOnUiThread(Runnable { listAdapter.setItems(items) })
 
 	private fun addListItem(item: Note) = runOnUiThread(Runnable { listAdapter.addItem(item) })
+
+	private fun deleteListItem(id: Long) = runOnUiThread(Runnable { listAdapter.deleteItem(id) })
 
 	fun handleFilterSelected(filterId: Int) : Boolean {
 		when (filterId) {

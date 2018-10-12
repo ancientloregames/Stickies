@@ -11,6 +11,7 @@
 	<string name="all">All</string>
 
 	<string name="important">Important</string>
+	<string name="delete">Delete</string>
 
 	<string name="sort">Sort</string>
 	<string name="sort_title">By title</string>
