@@ -43,16 +43,16 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	override fun setupViewModel() {
 		super.setupViewModel()
 
-		subscriptions.add(viewModel.onAddNote()
+		subscriptions.add(viewModel.observeAddNote()
 				.subscribe { startNoteAddition() })
 
-		subscriptions.add(viewModel.onShowNote()
+		subscriptions.add(viewModel.observeShowNote()
 				.subscribe { openNoteDetails(it) })
 
-		subscriptions.add(viewModel.onShowFilterMenu()
+		subscriptions.add(viewModel.observeShowFilterMenu()
 				.subscribe { showFilterMenu() })
 
-		subscriptions.add(viewModel.onShowSortMenu()
+		subscriptions.add(viewModel.observeShowSortMenu()
 				.subscribe { showSortMenu(it) })
 	}
 

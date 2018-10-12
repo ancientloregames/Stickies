@@ -32,8 +32,8 @@ class NotesListViewModel(application: Application,
 
 	private val addNoteEvent = PublishSubject.create<Any>()
 	private val showNoteEvent = PublishSubject.create<Long>()
-	private val onShowFilterMenu = PublishSubject.create<Any>()
-	private val onShowSortMenu = PublishSubject.create<String>()
+	private val showFilterMenuEvent = PublishSubject.create<Any>()
+	private val showSortMenuEvent = PublishSubject.create<String>()
 
 	init {
 		loadNotes()
@@ -44,8 +44,8 @@ class NotesListViewModel(application: Application,
 
 	override fun handleOptionSelection(option: String): Boolean {
 		when (option) {
-			OPTION_FILTER -> onShowFilterMenu.onNext(EmptyObject)
-			OPTION_SORT -> onShowSortMenu.onNext(currentSortOrder)
+			OPTION_FILTER -> showFilterMenuEvent.onNext(EmptyObject)
+			OPTION_SORT -> showSortMenuEvent.onNext(currentSortOrder)
 			else -> return false
 		}
 		return true
@@ -57,6 +57,30 @@ class NotesListViewModel(application: Application,
 			INTENT_SHOW_NOTE -> handleShowNoteResult(resultCode, data)
 		}
 	}
+
+	fun handleFilterSelection(filter: Int) = when (filter) {
+		FILTER_ALL -> loadNotes()
+		FILTER_IMPORTANT -> loadImportantNotes()
+		else -> {
+			Log.w(TAG, "Unknown filter $filter")
+			Unit
+		}
+	}
+
+	fun sort(@SortField field: String, @SortOrder order: String) {
+		currentSortOrder = order
+		listAdapter.sort(field, order)
+	}
+
+	fun onAddNoteClicked() = addNoteEvent.onNext(EmptyObject)
+
+	fun observeAddNote() = addNoteEvent as Observable<*>
+
+	fun observeShowNote() = showNoteEvent as Observable<Long>
+
+	fun observeShowFilterMenu() = showFilterMenuEvent as Observable<*>
+
+	fun observeShowSortMenu() = showSortMenuEvent as Observable<String>
 
 	private fun handleNoteAdditionResult(resultCode: Int, data: Intent?) = when (resultCode) {
 		Activity.RESULT_OK -> getIdAndLoadNote(data)
@@ -105,28 +129,4 @@ class NotesListViewModel(application: Application,
 	private fun addListItem(item: Note) = runOnUiThread(Runnable { listAdapter.addItem(item) })
 
 	private fun deleteListItem(id: Long) = runOnUiThread(Runnable { listAdapter.deleteItem(id) })
-
-	fun handleFilterSelection(filter: Int) = when (filter) {
-		FILTER_ALL -> loadNotes()
-		FILTER_IMPORTANT -> loadImportantNotes()
-		else -> {
-			Log.w(TAG, "Unknown filter $filter")
-			Unit
-		}
-	}
-
-	fun sort(@SortField field: String, @SortOrder order: String) {
-		currentSortOrder = order
-		listAdapter.sort(field, order)
-	}
-
-	fun onAddNoteClicked() = addNoteEvent.onNext(EmptyObject)
-
-	fun onAddNote() = addNoteEvent as Observable<*>
-
-	fun onShowNote() = showNoteEvent as Observable<Long>
-
-	fun onShowFilterMenu() = onShowFilterMenu as Observable<*>
-
-	fun onShowSortMenu() = onShowSortMenu as Observable<String>
 }
