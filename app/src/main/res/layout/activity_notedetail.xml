@@ -22,7 +22,6 @@
 			android:minHeight="?attr/actionBarSize"
 			android:theme="@style/AppTheme.AppBarOverlay"
 			app:layout_constraintTop_toTopOf="parent"
-			app:layout_constraintBottom_toTopOf="@+id/messageView"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			tools:layout_height="56dp"
@@ -54,6 +53,21 @@
 		</android.support.design.widget.AppBarLayout>
 
 		<android.support.v7.widget.AppCompatTextView
+			android:id="@+id/dateView"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textSize="14sp"
+			android:textColor="@android:color/darker_gray"
+			android:gravity="end"
+			android:layout_margin="4dp"
+			android:text="@={viewModel.dateField}"
+			app:layout_constraintTop_toBottomOf="@+id/appbar"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			tools:text="19/12/1990 19:00"
+			/>
+
+		<android.support.v7.widget.AppCompatTextView
 			android:id="@+id/messageView"
 			android:layout_width="0dp"
 			android:layout_height="0dp"
@@ -62,7 +76,7 @@
 			android:textSize="16sp"
 			android:textColor="@color/stickyTitle"
 			android:textIsSelectable="true"
-			app:layout_constraintTop_toBottomOf="@+id/appbar"
+			app:layout_constraintTop_toBottomOf="@+id/dateView"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
