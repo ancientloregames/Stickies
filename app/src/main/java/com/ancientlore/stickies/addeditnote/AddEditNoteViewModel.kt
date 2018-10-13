@@ -12,7 +12,7 @@ import io.reactivex.subjects.PublishSubject
 class AddEditNoteViewModel(application: Application): BasicViewModel(application) {
 
 	companion object {
-		const val OPTION_IMPRTANT = "option_important"
+		const val OPTION_IMPRTANT = 0
 
 		private const val NOTE_VALID = 0
 		const val ALERT_TITLE_EMPTY = 1
@@ -39,7 +39,7 @@ class AddEditNoteViewModel(application: Application): BasicViewModel(application
 		loadNote(noteId)
 	}
 
-	override fun handleOptionSelection(option: String): Boolean {
+	override fun handleOptionSelection(option: Int): Boolean {
 		when (option) {
 			OPTION_IMPRTANT -> switchImportance()
 			else -> return false

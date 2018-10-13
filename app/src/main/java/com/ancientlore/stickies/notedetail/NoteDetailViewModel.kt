@@ -14,7 +14,7 @@ class NoteDetailViewModel(application: Application,
 	: BasicViewModel(application) {
 
 	companion object {
-		const val OPTION_DELETE = "option_delete"
+		const val OPTION_DELETE = 0
 	}
 
 	val titleField = ObservableField<String>("")
@@ -26,7 +26,7 @@ class NoteDetailViewModel(application: Application,
 
 	init { loadNote(noteId) }
 
-	override fun handleOptionSelection(option: String): Boolean {
+	override fun handleOptionSelection(option: Int): Boolean {
 		when (option) {
 			OPTION_DELETE -> deleteNote()
 			else -> return false

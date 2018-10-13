@@ -14,18 +14,16 @@ abstract class BasicViewModel(application: Application): AndroidViewModel(applic
 
 	protected val repository = NotesRepository
 
-	init {
-		initRepository(application.baseContext)
-	}
+	init { initRepository(application.baseContext) }
 
-	open fun handleOptionSelection(option: String) = false
+	open fun handleOptionSelection(option: Int) = false
 
 	open fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { }
+
+	protected fun runOnUiThread(action: Runnable) { uiHandler.post(action) }
 
 	private fun initRepository(context: Context) {
 		val db = NotesDatabase.getInstance(context)
 		repository.initLocalSource(db.notesDao())
 	}
-
-	protected fun runOnUiThread(action: Runnable) { uiHandler.post(action) }
 }

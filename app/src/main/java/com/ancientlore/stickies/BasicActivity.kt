@@ -6,7 +6,6 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
-import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import io.reactivex.internal.disposables.ListCompositeDisposable
 import kotlinx.android.synthetic.main.appbar.*
