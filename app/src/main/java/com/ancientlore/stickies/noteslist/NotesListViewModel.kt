@@ -3,6 +3,7 @@ package com.ancientlore.stickies.noteslist
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.databinding.ObservableField
 import android.util.Log
 import com.ancientlore.stickies.*
 import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
@@ -27,6 +28,8 @@ class NotesListViewModel(application: Application,
 		const val FILTER_ALL = 0
 		const val FILTER_IMPORTANT = 1
 	}
+
+	val isEmpty = ObservableField<Boolean>(true)
 
 	private var currentSortOrder = C.ORDER_ASC
 
@@ -124,9 +127,20 @@ class NotesListViewModel(application: Application,
 
 	private fun deleteNote(id: Long) = deleteListItem(id)
 
-	private fun setListItems(items: List<Note>) = runOnUiThread(Runnable { listAdapter.setItems(items) })
+	private fun setListItems(items: List<Note>) {
+		isEmpty.set(items.isEmpty())
+		runOnUiThread(Runnable { listAdapter.setItems(items) })
+	}
 
-	private fun addListItem(item: Note) = runOnUiThread(Runnable { listAdapter.addItem(item) })
+	private fun addListItem(item: Note) {
+		isEmpty.set(false)
+		runOnUiThread(Runnable { listAdapter.addItem(item) })
+	}
 
-	private fun deleteListItem(id: Long) = runOnUiThread(Runnable { listAdapter.deleteItem(id) })
+	private fun deleteListItem(id: Long) {
+		runOnUiThread(Runnable {
+			listAdapter.deleteItem(id)
+			isEmpty.set(listAdapter.isEmpty())
+		})
+	}
 }

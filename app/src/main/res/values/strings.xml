@@ -18,8 +18,11 @@
 	<string name="sort_date_creation">By date of creation</string>
 	<string name="order_asc">Ascending</string>
 	<string name="order_desc">Descending</string>
-	
+
 	<string name="alert_note_title_empty">Note title is mandatory</string>
 	<string name="alert_note_title_long">Note title is too long</string>
 	<string name="alert_note_body_long">Note message is too long</string>
+
+	<string name="list_empty_msg">The notes list is currently empty</string>
+	<string name="list_empty_hint">Click this button to add some note</string>
 </resources>
