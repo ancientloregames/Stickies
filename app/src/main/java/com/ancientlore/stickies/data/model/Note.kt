@@ -2,8 +2,10 @@ package com.ancientlore.stickies.data.model
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.text.TextUtils
+import java.util.*
 
 @Entity(tableName = "notes")
 data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -17,6 +19,10 @@ data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
 				@field:ColumnInfo val topic: String = "",
 				@field:ColumnInfo val isImportant: Boolean = false,
 				@field:ColumnInfo val isCompleted: Boolean = false) {
+
+	@delegate:Ignore private val dateCreated by lazy { Date(timeCreated) }
+	@delegate:Ignore private val dateUpdated by lazy { Date(timeUpdated) }
+	@delegate:Ignore private val dateNotify by lazy { Date(timeNotify) }
 
 	override fun equals(other: Any?): Boolean {
 		return other is Note
