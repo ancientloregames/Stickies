@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.text.TextUtils
+import java.text.DateFormat
 import java.util.*
 
 @Entity(tableName = "notes")
@@ -53,4 +54,6 @@ data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
 		result = 31 * result + isCompleted.hashCode()
 		return result
 	}
+
+	fun getDateCreated(dateStyle: Int) = DateFormat.getDateInstance(dateStyle).format(dateCreated)!!
 }

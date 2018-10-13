@@ -48,7 +48,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 		override fun bind(data: Note) {
 			titleView.text = data.title
-			dateView.text = DateFormat.getDateInstance(DateFormat.SHORT).format(Date(data.timeCreated))
+			dateView.text = data.getDateCreated(DateFormat.SHORT)
 		}
 	}
 
