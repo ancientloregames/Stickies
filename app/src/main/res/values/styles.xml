@@ -6,10 +6,6 @@
 		<item name="colorAccent">@color/colorAccent</item>
 	</style>
 
-	<style name="AppTheme.ActionBarTextInputLayout" parent="AppTheme">
-		<item name="colorAccent">#8fffffff</item>
-	</style>
-
 	<style name="AppTheme.ActionBarTextInput" parent="AppTheme">
 		<item name="android:textColor">@android:color/white</item>
 		<item name="android:textSize">16sp</item>
@@ -43,6 +39,11 @@
 	<style name="AppTheme.ActionBarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
 		<item name="android:textSize">20sp</item>
 		<item name="android:gravity">center_vertical</item>
+	</style>
+
+	<style name="ActionBarInputLayout">
+		<item name="android:textColor">@color/actionBarTextFieldHint</item>
+		<item name="android:textSize">16sp</item>
 	</style>
 
 </resources>

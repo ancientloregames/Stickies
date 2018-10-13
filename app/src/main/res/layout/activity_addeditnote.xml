@@ -43,7 +43,7 @@
 					android:id="@+id/titleFiledWrapper"
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:theme="@style/AppTheme.ActionBarTextInputLayout"
+					app:hintTextAppearance="@style/ActionBarInputLayout"
 					>
 					<android.support.design.widget.TextInputEditText
 						android:id="@+id/titleField"
