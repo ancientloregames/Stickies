@@ -34,8 +34,6 @@ abstract class BasicListAdapter<
 
 	abstract fun getSortComparator(@SortField sortField: String): Comparator<P>
 
-	private fun getViewHolderLayout(parent: ViewGroup, layoutRes: Int) = layoutInflater.inflate(layoutRes, parent,false)
-
 	override fun getItemCount() = items.count()
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
@@ -113,6 +111,10 @@ abstract class BasicListAdapter<
 	}
 
 	override fun onItemSelected() = itemSelectedEvent as Observable<P>
+
+	override fun isEmpty() = items.isEmpty()
+
+	private fun getViewHolderLayout(parent: ViewGroup, layoutRes: Int) = layoutInflater.inflate(layoutRes, parent, false)
 
 	@UiThread
 	protected fun deleteItemAt(position: Int): Boolean {

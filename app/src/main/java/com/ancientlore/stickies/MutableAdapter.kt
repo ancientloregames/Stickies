@@ -10,6 +10,7 @@ interface MutableAdapter<T> {
 	fun deleteItem(id: Long): Boolean
 	fun findItem(id: Long): T?
 	fun findPosition(id: Long): Int?
+	fun isEmpty(): Boolean
 
 	fun sort(@SortField field: String, @SortOrder order: String)
 
