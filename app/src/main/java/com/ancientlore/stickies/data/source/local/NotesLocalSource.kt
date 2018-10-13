@@ -3,12 +3,15 @@ package com.ancientlore.stickies.data.source.local
 import com.ancientlore.stickies.SingletonHolder
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
+import com.ancientlore.stickies.data.source.EmptyResultException
 import com.ancientlore.stickies.data.source.NotesSource
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class NotesLocalSource private constructor(private val dao: NotesDao)
 	: NotesSource {
+
+	internal companion object : SingletonHolder<NotesLocalSource, NotesDao>({ NotesLocalSource(it) })
 
 	private val executor: ExecutorService = Executors.newSingleThreadExecutor { r -> Thread(r, "db_worker") }
 
@@ -17,7 +20,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 			dao.getAll()
 					.takeIf { it.isNotEmpty() }
 					?.let { callback.onSuccess(it) }
-					?: callback.onFailure(Throwable("Database is empty"))
+					?: callback.onFailure(EmptyResultException())
 		}
 	}
 
@@ -26,7 +29,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 			dao.getImportant()
 					.takeIf { it.isNotEmpty() }
 					?.let { callback.onSuccess(it) }
-					?: callback.onFailure(Throwable("Database is empty"))
+					?: callback.onFailure(EmptyResultException())
 		}
 	}
 
@@ -34,7 +37,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		executor.submit {
 			dao.findById(id)
 					?.let { callback.onSuccess(it) }
-					?: callback.onFailure(Throwable("No such item"))
+					?: callback.onFailure(EmptyResultException())
 		}
 	}
 
@@ -56,8 +59,4 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 			dao.deleteById(id)
 		}
 	}
-
-	internal companion object : SingletonHolder<NotesLocalSource, NotesDao>({
-		NotesLocalSource(it)
-	})
 }
