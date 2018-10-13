@@ -15,8 +15,6 @@ interface DataSource<DataModel> {
 
 	fun getAll(callback: RequestCallback<List<DataModel>>)
 
-	fun getImportant(callback: RequestCallback<List<DataModel>>)
-
 	fun getItem(id: Long, callback: RequestCallback<DataModel>)
 
 	fun insertItem(item: DataModel, callback: RequestCallback<Long>)
