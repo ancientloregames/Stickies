@@ -32,10 +32,20 @@ abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatAc
 		setupViewModel()
 	}
 
-	override fun onDestroy() {
+	final override fun onDestroy() {
 		subscriptions.dispose()
 
 		super.onDestroy()
+	}
+
+	override fun onSaveInstanceState(outState: Bundle?) {
+		outState?.run { viewModel.saveState(this) }
+		super.onSaveInstanceState(outState)
+	}
+
+	override fun onRestoreInstanceState(prevState: Bundle?) {
+		prevState?.run { viewModel.loadState(this) }
+		super.onRestoreInstanceState(prevState)
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
