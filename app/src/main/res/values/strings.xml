@@ -24,5 +24,5 @@
 	<string name="alert_note_body_long">Note message is too long</string>
 
 	<string name="list_empty_msg">The notes list is currently empty</string>
-	<string name="list_empty_hint">Click this button to add some note</string>
+	<string name="list_empty_hint">Click this button to add a note</string>
 </resources>

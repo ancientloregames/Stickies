@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="new_note">Новая заметка</string>
+	<string name="note_details">Заметка</string>
+	<string name="title">Заголовок</string>
+	<string name="typeTitle">Введите заголовок</string>
+	<string name="typeMessage">Введите текст</string>
+	<string name="filter">Фильтр</string>
+	<string name="all">Все</string>
+	<string name="important">Важные</string>
+	<string name="delete">Удалить</string>
+	<string name="sort">Сортировка</string>
+	<string name="sort_title">По заголовку</string>
+	<string name="sort_date_creation">По дате создания</string>
+	<string name="order_asc">Восходящая</string>
+	<string name="order_desc">Нисходящая</string>
+	<string name="alert_note_title_empty">Заголовок обязателен</string>
+	<string name="alert_note_title_long">Заголовок слишком большой</string>
+	<string name="alert_note_body_long">Текст заметки слишком большой</string>
+	<string name="list_empty_msg">Список заметок пуст</string>
+	<string name="list_empty_hint">Добавить новую заметку</string>
+	<string name="app_name">Заметки</string>
+</resources>
