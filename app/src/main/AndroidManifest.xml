@@ -11,7 +11,8 @@
 		android:theme="@style/AppTheme">
 		<activity android:name=".noteslist.NotesListActivity"
 				  android:screenOrientation="portrait"
-				  android:configChanges="orientation">
+				  android:configChanges="orientation"
+				  android:theme="@style/SplashTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 

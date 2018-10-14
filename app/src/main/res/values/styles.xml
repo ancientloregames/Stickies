@@ -6,6 +6,10 @@
 		<item name="colorAccent">@color/colorAccent</item>
 	</style>
 
+	<style name="SplashTheme" parent="AppTheme">
+		<item name="android:windowBackground">@drawable/splashscreen</item>
+	</style>
+
 	<style name="AppTheme.ActionBarTextInput" parent="AppTheme">
 		<item name="android:textColor">@android:color/white</item>
 		<item name="android:textSize">16sp</item>
