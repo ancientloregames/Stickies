@@ -3,13 +3,13 @@ package com.ancientlore.stickies.addeditnote
 import android.app.Application
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import com.ancientlore.stickies.BasicViewModel
+import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class AddEditNoteViewModel(application: Application): BasicViewModel(application) {
+class AddEditNoteViewModel(application: Application): NotesViewModel(application) {
 
 	companion object {
 		const val OPTION_IMPRTANT = 0

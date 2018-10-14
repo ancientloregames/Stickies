@@ -1,8 +1,8 @@
 package com.ancientlore.stickies.sortdialog
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.databinding.ObservableField
+import com.ancientlore.stickies.BasicViewModel
 import com.ancientlore.stickies.C
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.SortOrder
@@ -10,7 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 class SortDialogViewModel(application: Application, currentOrder: String)
-	: AndroidViewModel(application) {
+	: BasicViewModel(application) {
 
 	val orderField = ObservableField<String>(getSortOrderString(currentOrder))
 

@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 
 class NotesListViewModel(application: Application,
 						 private val listAdapter: MutableAdapter<Note>)
-	: BasicViewModel(application) {
+	: NotesViewModel(application) {
 
 	companion object {
 		private const val TAG = "MainActivityViewModel"
