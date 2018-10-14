@@ -12,6 +12,7 @@ import java.util.*
 data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
 				@field:ColumnInfo val timeCreated: Long = 0,
 				@field:ColumnInfo val timeUpdated: Long = 0,
+				@field:ColumnInfo val timeCompleted: Long = 0,
 				@field:ColumnInfo val timeNotify: Long = 0,
 				@field:ColumnInfo val title: String,
 				@field:ColumnInfo val body: String = "",
@@ -23,6 +24,7 @@ data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
 
 	@delegate:Ignore private val dateCreated by lazy { Date(timeCreated) }
 	@delegate:Ignore private val dateUpdated by lazy { Date(timeUpdated) }
+	@delegate:Ignore private val dateCompleted by lazy { Date(timeCompleted) }
 	@delegate:Ignore private val dateNotify by lazy { Date(timeNotify) }
 
 	override fun equals(other: Any?): Boolean {
@@ -30,6 +32,7 @@ data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
 				&& other.id == id
 				&& other.timeCreated == timeCreated
 				&& other.timeUpdated == timeUpdated
+				&& other.timeCompleted == timeCompleted
 				&& other.timeNotify == timeNotify
 				&& other.isImportant == isImportant
 				&& other.isCompleted == isCompleted
@@ -44,6 +47,7 @@ data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
 		var result = id.hashCode()
 		result = 31 * result + timeCreated.hashCode()
 		result = 31 * result + timeUpdated.hashCode()
+		result = 31 * result + timeCompleted.hashCode()
 		result = 31 * result + timeNotify.hashCode()
 		result = 31 * result + title.hashCode()
 		result = 31 * result + body.hashCode()
