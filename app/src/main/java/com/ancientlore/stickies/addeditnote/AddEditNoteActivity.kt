@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.ancientlore.stickies.BR
 import com.ancientlore.stickies.BasicActivity
+import com.ancientlore.stickies.C
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_IMPRTANT
 import com.ancientlore.stickies.databinding.ActivityAddeditnoteBinding
@@ -17,8 +18,6 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 
 	companion object {
 		const val TAG = "AddEditNoteActivity"
-
-		const val EXTRA_NOTE_ID = "extra_note_id"
 
 		private const val DUMMY_ID = -1L
 	}
@@ -57,13 +56,13 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 				.subscribe { showAlert(getAlertMessage(it)) })
 	}
 
-	private fun getNoteId() = intent.getLongExtra(EXTRA_NOTE_ID, DUMMY_ID)
+	private fun getNoteId() = intent.getLongExtra(C.EXTRA_NOTE_ID, DUMMY_ID)
 
 	private fun isValidId(id: Long) = id != DUMMY_ID
 
-	private fun finishWithResult(newNoteId: Long) {
+	private fun finishWithResult(noteId: Long) {
 		val intent = Intent().apply {
-			putExtra(EXTRA_NOTE_ID, newNoteId)
+			putExtra(C.EXTRA_NOTE_ID, noteId)
 		}
 		setResult(Activity.RESULT_OK, intent)
 		finish()

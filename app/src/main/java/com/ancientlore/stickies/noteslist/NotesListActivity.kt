@@ -46,6 +46,9 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		subscriptions.add(viewModel.observeAddNote()
 				.subscribe { startNoteAddition() })
 
+		subscriptions.add(viewModel.observeEditNote()
+				.subscribe { startNoteEditing(it) })
+
 		subscriptions.add(viewModel.observeShowNote()
 				.subscribe { openNoteDetails(it) })
 
@@ -87,9 +90,16 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		startActivityForResult(intent, NotesListViewModel.INTENT_ADD_NOTE)
 	}
 
+	private fun startNoteEditing(id: Long) {
+		val intent = Intent(this, AddEditNoteActivity::class.java).apply {
+			putExtra(C.EXTRA_NOTE_ID, id)
+		}
+		startActivityForResult(intent, NotesListViewModel.INTENT_EDIT_NOTE)
+	}
+
 	private fun openNoteDetails(id: Long) {
-		val intent = Intent(this, NoteDetailActivity::class.java). apply {
-			putExtra(NoteDetailActivity.EXTRA_NOTE_ID, id)
+		val intent = Intent(this, NoteDetailActivity::class.java).apply {
+			putExtra(C.EXTRA_NOTE_ID, id)
 		}
 		startActivityForResult(intent, NotesListViewModel.INTENT_SHOW_NOTE)
 	}
