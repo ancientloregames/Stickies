@@ -53,7 +53,7 @@
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			/>
-		
+
 		<LinearLayout
 			android:id="@+id/addNoteHint"
 			android:layout_width="0dp"
@@ -73,13 +73,14 @@
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
+				android:maxLines="2"
+				android:ellipsize="end"
 				android:gravity="center"
 				android:text="@string/list_empty_hint"
 				/>
 			<android.support.v7.widget.AppCompatImageView
 				android:layout_width="wrap_content"
 				android:layout_height="match_parent"
-				android:gravity="center"
 				app:srcCompat="@drawable/ic_arrow_right"
 				/>
 		</LinearLayout>
@@ -92,7 +93,6 @@
 			android:onClick="@{() -> viewModel.onAddNoteClicked()}"
 			app:srcCompat="@drawable/ic_plus"
 			app:backgroundTint="@color/fabAddNote"
-			app:layout_constraintStart_toEndOf="@+id/addNoteHint"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
 			/>
