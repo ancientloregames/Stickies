@@ -46,6 +46,10 @@ object NotesRepository: NotesSource {
 		localSource?.insertItem(item, callback)
 	}
 
+	override fun updateItem(item: Note) {
+		localSource?.updateItem(item)
+	}
+
 	override fun deleteAll() {
 		localSource?.deleteAll()
 	}

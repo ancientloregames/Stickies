@@ -48,6 +48,12 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		}
 	}
 
+	override fun updateItem(item: Note) {
+		executor.submit {
+			dao.update(item)
+		}
+	}
+
 	override fun deleteAll() {
 		executor.submit {
 			dao.deleteAll()

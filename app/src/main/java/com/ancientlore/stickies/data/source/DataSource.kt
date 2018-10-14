@@ -19,6 +19,8 @@ interface DataSource<DataModel> {
 
 	fun insertItem(item: DataModel, callback: RequestCallback<Long>)
 
+	fun updateItem(item: DataModel)
+
 	fun deleteAll()
 
 	fun deleteItem(id: Long)
