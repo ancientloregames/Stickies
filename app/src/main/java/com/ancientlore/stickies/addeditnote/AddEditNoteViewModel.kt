@@ -3,6 +3,7 @@ package com.ancientlore.stickies.addeditnote
 import android.app.Application
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
+import android.os.Bundle
 import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
@@ -21,6 +22,10 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 		const val TITLE_LIMIT = 256
 		const val BODY_LIMIT = 2048
+
+		private const val STATE_TITLE = "state_title"
+		private const val STATE_BODY = "state_body"
+		private const val STATE_IMPORTANCE = "state_importance"
 	}
 
 	val titleField = ObservableField<String>("")
@@ -37,6 +42,18 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	constructor(application: Application, noteId: Long) : this(application) {
 		loadNote(noteId)
+	}
+
+	override fun saveState(bundle: Bundle) {
+		bundle.putString(STATE_TITLE, titleField.get())
+		bundle.putString(STATE_BODY, messageField.get())
+		bundle.putBoolean(STATE_IMPORTANCE, isImportant.get())
+	}
+
+	override fun loadState(bundle: Bundle) {
+		titleField.set(bundle.getString(STATE_TITLE))
+		messageField.set(bundle.getString(STATE_BODY))
+		isImportant.set(bundle.getBoolean(STATE_IMPORTANCE))
 	}
 
 	override fun handleOptionSelection(option: Int): Boolean {

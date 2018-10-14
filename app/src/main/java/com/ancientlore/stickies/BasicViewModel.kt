@@ -10,9 +10,9 @@ abstract class BasicViewModel(application: Application): AndroidViewModel(applic
 
 	private val uiHandler = Handler(application.mainLooper)
 
-	open fun saveState(bandle: Bundle) { }
+	open fun saveState(bundle: Bundle) { }
 
-	open fun loadState(bandle: Bundle) { }
+	open fun loadState(bundle: Bundle) { }
 
 	open fun handleOptionSelection(option: Int) = false
 
