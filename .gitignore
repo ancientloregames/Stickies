@@ -16,9 +16,6 @@ out/
 # Gradle files
 .gradle/
 build/
-gradlew
-gradlew.bat
-gradle-wrapper.*
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -60,3 +57,9 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
+# Eclipse project files
+.project
+.settings/
+.classpath
+.DS_Store
