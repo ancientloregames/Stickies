@@ -16,6 +16,7 @@ object NotesRepository: NotesSource {
 				if (error is EmptyResultException)
 					Log.w("NotesRepository", "Local database is empty")
 				// TODO load from the remote db
+				callback.onSuccess(emptyList())
 			}
 		})
 	}
@@ -27,6 +28,7 @@ object NotesRepository: NotesSource {
 				if (error is EmptyResultException)
 					Log.w("NotesRepository", "Local database is empty")
 				// TODO load from the remote db
+				callback.onSuccess(emptyList())
 			}
 		})
 	}
