@@ -12,6 +12,11 @@ import io.reactivex.internal.disposables.ListCompositeDisposable
 import kotlinx.android.synthetic.main.appbar.*
 
 abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatActivity() {
+
+	companion object {
+		init { AppCompatDelegate.setCompatVectorFromResourcesEnabled(true) }
+	}
+
 	private lateinit var viewDataBinding : T
 	protected lateinit var viewModel : V
 
@@ -25,7 +30,6 @@ abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatAc
 	abstract fun createViewModel() : V
 
 	final override fun onCreate(savedInstanceState: Bundle?) {
-		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 		super.onCreate(savedInstanceState)
 		viewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
 
@@ -59,7 +63,6 @@ abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatAc
 	 */
 	@CallSuper
 	protected open fun setupView(savedInstanceState: Bundle?) {
-		setupActionBar()
 	}
 
 	@CallSuper
