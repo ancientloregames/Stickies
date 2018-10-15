@@ -63,6 +63,7 @@ abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatAc
 	 */
 	@CallSuper
 	protected open fun setupView(savedInstanceState: Bundle?) {
+		setupActionBar()
 	}
 
 	@CallSuper
