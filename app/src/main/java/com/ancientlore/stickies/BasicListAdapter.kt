@@ -62,6 +62,17 @@ abstract class BasicListAdapter<
 	}
 
 	@UiThread
+	override fun prependItem(newItem: P): Boolean {
+		if (isUnique(newItem)) {
+			items.add(0, newItem)
+			notifyItemInserted(0)
+			return true
+		}
+
+		return false
+	}
+
+	@UiThread
 	override fun addItem(newItem: P): Boolean {
 		if (isUnique(newItem)) {
 			items.add(newItem)

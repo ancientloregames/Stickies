@@ -155,7 +155,7 @@ class NotesListViewModel(application: Application,
 
 	private fun addListItem(item: Note) {
 		isEmpty.set(false)
-		runOnUiThread(Runnable { listAdapter.addItem(item) })
+		runOnUiThread(Runnable { listAdapter.prependItem(item) })
 	}
 
 	private fun updateListItem(item: Note) = runOnUiThread(Runnable { listAdapter.updateItem(item) })
