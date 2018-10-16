@@ -15,8 +15,6 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 
 	companion object {
 		const val TAG = "AddEditNoteActivity"
-
-		private const val DUMMY_ID = -1L
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -48,9 +46,9 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 				.subscribe { showAlert(getAlertMessage(it)) })
 	}
 
-	private fun getNoteId() = intent.getLongExtra(C.EXTRA_NOTE_ID, DUMMY_ID)
+	private fun getNoteId() = intent.getLongExtra(C.EXTRA_NOTE_ID, C.DUMMY_ID)
 
-	private fun isValidId(id: Long) = id != DUMMY_ID
+	private fun isValidId(id: Long) = id != C.DUMMY_ID
 
 	private fun finishWithResult(noteId: Long) {
 		val intent = Intent().apply {
