@@ -36,7 +36,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 
 	override fun setupView(savedInstanceState: Bundle?) {
 		super.setupView(savedInstanceState)
-
+		setupActionBar()
 		setupList()
 	}
 

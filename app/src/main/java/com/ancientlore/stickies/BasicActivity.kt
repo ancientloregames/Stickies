@@ -60,11 +60,9 @@ abstract class BasicActivity<T: ViewDataBinding, V: BasicViewModel>: AppCompatAc
 
 	/**
 	 * Called before the initialization of the ViewModel
-	 */
+	*/
 	@CallSuper
-	protected open fun setupView(savedInstanceState: Bundle?) {
-		setupActionBar()
-	}
+	protected open fun setupView(savedInstanceState: Bundle?) {}
 
 	@CallSuper
 	protected open fun setupActionBar() = setSupportActionBar(toolbar)

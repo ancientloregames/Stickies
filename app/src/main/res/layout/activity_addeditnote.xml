@@ -22,42 +22,41 @@
 			android:id="@+id/appbar"
 			android:layout_width="0dp"
 			android:layout_height="?attr/actionBarSize"
-			android:minHeight="?attr/actionBarSize"
 			android:theme="@style/AppTheme.AppBarOverlay"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintBottom_toTopOf="@+id/messageField"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			tools:layout_height="56dp"
-			tools:background="@color/stickyYellowDark"
+			tools:background="@color/colorPrimary"
 			>
-
-			<android.support.v7.widget.Toolbar
-				android:id="@+id/toolbar"
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				app:popupTheme="@style/AppTheme.PopupOverlay"
+				android:orientation="horizontal"
 				>
-
-				<android.support.design.widget.TextInputLayout
-					android:id="@+id/titleFiledWrapper"
-					android:layout_width="match_parent"
+				<android.support.v7.widget.AppCompatEditText
+					android:id="@+id/titleField"
+					android:layout_width="0dp"
 					android:layout_height="match_parent"
-					app:hintTextAppearance="@style/ActionBarInputLayout"
-					>
-					<android.support.design.widget.TextInputEditText
-						android:id="@+id/titleField"
-						android:layout_width="match_parent"
-						android:layout_height="match_parent"
-						android:maxLines="1"
-						android:singleLine="true"
-						android:text="@={viewModel.titleField}"
-						android:hint="@string/title"
-						android:inputType="textCapSentences"
-						style="@style/AppTheme.ActionBarTextInput"
-						/>
-				</android.support.design.widget.TextInputLayout>
-			</android.support.v7.widget.Toolbar>
+					android:layout_weight="1"
+					android:text="@={viewModel.titleField}"
+					android:hint="@string/typeTitle"
+					android:layout_marginStart="8dp"
+					android:layout_marginLeft="8dp"
+					android:background="@null"
+					style="@style/AppTheme.ActionBarTextInput"
+					/>
+				<android.support.v7.widget.AppCompatCheckBox
+					android:id="@+id/importantSwitch"
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent"
+					android:button="@drawable/important_selector"
+					android:checked="@={viewModel.isImportant()}"
+					android:paddingRight="16dp"
+					android:paddingEnd="16dp"
+					/>
+			</LinearLayout>
 
 		</android.support.design.widget.AppBarLayout>
 
