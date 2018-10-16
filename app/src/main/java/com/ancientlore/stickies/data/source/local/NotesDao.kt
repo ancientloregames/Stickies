@@ -6,10 +6,10 @@ import com.ancientlore.stickies.data.model.Note
 @Dao
 interface NotesDao {
 
-	@Query("SELECT * FROM notes")
+	@Query("SELECT * FROM notes ORDER BY id DESC")
 	fun getAll(): List<Note>
 
-	@Query("SELECT * FROM notes WHERE isImportant = 1")
+	@Query("SELECT * FROM notes WHERE isImportant = 1 ORDER BY id DESC")
 	fun getImportant(): List<Note>
 
 	@Query("SELECT * FROM notes WHERE id IN (:ids)")
