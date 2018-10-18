@@ -2,10 +2,10 @@ package com.ancientlore.stickies.popupmenu
 
 import android.databinding.BaseObservable
 
-class PopupMenuItemViewModel(val item: PopupMenuItem): BaseObservable() {
+class MenuItemViewModel(val item: MenuItem): BaseObservable() {
 
 	interface Listener {
-		fun onItemClicked(item: PopupMenuItem)
+		fun onItemClicked(item: MenuItem)
 	}
 	private var listener: Listener? = null
 

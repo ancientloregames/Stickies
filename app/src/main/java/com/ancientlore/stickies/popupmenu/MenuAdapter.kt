@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import com.ancientlore.stickies.BasicListAdapter
 import com.ancientlore.stickies.databinding.PopupItemBinding
 
-class PopupMenuAdapter(context: Context)
-	: BasicListAdapter<PopupMenuItem>(context), PopupMenuItemViewModel.Listener {
+class MenuAdapter(context: Context)
+	: BasicListAdapter<MenuItem>(context), MenuItemViewModel.Listener {
 
 	override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 		val  binding = convertView?.let {
 			DataBindingUtil.getBinding<PopupItemBinding>(convertView)
 		} ?: PopupItemBinding.inflate(inflater, parent, false)
 
-		val viewModel = PopupMenuItemViewModel(getItem(position))
+		val viewModel = MenuItemViewModel(getItem(position))
 		binding.viewModel = viewModel
 
 		viewModel.setListener(this)
@@ -23,5 +23,5 @@ class PopupMenuAdapter(context: Context)
 		return binding.root
 	}
 
-	override fun onItemClicked(item: PopupMenuItem) = itemClickedEvent.onNext(item)
+	override fun onItemClicked(item: MenuItem) = itemClickedEvent.onNext(item)
 }

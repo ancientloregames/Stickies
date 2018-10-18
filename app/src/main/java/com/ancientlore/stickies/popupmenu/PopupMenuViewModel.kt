@@ -7,9 +7,9 @@ import android.widget.ListAdapter
 
 class PopupMenuViewModel(context: Context): BaseObservable() {
 
-	private val adapter = PopupMenuAdapter(context)
+	private val adapter = MenuAdapter(context)
 
-	fun setAdapterItems(items: List<PopupMenuItem>) = adapter.setItems(items)
+	fun setAdapterItems(items: List<MenuItem>) = adapter.setItems(items)
 
 	@Bindable
 	fun getListAdapter() = adapter as ListAdapter

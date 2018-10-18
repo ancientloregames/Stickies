@@ -20,7 +20,7 @@ class PopupMenu(context: Context) {
 	}
 
 	@UiThread
-	fun setItems(items: List<PopupMenuItem>) = viewModel.setAdapterItems(items)
+	fun setItems(items: List<MenuItem>) = viewModel.setAdapterItems(items)
 
 	@UiThread
 	fun show(anchor: View) {

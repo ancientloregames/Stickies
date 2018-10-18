@@ -6,7 +6,7 @@
 	<data>
 		<variable
 			name="viewModel"
-			type="com.ancientlore.stickies.popupmenu.PopupMenuItemViewModel"/>
+			type="com.ancientlore.stickies.popupmenu.MenuItemViewModel"/>
 	</data>
 	<LinearLayout
 		android:layout_width="match_parent"
