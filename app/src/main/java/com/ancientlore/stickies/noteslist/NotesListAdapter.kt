@@ -5,7 +5,7 @@ import android.support.annotation.UiThread
 import android.support.v7.util.DiffUtil
 import android.view.View
 import android.widget.TextView
-import com.ancientlore.stickies.BasicListAdapter
+import com.ancientlore.stickies.BasicRecyclerAdapter
 import com.ancientlore.stickies.C
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.SortField
@@ -14,7 +14,7 @@ import java.text.DateFormat
 import java.util.*
 
 class NotesListAdapter(context: Context, items: MutableList<Note>)
-	: BasicListAdapter<Note, NotesListAdapter.ViewHolder>(context, items) {
+	: BasicRecyclerAdapter<Note, NotesListAdapter.ViewHolder>(context, items) {
 
 	private var timeComparator = Comparator<Note> { o1, o2 -> o1.timeCreated.compareTo(o2.timeCreated) }
 	private var titleComparator = Comparator<Note> { o1, o2 -> o1.title.compareTo(o2.title) }
@@ -41,7 +41,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		else -> titleComparator
 	}
 
-	class ViewHolder(itemView: View): BasicListAdapter.ViewHolder<Note>(itemView) {
+	class ViewHolder(itemView: View): BasicRecyclerAdapter.ViewHolder<Note>(itemView) {
 
 		private val titleView = itemView.findViewById<TextView>(R.id.titleView)
 		private val dateView = itemView.findViewById<TextView>(R.id.dateView)
