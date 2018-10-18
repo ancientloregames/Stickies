@@ -1,4 +1,4 @@
-package com.ancientlore.stickies.popupmenu
+package com.ancientlore.stickies.menu.popup
 
 import android.content.Context
 import android.support.annotation.UiThread
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import com.ancientlore.stickies.databinding.PopupMenuBinding
+import com.ancientlore.stickies.menu.MenuItem
 
 class PopupMenu(context: Context) {
 

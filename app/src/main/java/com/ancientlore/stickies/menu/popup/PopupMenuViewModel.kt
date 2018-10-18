@@ -1,9 +1,11 @@
-package com.ancientlore.stickies.popupmenu
+package com.ancientlore.stickies.menu.popup
 
 import android.content.Context
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.widget.ListAdapter
+import com.ancientlore.stickies.menu.MenuAdapter
+import com.ancientlore.stickies.menu.MenuItem
 
 class PopupMenuViewModel(context: Context): BaseObservable() {
 

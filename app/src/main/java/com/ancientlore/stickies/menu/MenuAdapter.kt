@@ -1,4 +1,4 @@
-package com.ancientlore.stickies.popupmenu
+package com.ancientlore.stickies.menu
 
 import android.content.Context
 import android.databinding.DataBindingUtil

@@ -1,4 +1,4 @@
-package com.ancientlore.stickies.popupmenu
+package com.ancientlore.stickies.menu
 
 import android.support.annotation.DrawableRes
 
