@@ -14,11 +14,14 @@
 		android:orientation="horizontal"
 		android:gravity="center_vertical"
 		android:background="@drawable/ripple_effect_background"
+		android:padding="16dp"
 		android:onClick="@{() -> viewModel.onClicked()}"
 		>
 		<android.support.v7.widget.AppCompatImageView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:paddingEnd="8dp"
+			android:paddingRight="8dp"
 			app:srcCompat="@{viewModel.item.iconRes}"
 			app:tint="@android:color/black"
 			tools:srcCompat="@drawable/ic_sort"
@@ -30,7 +33,6 @@
 			android:text="@{viewModel.item.title}"
 			android:textColor="@color/stickyTitle"
 			android:textSize="16sp"
-			android:padding="10dp"
 			tools:text="Title"
 			/>
 	</LinearLayout>
