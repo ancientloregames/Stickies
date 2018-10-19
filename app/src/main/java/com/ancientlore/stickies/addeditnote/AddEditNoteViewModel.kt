@@ -99,24 +99,27 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	private fun composeNote() = editedNote?.let { composeNoteBasedOn(it) } ?: composeNewNote()
 
-	private fun composeNewNote() = Note(
-			timeCreated = System.currentTimeMillis(),
-			title = titleField.get()!!,
-			body = messageField.get()!!,
-			isImportant = isImportant.get())
+	private fun composeNewNote(): Note {
+		return Note(
+				timeCreated = System.currentTimeMillis(),
+				title = titleField.get()!!,
+				body = messageField.get()!!,
+				isImportant = isImportant.get())
+	}
 
-	private fun composeNoteBasedOn(note: Note) = Note(
-			id = note.id,
-			timeCreated = note.timeCreated,
-			timeUpdated = System.currentTimeMillis(),
-			timeNotify = note.timeCreated,
-			title = titleField.get()!!,
-			body = messageField.get()!!,
-			color = note.color,
-			icon = note.icon,
-			topic = note.topic,
-			isImportant = isImportant.get(),
-			isCompleted = note.isCompleted)
+	private fun composeNoteBasedOn(note: Note): Note {
+		return Note(id = note.id,
+				timeCreated = note.timeCreated,
+				timeUpdated = System.currentTimeMillis(),
+				timeNotify = note.timeCreated,
+				title = titleField.get()!!,
+				body = messageField.get()!!,
+				color = note.color,
+				icon = note.icon,
+				topic = note.topic,
+				isImportant = isImportant.get(),
+				isCompleted = note.isCompleted)
+	}
 
 	private fun isValid(): Boolean {
 		val messageId = getValidityMessageId()
@@ -127,10 +130,12 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		} else true
 	}
 
-	private fun getValidityMessageId() = when {
-		noteTitle.isEmpty() -> ALERT_TITLE_EMPTY
-		noteTitle.length > TITLE_LIMIT -> ALERT_TITLE_LONG
-		noteBody.length > BODY_LIMIT -> ALERT_BODY_LONG
-		else -> NOTE_VALID
+	private fun getValidityMessageId(): Int {
+		return when {
+			noteTitle.isEmpty() -> ALERT_TITLE_EMPTY
+			noteTitle.length > TITLE_LIMIT -> ALERT_TITLE_LONG
+			noteBody.length > BODY_LIMIT -> ALERT_BODY_LONG
+			else -> NOTE_VALID
+		}
 	}
 }
