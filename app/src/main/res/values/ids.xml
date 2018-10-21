@@ -3,4 +3,5 @@
 <resources>
 	<item name="im_important" type="id"/>
 	<item name="im_completed" type="id"/>
+	<item name="im_colorpicker" type="id"/>
 </resources>

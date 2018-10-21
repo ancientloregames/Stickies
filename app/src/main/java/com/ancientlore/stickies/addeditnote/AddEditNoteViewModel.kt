@@ -2,9 +2,12 @@ package com.ancientlore.stickies.addeditnote
 
 import android.app.Application
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import com.ancientlore.stickies.EmptyObject
 import com.ancientlore.stickies.NotesViewModel
+import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
 import io.reactivex.Observable
@@ -13,8 +16,9 @@ import io.reactivex.subjects.PublishSubject
 class AddEditNoteViewModel(application: Application): NotesViewModel(application) {
 
 	companion object {
-		const val OPTION_IMPRTANT = 0
+		const val OPTION_IMPORTANT = 0
 		const val OPTION_COMPLETED = 1
+		const val OPTION_PICKCOLOR = 2
 
 		private const val NOTE_VALID = 0
 		const val ALERT_TITLE_EMPTY = 1
@@ -31,16 +35,19 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	val titleField = ObservableField<String>("")
 	val messageField = ObservableField<String>("")
+	val colorField = ObservableInt(ContextCompat.getColor(context, R.color.noteYellow))
 
 	private var editedNote: Note? = null
 
 	private val noteTitle get() = titleField.get()!!
 	private val noteBody get() = messageField.get()!!
+	private val noteColor get() = colorField.get()
 	private var isImportant = false
 	private var isCompleted = false
 
 	private val onNoteAdded = PublishSubject.create<Long>()
 	private val onMenuCalled = PublishSubject.create<Any>()
+	private val onColorPickerCalled = PublishSubject.create<Int>()
 	private val onAlert = PublishSubject.create<Int>()
 
 	constructor(application: Application, noteId: Long) : this(application) {
@@ -61,12 +68,15 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	override fun handleOptionSelection(option: Int): Boolean {
 		when (option) {
-			OPTION_IMPRTANT -> switchImportance()
+			OPTION_IMPORTANT -> switchImportance()
 			OPTION_COMPLETED -> switchCompletion()
+			OPTION_PICKCOLOR -> onColorPickerCalled.onNext(colorField.get())
 			else -> return false
 		}
 		return true
 	}
+
+	fun setColor(color: Int) = colorField.set(color)
 
 	fun onSubmitClicked() {
 		if (isValid())
@@ -78,6 +88,8 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	fun observeNoteAdded() = onNoteAdded as Observable<Long>
 
 	fun observeMenuCalled() = onMenuCalled as Observable<*>
+
+	fun observeColorPickerCalled() = onColorPickerCalled as Observable<Int>
 
 	fun observeAlert() = onAlert as Observable<Int>
 
@@ -112,6 +124,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 				timeCreated = System.currentTimeMillis(),
 				title = noteTitle,
 				body = noteBody,
+				color = noteColor,
 				isImportant = isImportant,
 				isCompleted = isCompleted)
 	}

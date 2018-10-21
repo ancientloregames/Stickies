@@ -21,6 +21,7 @@ internal class AddEditMenuDialog: BottomMenuDialog() {
 		return arrayListOf<MenuItem>().apply {
 			add(MenuItem(R.id.im_important, R.string.menu_important, R.drawable.ic_important_on))
 			add(MenuItem(R.id.im_completed, R.string.menu_completed, R.drawable.ic_completed_on))
+			add(MenuItem(R.id.im_colorpicker, R.string.menu_colorpicker, R.drawable.ic_colorpicker))
 		}
 	}
 }

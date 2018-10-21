@@ -15,6 +15,7 @@
 
 	<string name="menu_important">Important</string>
 	<string name="menu_completed">Completed</string>
+	<string name="menu_colorpicker">Change Color</string>
 
 	<string name="sort">Sort</string>
 	<string name="sort_title">By title</string>

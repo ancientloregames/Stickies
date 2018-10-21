@@ -14,8 +14,9 @@
 	<android.support.constraint.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:background="@color/stickyYellowLight"
+		android:background="@{viewModel.colorField}"
 		tools:context=".noteslist.NotesListActivity"
+		tools:background="@color/noteYellow"
 		>
 
 		<android.support.design.widget.AppBarLayout

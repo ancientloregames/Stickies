@@ -10,7 +10,9 @@ import com.ancientlore.stickies.BasicActivity
 import com.ancientlore.stickies.C
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_COMPLETED
-import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_IMPRTANT
+import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_IMPORTANT
+import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_PICKCOLOR
+import com.ancientlore.stickies.menu.colorpicker.ColorPickerDialogFragment
 import com.ancientlore.stickies.databinding.ActivityAddeditnoteBinding
 import com.ancientlore.stickies.menu.MenuItem
 import com.ancientlore.stickies.menu.bottomsheet.BottomMenuDialog
@@ -49,6 +51,9 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 		subscriptions.add(viewModel.observeMenuCalled()
 				.subscribe { openMenu() })
 
+		subscriptions.add(viewModel.observeColorPickerCalled()
+				.subscribe { openColorPicker(it) })
+
 		subscriptions.add(viewModel.observeAlert()
 				.subscribe { showAlert(getAlertMessage(it)) })
 	}
@@ -70,8 +75,8 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 
 		menu.setListener(object : BottomMenuDialog.Listener {
 			override fun onItemSelected(item: MenuItem) {
-				onMenuItemSelected(item)
 				menu.hide()
+				onMenuItemSelected(item)
 			}
 		})
 
@@ -80,11 +85,26 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 
 	private fun onMenuItemSelected(item: MenuItem) {
 		val option = when (item.id) {
-			R.id.im_important -> OPTION_IMPRTANT
+			R.id.im_important -> OPTION_IMPORTANT
 			R.id.im_completed -> OPTION_COMPLETED
+			R.id.im_colorpicker -> OPTION_PICKCOLOR
 			else -> throw RuntimeException("Unknown options menu item!")
 		}
 		viewModel.handleOptionSelection(option)
+	}
+
+	private fun openColorPicker(currentColor: Int) {
+		val colors = resources.getIntArray(R.array.noteColors)
+		val colorPicker = ColorPickerDialogFragment.newInstance(colors, currentColor)
+
+		colorPicker.setListener(object : ColorPickerDialogFragment.Listener {
+			override fun onColorPicked(color: Int) {
+				colorPicker.hide()
+				viewModel.setColor(color)
+			}
+		})
+
+		colorPicker.show(supportFragmentManager)
 	}
 
 	private fun showAlert(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

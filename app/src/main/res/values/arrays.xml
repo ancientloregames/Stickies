@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<integer-array name="noteColors">
+		<item>@color/noteWhite</item>
+		<item>@color/noteGray</item>
+		<item>@color/noteRed</item>
+		<item>@color/noteBlue</item>
+		<item>@color/noteGreen</item>
+		<item>@color/noteCyan</item>
+		<item>@color/noteMagenta</item>
+		<item>@color/noteYellow</item>
+	</integer-array>
+</resources>
