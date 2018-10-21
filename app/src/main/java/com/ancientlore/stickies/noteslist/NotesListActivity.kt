@@ -57,6 +57,9 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 
 		subscriptions.add(viewModel.observeShowSortMenu()
 				.subscribe { showSortMenu(it) })
+
+		subscriptions.add(viewModel.observeScrollToTopRequest()
+				.subscribe { notesListView.smoothScrollToPosition(0) })
 	}
 
 	private fun setupList() {

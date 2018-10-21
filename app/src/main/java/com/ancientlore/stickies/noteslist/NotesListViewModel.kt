@@ -38,6 +38,7 @@ class NotesListViewModel(application: Application,
 	private val showNoteEvent = PublishSubject.create<Long>()
 	private val showFilterMenuEvent = PublishSubject.create<Any>()
 	private val showSortMenuEvent = PublishSubject.create<String>()
+	private val requestScrollToTop = PublishSubject.create<Any>()
 
 	init {
 		loadAllNotes()
@@ -88,6 +89,8 @@ class NotesListViewModel(application: Application,
 	fun observeShowFilterMenu() = showFilterMenuEvent as Observable<*>
 
 	fun observeShowSortMenu() = showSortMenuEvent as Observable<String>
+
+	fun observeScrollToTopRequest() = requestScrollToTop as Observable<*>
 
 	private fun handleNoteAdditionResult(resultCode: Int, data: Intent?) {
 		when (resultCode) {
@@ -155,7 +158,10 @@ class NotesListViewModel(application: Application,
 
 	private fun addListItem(item: Note) {
 		isEmpty.set(false)
-		runOnUiThread(Runnable { listAdapter.prependItem(item) })
+		runOnUiThread(Runnable {
+			listAdapter.prependItem(item)
+			requestScrollToTop.onNext(EmptyObject)
+		})
 	}
 
 	private fun updateListItem(item: Note) = runOnUiThread(Runnable { listAdapter.updateItem(item) })
