@@ -22,7 +22,7 @@
 			android:layout_height="wrap_content"
 			android:paddingEnd="8dp"
 			android:paddingRight="8dp"
-			app:srcCompat="@{viewModel.item.iconRes}"
+			app:srcCompat="@{viewModel.item.icon}"
 			app:tint="@android:color/black"
 			tools:srcCompat="@drawable/ic_sort"
 			/>

@@ -3,20 +3,22 @@ package com.ancientlore.stickies.menu
 import android.os.Parcel
 import android.os.Parcelable
 import android.support.annotation.DrawableRes
+import android.support.annotation.IdRes
+import android.support.annotation.StringRes
 
-data class MenuItem(val id: Int,
-					val title: String,
-					@DrawableRes val iconRes: Int = -1) : Parcelable {
+data class MenuItem(@IdRes val id: Int,
+					@StringRes val title: Int,
+					@DrawableRes val icon: Int = -1) : Parcelable {
 
 	constructor(parcel: Parcel) : this(
 			parcel.readInt(),
-			parcel.readString() ?: "",
+			parcel.readInt(),
 			parcel.readInt())
 
 	override fun writeToParcel(parcel: Parcel, flags: Int) {
 		parcel.writeInt(id)
-		parcel.writeString(title)
-		parcel.writeInt(iconRes)
+		parcel.writeInt(title)
+		parcel.writeInt(icon)
 	}
 
 	override fun describeContents() = 0
