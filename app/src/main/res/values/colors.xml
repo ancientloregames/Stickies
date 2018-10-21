@@ -10,9 +10,8 @@
 	<color name="importantNote">#f00</color>
 	<color name="importantNoteNot">#ccc</color>
 
-	<color name="stickyYellowLight">#fff8bb</color>
-	<color name="stickyYellowDark">#f5da66</color>
-	<color name="stickyYellowDarker">#d1b31c</color>
+	<color name="splashUpper">#fff8bb</color>
+	<color name="splashLower">#f5da66</color>
 
 	<color name="stickyTitle">#333</color>
 	<color name="actionBarTextFieldHint">#8fffffff</color>
