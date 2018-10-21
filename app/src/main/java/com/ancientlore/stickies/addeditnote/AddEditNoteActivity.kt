@@ -79,6 +79,7 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 	private fun onMenuItemSelected(item: MenuItem) {
 		when (item.id) {
 			R.id.im_important -> viewModel.switchImportance()
+			R.id.im_completed -> viewModel.switchCompletion()
 		}
 	}
 

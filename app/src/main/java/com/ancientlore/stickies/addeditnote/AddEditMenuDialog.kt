@@ -20,6 +20,7 @@ internal class AddEditMenuDialog: BottomMenuDialog() {
 	private fun createMenu(): ArrayList<MenuItem> {
 		return arrayListOf<MenuItem>().apply {
 			add(MenuItem(R.id.im_important, R.string.menu_important, R.drawable.ic_important_on))
+			add(MenuItem(R.id.im_completed, R.string.menu_completed, R.drawable.ic_completed_on))
 		}
 	}
 }

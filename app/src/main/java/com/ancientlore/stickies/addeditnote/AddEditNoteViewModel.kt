@@ -37,6 +37,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	private val noteTitle get() = titleField.get()!!
 	private val noteBody get() = messageField.get()!!
+	private var isCompleted = false
 
 	private val onNoteAdded = PublishSubject.create<Long>()
 	private val onMenuCalled = PublishSubject.create<Any>()
@@ -90,6 +91,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		titleField.set(note.title)
 		messageField.set(note.body)
 		isImportant.set(note.isImportant)
+		isCompleted = note.isImportant
 	}
 
 	private fun addNote() {
@@ -98,10 +100,9 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		})
 	}
 
-	fun switchImportance() {
-		val wasImportant = isImportant.get()
-		isImportant.set(!wasImportant)
-	}
+	fun switchImportance() { isImportant.set(!isImportant.get()) }
+
+	fun switchCompletion() { isCompleted = !isCompleted }
 
 	private fun composeNote() = editedNote?.let { composeNoteBasedOn(it) } ?: composeNewNote()
 
@@ -110,7 +111,8 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 				timeCreated = System.currentTimeMillis(),
 				title = titleField.get()!!,
 				body = messageField.get()!!,
-				isImportant = isImportant.get())
+				isImportant = isImportant.get(),
+				isCompleted = isCompleted)
 	}
 
 	private fun composeNoteBasedOn(note: Note): Note {
@@ -124,7 +126,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 				icon = note.icon,
 				topic = note.topic,
 				isImportant = isImportant.get(),
-				isCompleted = note.isCompleted)
+				isCompleted = isCompleted)
 	}
 
 	private fun isValid(): Boolean {

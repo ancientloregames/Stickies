@@ -2,4 +2,5 @@
 
 <resources>
 	<item name="im_important" type="id"/>
+	<item name="im_completed" type="id"/>
 </resources>
