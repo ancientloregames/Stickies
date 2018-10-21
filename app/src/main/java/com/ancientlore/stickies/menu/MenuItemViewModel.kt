@@ -1,15 +1,7 @@
 package com.ancientlore.stickies.menu
 
-import android.databinding.BaseObservable
+import com.ancientlore.stickies.BasicListItemViewModel
 
-class MenuItemViewModel(val item: MenuItem): BaseObservable() {
-
-	interface Listener {
-		fun onItemClicked(item: MenuItem)
-	}
-	private var listener: Listener? = null
-
-	fun onClicked() = listener?.onItemClicked(item)
-
-	fun setListener(listener: Listener) { this.listener = listener }
+class MenuItemViewModel(item: MenuItem): BasicListItemViewModel<MenuItem>(item) {
+	interface Listener: BasicListItemViewModel.Listener<MenuItem>
 }
