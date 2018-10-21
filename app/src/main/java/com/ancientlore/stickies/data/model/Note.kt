@@ -16,7 +16,7 @@ data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
 				@field:ColumnInfo val timeNotify: Long = 0,
 				@field:ColumnInfo val title: String,
 				@field:ColumnInfo val body: String = "",
-				@field:ColumnInfo val color: String = "",
+				@field:ColumnInfo val color: Int = 0x7f050082,
 				@field:ColumnInfo val icon: String = "",
 				@field:ColumnInfo val topic: String = "",
 				@field:ColumnInfo val isImportant: Boolean = false,
@@ -36,9 +36,9 @@ data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
 				&& other.timeNotify == timeNotify
 				&& other.isImportant == isImportant
 				&& other.isCompleted == isCompleted
+				&& other.color == color
 				&& TextUtils.equals(other.title, title)
 				&& TextUtils.equals(other.body, body)
-				&& TextUtils.equals(other.color, color)
 				&& TextUtils.equals(other.icon, icon)
 				&& TextUtils.equals(other.topic, topic)
 	}
