@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.databinding.BottomMenuBinding
 import com.ancientlore.stickies.menu.MenuItem
+import io.reactivex.internal.disposables.ListCompositeDisposable
 
-class BottomMenuDialog: BottomSheetDialogFragment() {
+open class BottomMenuDialog: BottomSheetDialogFragment() {
 
 	companion object {
+		const val DEF_TAG = "optionsMenu"
 		const val ARG_ITEMS = "arg_items"
 
 		fun newInstance(items: ArrayList<MenuItem>): BottomMenuDialog {
@@ -25,6 +27,13 @@ class BottomMenuDialog: BottomSheetDialogFragment() {
 		}
 	}
 
+	interface Listener {
+		fun onItemSelected(item: MenuItem)
+	}
+	private var listener: Listener? = null
+
+	private val subscriptions = ListCompositeDisposable()
+
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = createView(inflater, container)
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,29 +41,38 @@ class BottomMenuDialog: BottomSheetDialogFragment() {
 
 		val viewModel = createViewModel(view.context)
 
-		setupViewModel(viewModel)
-
 		bind(view, viewModel)
 	}
 
-	override fun show(manager: FragmentManager, tag: String?) {
+	fun show(manager: FragmentManager) {
 		val transaction = manager.beginTransaction()
-		manager.findFragmentByTag(tag)
+		manager.findFragmentByTag(DEF_TAG)
 				?.let { transaction.remove(it) }
 		transaction.addToBackStack(null)
 
-		show(transaction, tag)
+		show(transaction, DEF_TAG)
 	}
 
-	fun hide() = activity?.runOnUiThread { dismiss() }
+	fun hide() {
+		subscriptions.clear()
+		activity?.runOnUiThread { dismiss() }
+	}
+
+	fun setListener(listener: Listener)  { this.listener = listener }
 
 	private fun createView(inflater: LayoutInflater, container: ViewGroup?) = inflater.inflate(R.layout.bottom_menu, container, false)!!
 
-	private fun createViewModel(context: Context) = BottomMenuViewModel(context)
+	private fun createViewModel(context: Context): BottomMenuViewModel {
+		val viewModel = BottomMenuViewModel(context)
+
+		viewModel.setAdapterItems(getMenuItemsArg())
+
+		subscriptions.add(viewModel.observeItemClicked().subscribe { listener?.onItemSelected(it) })
+
+		return viewModel
+	}
 
 	private fun createViewDataBinding(view: View) = BottomMenuBinding.bind(view)
-
-	private fun setupViewModel(viewModel: BottomMenuViewModel) = viewModel.setAdapterItems(getMenuItemsArg())
 
 	private fun bind(view: View, viewModel: BottomMenuViewModel) {
 		val binding = createViewDataBinding(view)
