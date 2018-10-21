@@ -41,6 +41,11 @@
 				android:layout_marginLeft="8dp"
 				android:layout_marginEnd="8dp"
 				android:layout_marginRight="8dp"
+				android:inputType="text|textCapWords"
+				android:lines="1"
+				android:singleLine="true"
+				android:imeOptions="actionNext"
+				android:nextFocusForward="@+id/messageField"
 				android:background="@null"
 				style="@style/AppTheme.ActionBarTextInput"
 				/>
