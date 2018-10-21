@@ -1,7 +1,6 @@
 package com.ancientlore.stickies.addeditnote
 
 import android.app.Application
-import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.os.Bundle
 import com.ancientlore.stickies.EmptyObject
@@ -31,12 +30,12 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	val titleField = ObservableField<String>("")
 	val messageField = ObservableField<String>("")
-	val isImportant = ObservableBoolean(false)
 
 	private var editedNote: Note? = null
 
 	private val noteTitle get() = titleField.get()!!
 	private val noteBody get() = messageField.get()!!
+	private var isImportant = false
 	private var isCompleted = false
 
 	private val onNoteAdded = PublishSubject.create<Long>()
@@ -50,13 +49,13 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	override fun saveState(bundle: Bundle) {
 		bundle.putString(STATE_TITLE, titleField.get())
 		bundle.putString(STATE_BODY, messageField.get())
-		bundle.putBoolean(STATE_IMPORTANCE, isImportant.get())
+		bundle.putBoolean(STATE_IMPORTANCE, isImportant)
 	}
 
 	override fun loadState(bundle: Bundle) {
 		titleField.set(bundle.getString(STATE_TITLE))
 		messageField.set(bundle.getString(STATE_BODY))
-		isImportant.set(bundle.getBoolean(STATE_IMPORTANCE))
+		isImportant = bundle.getBoolean(STATE_IMPORTANCE)
 	}
 
 	override fun handleOptionSelection(option: Int): Boolean {
@@ -90,7 +89,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		editedNote = note
 		titleField.set(note.title)
 		messageField.set(note.body)
-		isImportant.set(note.isImportant)
+		isImportant = note.isImportant
 		isCompleted = note.isImportant
 	}
 
@@ -100,7 +99,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		})
 	}
 
-	fun switchImportance() { isImportant.set(!isImportant.get()) }
+	fun switchImportance() { isImportant = !isImportant }
 
 	fun switchCompletion() { isCompleted = !isCompleted }
 
@@ -109,9 +108,9 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	private fun composeNewNote(): Note {
 		return Note(
 				timeCreated = System.currentTimeMillis(),
-				title = titleField.get()!!,
-				body = messageField.get()!!,
-				isImportant = isImportant.get(),
+				title = noteTitle,
+				body = noteBody,
+				isImportant = isImportant,
 				isCompleted = isCompleted)
 	}
 
@@ -120,12 +119,12 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 				timeCreated = note.timeCreated,
 				timeUpdated = System.currentTimeMillis(),
 				timeNotify = note.timeCreated,
-				title = titleField.get()!!,
-				body = messageField.get()!!,
+				title = noteTitle,
+				body = noteBody,
 				color = note.color,
 				icon = note.icon,
 				topic = note.topic,
-				isImportant = isImportant.get(),
+				isImportant = isImportant,
 				isCompleted = isCompleted)
 	}
 
