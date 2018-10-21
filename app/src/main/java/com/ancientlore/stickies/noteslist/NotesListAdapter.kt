@@ -3,6 +3,7 @@ package com.ancientlore.stickies.noteslist
 import android.content.Context
 import android.support.annotation.UiThread
 import android.support.v7.util.DiffUtil
+import android.support.v7.widget.CardView
 import android.view.View
 import android.widget.TextView
 import com.ancientlore.stickies.BasicRecyclerAdapter
@@ -47,7 +48,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		private val dateView = itemView.findViewById<TextView>(R.id.dateView)
 
 		override fun bind(data: Note) {
-			itemView.setBackgroundColor(data.color)
+			(itemView as CardView).setCardBackgroundColor(data.color)
 			titleView.text = data.title
 			dateView.text = data.getDateCreated(DateFormat.SHORT)
 		}
