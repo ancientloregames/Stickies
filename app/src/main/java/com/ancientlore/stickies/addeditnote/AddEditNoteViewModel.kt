@@ -30,7 +30,9 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 		private const val STATE_TITLE = "state_title"
 		private const val STATE_BODY = "state_body"
+		private const val STATE_COLOR = "state_color"
 		private const val STATE_IMPORTANCE = "state_importance"
+		private const val STATE_COMPLETED = "state_completed"
 	}
 
 	val titleField = ObservableField<String>("")
@@ -55,15 +57,19 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	}
 
 	override fun saveState(bundle: Bundle) {
+		bundle.putInt(STATE_COLOR, colorField.get())
 		bundle.putString(STATE_TITLE, titleField.get())
 		bundle.putString(STATE_BODY, messageField.get())
 		bundle.putBoolean(STATE_IMPORTANCE, isImportant)
+		bundle.putBoolean(STATE_COMPLETED, isCompleted)
 	}
 
 	override fun loadState(bundle: Bundle) {
+		colorField.set(bundle.getInt(STATE_COLOR))
 		titleField.set(bundle.getString(STATE_TITLE))
 		messageField.set(bundle.getString(STATE_BODY))
 		isImportant = bundle.getBoolean(STATE_IMPORTANCE)
+		isCompleted = bundle.getBoolean(STATE_COMPLETED)
 	}
 
 	override fun handleOptionSelection(option: Int): Boolean {
