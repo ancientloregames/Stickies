@@ -61,5 +61,9 @@ data class Note(@PrimaryKey(autoGenerate = true) val id: Long = 0,
 
 	fun getDateCreated(dateStyle: Int) = DateFormat.getDateInstance(dateStyle).format(dateCreated)!!
 
+	fun getDateUpdated(dateStyle: Int) = DateFormat.getDateInstance(dateStyle).format(dateUpdated)!!
+
 	fun getDateCreated(dateStyle: Int, timeStyle: Int) = DateFormat.getDateTimeInstance(dateStyle, timeStyle).format(dateCreated)!!
+
+	fun getDateUpdated(dateStyle: Int, timeStyle: Int) = DateFormat.getDateTimeInstance(dateStyle, timeStyle).format(dateUpdated)!!
 }

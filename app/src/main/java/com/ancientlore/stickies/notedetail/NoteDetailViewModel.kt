@@ -1,6 +1,7 @@
 package com.ancientlore.stickies.notedetail
 
 import android.app.Application
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.ancientlore.stickies.NotesViewModel
@@ -20,8 +21,11 @@ class NoteDetailViewModel(application: Application,
 
 	val titleField = ObservableField<String>("")
 	val messageField = ObservableField<String>("")
-	val dateField = ObservableField<String>("")
+	val dateCreatedField = ObservableField<String>("")
+	val dateUpdatedField = ObservableField<String>("")
 	val colorField = ObservableInt()
+	val isImportant = ObservableBoolean()
+	val wasUpdated = ObservableBoolean()
 
 	private val editNoteEvent = PublishSubject.create<Long>()
 	private val noteDeletionEvent = PublishSubject.create<Long>()
@@ -57,6 +61,9 @@ class NoteDetailViewModel(application: Application,
 		colorField.set(note.color)
 		titleField.set(note.title)
 		messageField.set(note.body)
-		dateField.set(note.getDateCreated(DateFormat.SHORT, DateFormat.SHORT))
+		dateCreatedField.set(note.getDateCreated(DateFormat.SHORT, DateFormat.SHORT))
+		dateUpdatedField.set(note.getDateUpdated(DateFormat.SHORT, DateFormat.SHORT))
+		isImportant.set(note.isImportant)
+		wasUpdated.set(note.timeUpdated != 0L)
 	}
 }
