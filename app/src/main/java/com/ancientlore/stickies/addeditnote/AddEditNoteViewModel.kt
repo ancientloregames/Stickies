@@ -14,6 +14,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	companion object {
 		const val OPTION_IMPRTANT = 0
+		const val OPTION_COMPLETED = 1
 
 		private const val NOTE_VALID = 0
 		const val ALERT_TITLE_EMPTY = 1
@@ -61,6 +62,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	override fun handleOptionSelection(option: Int): Boolean {
 		when (option) {
 			OPTION_IMPRTANT -> switchImportance()
+			OPTION_COMPLETED -> switchCompletion()
 			else -> return false
 		}
 		return true
@@ -99,9 +101,9 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		})
 	}
 
-	fun switchImportance() { isImportant = !isImportant }
+	private fun switchImportance() { isImportant = !isImportant }
 
-	fun switchCompletion() { isCompleted = !isCompleted }
+	private fun switchCompletion() { isCompleted = !isCompleted }
 
 	private fun composeNote() = editedNote?.let { composeNoteBasedOn(it) } ?: composeNewNote()
 

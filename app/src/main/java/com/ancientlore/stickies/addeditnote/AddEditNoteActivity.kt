@@ -9,6 +9,8 @@ import com.ancientlore.stickies.BR
 import com.ancientlore.stickies.BasicActivity
 import com.ancientlore.stickies.C
 import com.ancientlore.stickies.R
+import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_COMPLETED
+import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_IMPRTANT
 import com.ancientlore.stickies.databinding.ActivityAddeditnoteBinding
 import com.ancientlore.stickies.menu.MenuItem
 import com.ancientlore.stickies.menu.bottomsheet.BottomMenuDialog
@@ -77,10 +79,12 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 	}
 
 	private fun onMenuItemSelected(item: MenuItem) {
-		when (item.id) {
-			R.id.im_important -> viewModel.switchImportance()
-			R.id.im_completed -> viewModel.switchCompletion()
+		val option = when (item.id) {
+			R.id.im_important -> OPTION_IMPRTANT
+			R.id.im_completed -> OPTION_COMPLETED
+			else -> throw RuntimeException("Unknown options menu item!")
 		}
+		viewModel.handleOptionSelection(option)
 	}
 
 	private fun showAlert(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
