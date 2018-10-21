@@ -63,7 +63,7 @@
 			app:layout_constraintTop_toBottomOf="@+id/appbar"
 			/>
 
-		<android.support.v7.widget.AppCompatTextView
+		<com.ancientlore.stickies.view.DrawableCompatTextView
 			android:id="@+id/dateEditedView"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -74,8 +74,7 @@
 			android:textColor="@android:color/darker_gray"
 			android:gravity="end"
 			android:text="@={viewModel.dateUpdatedField}"
-			android:drawableStart="@drawable/ic_date_edited"
-			android:drawableLeft="@drawable/ic_date_edited"
+			app:drawableStart="@drawable/ic_date_edited"
 			android:drawablePadding="4dp"
 			android:visibility="@{viewModel.wasUpdated ? View.VISIBLE : View.INVISIBLE}"
 			app:layout_constraintTop_toBottomOf="@+id/importanceView"
@@ -83,9 +82,10 @@
 			app:layout_constraintEnd_toStartOf="@+id/dateCreatedView"
 			tools:text="19/12/1990 19:00"
 			app:layout_constraintHorizontal_chainStyle="spread_inside"
+			tools:drawableStart="@drawable/ic_date_edited"
 			/>
 
-		<android.support.v7.widget.AppCompatTextView
+		<com.ancientlore.stickies.view.DrawableCompatTextView
 			android:id="@+id/dateCreatedView"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -96,14 +96,14 @@
 			android:textColor="@android:color/darker_gray"
 			android:gravity="end"
 			android:text="@={viewModel.dateCreatedField}"
-			android:drawableStart="@drawable/ic_date_created"
-			android:drawableLeft="@drawable/ic_date_created"
+			app:drawableStart="@drawable/ic_date_created"
 			android:drawablePadding="4dp"
 			app:layout_constraintTop_toBottomOf="@+id/importanceView"
 			app:layout_constraintStart_toEndOf="@+id/dateEditedView"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintHorizontal_chainStyle="spread"
 			tools:text="19/12/1990 19:00"
+			tools:drawableStart="@drawable/ic_date_created"
 			/>
 
 		<android.support.v7.widget.AppCompatTextView

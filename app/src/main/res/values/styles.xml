@@ -33,7 +33,7 @@
 
 	<style name="noteTitle" parent="@style/TextAppearance.AppCompat.Title">
 		<item name="android:textColor">@color/stickyTitle</item>
-		<item name="android:textSize">18sp</item>
+		<item name="android:textSize">17sp</item>
 		<item name="android:paddingTop">16dp</item>
 		<item name="android:paddingBottom">16dp</item>
 		<item name="android:paddingLeft">8dp</item>
