@@ -47,6 +47,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		private val dateView = itemView.findViewById<TextView>(R.id.dateView)
 
 		override fun bind(data: Note) {
+			itemView.setBackgroundColor(data.color)
 			titleView.text = data.title
 			dateView.text = data.getDateCreated(DateFormat.SHORT)
 		}

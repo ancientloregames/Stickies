@@ -101,6 +101,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	private fun bind(note: Note) {
 		editedNote = note
+		colorField.set(note.color)
 		titleField.set(note.title)
 		messageField.set(note.body)
 		isImportant = note.isImportant
