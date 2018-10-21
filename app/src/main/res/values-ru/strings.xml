@@ -6,8 +6,8 @@
 	<string name="typeTitle">Введите заголовок</string>
 	<string name="typeMessage">Введите текст</string>
 	<string name="filter">Фильтр</string>
-	<string name="all">Все</string>
-	<string name="important">Важные</string>
+	<string name="filter_all">Все</string>
+	<string name="filter_important">Важные</string>
 	<string name="delete">Удалить</string>
 	<string name="sort">Сортировка</string>
 	<string name="sort_title">По заголовку</string>

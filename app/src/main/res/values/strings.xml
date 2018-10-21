@@ -8,10 +8,12 @@
 	<string name="typeMessage">Type a message</string>
 
 	<string name="filter">Filter</string>
-	<string name="all">All</string>
+	<string name="filter_all">All</string>
+	<string name="filter_important">Important</string>
 
-	<string name="important">Important</string>
 	<string name="delete">Delete</string>
+
+	<string name="menu_important">Important</string>
 
 	<string name="sort">Sort</string>
 	<string name="sort_title">By title</string>

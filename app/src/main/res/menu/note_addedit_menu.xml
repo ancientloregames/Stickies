@@ -6,7 +6,7 @@
 	>
 	<item
 		android:id="@+id/important"
-		android:title="@string/important"
+		android:title="@string/filter_important"
 		android:icon="@drawable/ic_important_off"
 		android:checkable="true"
 		app:showAsAction="ifRoom"/>
