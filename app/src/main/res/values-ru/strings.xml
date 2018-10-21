@@ -20,4 +20,7 @@
 	<string name="list_empty_msg">Список заметок пуст</string>
 	<string name="list_empty_hint">Добавить новую заметку</string>
 	<string name="app_name">Заметки</string>
+	<string name="menu_important">Важная</string>
+	<string name="menu_completed">Завершенная</string>
+	<string name="menu_colorpicker">Изменить цвет</string>
 </resources>
