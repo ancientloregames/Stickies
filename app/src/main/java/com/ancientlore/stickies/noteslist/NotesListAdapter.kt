@@ -43,14 +43,15 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 	}
 
 	class ViewHolder(itemView: View): BasicRecyclerAdapter.ViewHolder<Note>(itemView) {
-
 		private val titleView = itemView.findViewById<TextView>(R.id.titleView)
 		private val dateView = itemView.findViewById<TextView>(R.id.dateView)
+		private val importanceView = itemView.findViewById<View>(R.id.importanceView)
 
 		override fun bind(data: Note) {
 			(itemView as CardView).setCardBackgroundColor(data.color)
 			titleView.text = data.title
 			dateView.text = data.getDateCreated(DateFormat.SHORT)
+			importanceView.visibility = if (data.isImportant) View.VISIBLE else View.INVISIBLE
 		}
 	}
 
