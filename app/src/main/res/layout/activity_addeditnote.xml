@@ -30,33 +30,19 @@
 			tools:layout_height="56dp"
 			tools:background="@color/colorPrimary"
 			>
-			<LinearLayout
+			<android.support.v7.widget.AppCompatEditText
+				android:id="@+id/titleField"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				android:orientation="horizontal"
-				>
-				<android.support.v7.widget.AppCompatEditText
-					android:id="@+id/titleField"
-					android:layout_width="0dp"
-					android:layout_height="match_parent"
-					android:layout_weight="1"
-					android:text="@={viewModel.titleField}"
-					android:hint="@string/typeTitle"
-					android:layout_marginStart="8dp"
-					android:layout_marginLeft="8dp"
-					android:background="@null"
-					style="@style/AppTheme.ActionBarTextInput"
-					/>
-				<android.support.v7.widget.AppCompatCheckBox
-					android:id="@+id/importantSwitch"
-					android:layout_width="wrap_content"
-					android:layout_height="match_parent"
-					android:button="@drawable/important_selector"
-					android:checked="@={viewModel.isImportant()}"
-					android:paddingRight="16dp"
-					android:paddingEnd="16dp"
-					/>
-			</LinearLayout>
+				android:text="@={viewModel.titleField}"
+				android:hint="@string/typeTitle"
+				android:layout_marginStart="8dp"
+				android:layout_marginLeft="8dp"
+				android:layout_marginEnd="8dp"
+				android:layout_marginRight="8dp"
+				android:background="@null"
+				style="@style/AppTheme.ActionBarTextInput"
+				/>
 
 		</android.support.design.widget.AppBarLayout>
 
@@ -77,17 +63,32 @@
 			/>
 
 		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/openMenuButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="16dp"
+			android:onClick="@{() -> viewModel.onMenuButtonClicked()}"
+			app:backgroundTint="@color/fabAddNote"
+			app:srcCompat="@drawable/ic_context_menu"
+			app:fabSize="mini"
+			app:layout_constraintBottom_toTopOf="@+id/addNoteButton"
+			app:layout_constraintStart_toStartOf="@+id/addNoteButton"
+			app:layout_constraintEnd_toEndOf="@+id/addNoteButton"
+			/>
+
+		<android.support.design.widget.FloatingActionButton
 			android:id="@+id/addNoteButton"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="16dp"
 			android:layout_marginEnd="16dp"
 			android:layout_marginRight="16dp"
-			app:backgroundTint="@color/fabAddNote"
+			app:backgroundTint="@color/fabSubmitNote"
 			android:onClick="@{() -> viewModel.onSubmitClicked()}"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:srcCompat="@drawable/ic_done"
+			app:fabSize="normal"
 			/>
 
 	</android.support.constraint.ConstraintLayout>

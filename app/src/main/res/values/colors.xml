@@ -5,6 +5,7 @@
 	<color name="colorAccent">#c10006</color>
 
 	<color name="fabAddNote">@android:color/holo_blue_light</color>
+	<color name="fabSubmitNote">@android:color/holo_green_light</color>
 
 	<color name="importantNote">#f00</color>
 	<color name="importantNoteNot">#ccc</color>

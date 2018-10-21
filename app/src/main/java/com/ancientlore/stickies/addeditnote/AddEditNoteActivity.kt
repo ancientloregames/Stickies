@@ -10,6 +10,8 @@ import com.ancientlore.stickies.BasicActivity
 import com.ancientlore.stickies.C
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.databinding.ActivityAddeditnoteBinding
+import com.ancientlore.stickies.menu.MenuItem
+import com.ancientlore.stickies.menu.bottomsheet.BottomMenuDialog
 
 class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNoteViewModel>() {
 
@@ -42,6 +44,9 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 		subscriptions.add(viewModel.observeNoteAdded()
 				.subscribe { finishWithResult(it) })
 
+		subscriptions.add(viewModel.observeMenuCalled()
+				.subscribe { openMenu() })
+
 		subscriptions.add(viewModel.observeAlert()
 				.subscribe { showAlert(getAlertMessage(it)) })
 	}
@@ -56,6 +61,25 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 		}
 		setResult(Activity.RESULT_OK, intent)
 		finish()
+	}
+
+	private fun openMenu() {
+		val menu = AddEditMenuDialog.newInstance()
+
+		menu.setListener(object : BottomMenuDialog.Listener {
+			override fun onItemSelected(item: MenuItem) {
+				onMenuItemSelected(item)
+				menu.hide()
+			}
+		})
+
+		menu.show(supportFragmentManager)
+	}
+
+	private fun onMenuItemSelected(item: MenuItem) {
+		when (item.id) {
+			R.id.im_important -> viewModel.switchImportance()
+		}
 	}
 
 	private fun showAlert(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

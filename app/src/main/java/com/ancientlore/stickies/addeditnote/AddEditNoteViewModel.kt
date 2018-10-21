@@ -4,6 +4,7 @@ import android.app.Application
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.os.Bundle
+import com.ancientlore.stickies.EmptyObject
 import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
@@ -38,6 +39,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	private val noteBody get() = messageField.get()!!
 
 	private val onNoteAdded = PublishSubject.create<Long>()
+	private val onMenuCalled = PublishSubject.create<Any>()
 	private val onAlert = PublishSubject.create<Int>()
 
 	constructor(application: Application, noteId: Long) : this(application) {
@@ -69,7 +71,11 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 			addNote()
 	}
 
+	fun onMenuButtonClicked() = onMenuCalled.onNext(EmptyObject)
+
 	fun observeNoteAdded() = onNoteAdded as Observable<Long>
+
+	fun observeMenuCalled() = onMenuCalled as Observable<*>
 
 	fun observeAlert() = onAlert as Observable<Int>
 
@@ -92,7 +98,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		})
 	}
 
-	private fun switchImportance() {
+	fun switchImportance() {
 		val wasImportant = isImportant.get()
 		isImportant.set(!wasImportant)
 	}
