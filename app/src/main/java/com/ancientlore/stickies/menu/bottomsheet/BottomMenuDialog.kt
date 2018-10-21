@@ -2,6 +2,7 @@ package com.ancientlore.stickies.menu.bottomsheet
 
 import android.content.Context
 import android.os.Bundle
+import android.support.annotation.AnyThread
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
@@ -44,6 +45,12 @@ open class BottomMenuDialog: BottomSheetDialogFragment() {
 		bind(view, viewModel)
 	}
 
+	override fun onDestroyView() {
+		subscriptions.dispose()
+
+		super.onDestroyView()
+	}
+
 	fun show(manager: FragmentManager) {
 		val transaction = manager.beginTransaction()
 		manager.findFragmentByTag(DEF_TAG)
@@ -53,12 +60,10 @@ open class BottomMenuDialog: BottomSheetDialogFragment() {
 		show(transaction, DEF_TAG)
 	}
 
-	fun hide() {
-		subscriptions.clear()
-		activity?.runOnUiThread { dismiss() }
-	}
+	@AnyThread
+	fun hide() = activity?.runOnUiThread { dismiss() }
 
-	fun setListener(listener: Listener)  { this.listener = listener }
+	fun setListener(listener: Listener) { this.listener = listener }
 
 	private fun createView(inflater: LayoutInflater, container: ViewGroup?) = inflater.inflate(R.layout.bottom_menu, container, false)!!
 
@@ -72,10 +77,8 @@ open class BottomMenuDialog: BottomSheetDialogFragment() {
 		return viewModel
 	}
 
-	private fun createViewDataBinding(view: View) = BottomMenuBinding.bind(view)
-
 	private fun bind(view: View, viewModel: BottomMenuViewModel) {
-		val binding = createViewDataBinding(view)
+		val binding = BottomMenuBinding.bind(view)
 		binding.viewModel = viewModel
 	}
 
