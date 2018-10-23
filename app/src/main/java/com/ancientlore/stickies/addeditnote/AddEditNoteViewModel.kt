@@ -143,7 +143,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 				timeNotify = note.timeCreated,
 				title = noteTitle,
 				body = noteBody,
-				color = note.color,
+				color = noteColor,
 				icon = note.icon,
 				topic = note.topic,
 				isImportant = isImportant,
