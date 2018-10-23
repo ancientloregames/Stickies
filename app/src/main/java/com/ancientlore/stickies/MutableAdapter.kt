@@ -16,4 +16,5 @@ interface MutableAdapter<T> {
 	fun sort(@SortField field: String, @SortOrder order: String)
 
 	fun onItemSelected(): Observable<T>
+	fun observeNewItem(): Observable<T>
 }

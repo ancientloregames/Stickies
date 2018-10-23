@@ -16,11 +16,28 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 				@field:ColumnInfo var timeNotify: Long = 0,
 				@field:ColumnInfo var title: String = "",
 				@field:ColumnInfo var body: String = "",
-				@field:ColumnInfo var color: Int = 0x7f050082,
+				@field:ColumnInfo var color: Int = -0x45,
 				@field:ColumnInfo var icon: String = "",
 				@field:ColumnInfo var topic: String = "",
 				@field:ColumnInfo var isImportant: Boolean = false,
 				@field:ColumnInfo var isCompleted: Boolean = false) {
+
+	companion object {
+		fun newInstance(finalId: Long, note: Note): Note {
+			return Note(finalId,
+					note.timeCreated,
+					note.timeUpdated,
+					note.timeCreated,
+					note.timeNotify,
+					note.title,
+					note.body,
+					note.color,
+					note.icon,
+					note.topic,
+					note.isImportant,
+					note.isCompleted)
+		}
+	}
 
 	@delegate:Ignore private val dateCreated by lazy { Date(timeCreated) }
 	@delegate:Ignore private val dateUpdated by lazy { Date(timeUpdated) }

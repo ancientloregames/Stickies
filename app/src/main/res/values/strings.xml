@@ -31,4 +31,6 @@
 
 	<string name="list_empty_msg">The notes list is currently empty</string>
 	<string name="list_empty_hint">Click this button to add a note</string>
+
+	<string name="hint_quick_note">Enter a quick note</string>
 </resources>

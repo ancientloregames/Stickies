@@ -45,6 +45,9 @@ class NotesListViewModel(application: Application,
 
 		listAdapter.onItemSelected()
 				.subscribe { showNoteEvent.onNext(it.id) }
+
+		listAdapter.observeNewItem()
+				.subscribe { insertAndAddNote(it) }
 	}
 
 	override fun handleOptionSelection(option: Int): Boolean {
@@ -134,6 +137,12 @@ class NotesListViewModel(application: Application,
 	private fun loadImportantNotes() {
 		repository.getImportant(object : DataSource.SimpleRequestCallback<List<Note>>()  {
 			override fun onSuccess(result: List<Note>) = setListItems(result)
+		})
+	}
+
+	private fun insertAndAddNote(note: Note) {
+		repository.insertItem(note, object : DataSource.SimpleRequestCallback<Long>() {
+			override fun onSuccess(result: Long) = addListItem(Note.newInstance(result, note))
 		})
 	}
 

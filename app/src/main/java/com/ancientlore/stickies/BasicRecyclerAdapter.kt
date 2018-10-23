@@ -12,13 +12,15 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
-abstract class BasicRecyclerAdapter<
-		P,
-		T: BasicRecyclerAdapter.ViewHolder<P>>
-			(context: Context, internal val items: MutableList<P>)
-	: RecyclerView.Adapter<T>(), MutableAdapter<P> {
+abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P>>(
+		context: Context, items: MutableList<P>, withHeader: Boolean = false, withFooter: Boolean = false)
+	: HeadedRecyclerAdapter<P, T>(items, withHeader, withFooter), MutableAdapter<P> {
 
-	private val layoutInflater = LayoutInflater.from(context)
+	companion object {
+		private const val VIEW_TYPE_ITEM = 0
+	}
+
+	protected val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
 	private val itemSelectedEvent = PublishSubject.create<P>()
 
@@ -34,17 +36,17 @@ abstract class BasicRecyclerAdapter<
 
 	abstract fun getSortComparator(@SortField sortField: String): Comparator<P>
 
-	override fun getItemCount() = items.count()
+	override fun getItemViewTypeInner(position: Int) = VIEW_TYPE_ITEM
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
+	override fun onCreateViewHolderInner(parent: ViewGroup, viewType: Int): T {
 		val layoutRes = getViewHolderLayoutRes(viewType)
 		val layout = getViewHolderLayout(parent, layoutRes)
 		return getViewHolder(layout)
 	}
 
 	@CallSuper
-	override fun onBindViewHolder(holder: T, index: Int) {
-		val item = items[index]
+	override fun onBindViewHolderInner(holder: T, position: Int) {
+		val item = items[position]
 		holder.bind(item)
 		holder.onClick(Runnable {
 			itemSelectedEvent.onNext(item)
@@ -65,7 +67,7 @@ abstract class BasicRecyclerAdapter<
 	override fun prependItem(newItem: P): Boolean {
 		if (isUnique(newItem)) {
 			items.add(0, newItem)
-			notifyItemInserted(0)
+			notifyListItemInserted(0)
 			return true
 		}
 
@@ -76,7 +78,7 @@ abstract class BasicRecyclerAdapter<
 	override fun addItem(newItem: P): Boolean {
 		if (isUnique(newItem)) {
 			items.add(newItem)
-			notifyItemInserted(itemCount - 1)
+			notifyListItemInserted(itemCount - 1)
 			return true
 		}
 
@@ -99,7 +101,7 @@ abstract class BasicRecyclerAdapter<
 		val position = getItemPosition(itemToDelete)
 		if (position != -1) {
 			items.removeAt(position)
-			notifyItemRemoved(position)
+			notifyListItemRemoved(position)
 			return true
 		}
 
@@ -131,7 +133,7 @@ abstract class BasicRecyclerAdapter<
 	protected fun deleteItemAt(position: Int): Boolean {
 		if (isValidPosition(position)) {
 			items.removeAt(position)
-			notifyItemRemoved(position)
+			notifyListItemRemoved(position)
 			return true
 		}
 
@@ -141,10 +143,8 @@ abstract class BasicRecyclerAdapter<
 	@UiThread
 	private fun updateItemAt(index: Int, updatedItem: P) {
 		items[index] = updatedItem
-		notifyItemChanged(index)
+		notifyListItemChanged(index)
 	}
-
-	private fun isValidPosition(position: Int) = position > -1 && position < items.size
 
 	private fun getItemPosition(updatedItem: P) = items.indexOfFirst { isTheSame(it, updatedItem) }
 
