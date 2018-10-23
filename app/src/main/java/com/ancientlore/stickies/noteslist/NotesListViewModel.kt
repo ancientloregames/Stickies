@@ -153,7 +153,10 @@ class NotesListViewModel(application: Application,
 
 	private fun setListItems(items: List<Note>) {
 		isEmpty.set(items.isEmpty())
-		runOnUiThread(Runnable { listAdapter.setItems(items) })
+		runOnUiThread(Runnable {
+			listAdapter.setItems(items)
+			requestScrollToTop.onNext(EmptyObject)
+		})
 	}
 
 	private fun addListItem(item: Note) {
