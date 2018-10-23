@@ -110,7 +110,7 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 	private fun showAlert(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
 	private fun getAlertMessage(alertId: Int) = when (alertId) {
-		AddEditNoteViewModel.ALERT_TITLE_EMPTY -> getString(R.string.alert_note_title_empty)
+		AddEditNoteViewModel.ALERT_EMPTY -> getString(R.string.alert_note_title_empty)
 		AddEditNoteViewModel.ALERT_TITLE_LONG -> getString(R.string.alert_note_title_long)
 		AddEditNoteViewModel.ALERT_BODY_LONG -> getString(R.string.alert_note_body_long)
 		else -> {

@@ -21,7 +21,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		const val OPTION_PICKCOLOR = 2
 
 		private const val NOTE_VALID = 0
-		const val ALERT_TITLE_EMPTY = 1
+		const val ALERT_EMPTY = 1
 		const val ALERT_TITLE_LONG = 2
 		const val ALERT_BODY_LONG = 3
 
@@ -161,7 +161,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	private fun getValidityMessageId(): Int {
 		return when {
-			noteTitle.isEmpty() -> ALERT_TITLE_EMPTY
+			noteTitle.isEmpty() && noteBody.isEmpty() -> ALERT_EMPTY
 			noteTitle.length > TITLE_LIMIT -> ALERT_TITLE_LONG
 			noteBody.length > BODY_LIMIT -> ALERT_BODY_LONG
 			else -> NOTE_VALID

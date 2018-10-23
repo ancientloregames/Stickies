@@ -3,6 +3,8 @@
 	<string name="new_note">New Note</string>
 	<string name="note_details">Note Details</string>
 
+	<string name="note_num">Note №%1$d</string>
+
 	<string name="title">Title</string>
 	<string name="typeTitle">Type a title</string>
 	<string name="typeMessage">Type a message</string>
@@ -23,7 +25,7 @@
 	<string name="order_asc">Ascending</string>
 	<string name="order_desc">Descending</string>
 
-	<string name="alert_note_title_empty">Note title is mandatory</string>
+	<string name="alert_note_title_empty">Either title or message must be entered</string>
 	<string name="alert_note_title_long">Note title is too long</string>
 	<string name="alert_note_body_long">Note message is too long</string>
 

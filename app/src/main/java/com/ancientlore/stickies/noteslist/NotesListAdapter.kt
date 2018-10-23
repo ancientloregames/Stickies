@@ -11,6 +11,7 @@ import com.ancientlore.stickies.C
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.SortField
 import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.utils.getListTitle
 import java.text.DateFormat
 import java.util.*
 
@@ -18,7 +19,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 	: BasicRecyclerAdapter<Note, NotesListAdapter.ViewHolder>(context, items) {
 
 	private var timeComparator = Comparator<Note> { o1, o2 -> o1.timeCreated.compareTo(o2.timeCreated) }
-	private var titleComparator = Comparator<Note> { o1, o2 -> o1.title.compareTo(o2.title) }
+	private var titleComparator = Comparator<Note> { o1, o2 -> o1.compareByText(o2) }
 
 	override fun getViewHolderLayoutRes(viewType: Int) = R.layout.notes_list_item
 
@@ -49,7 +50,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 		override fun bind(data: Note) {
 			(itemView as CardView).setCardBackgroundColor(data.color)
-			titleView.text = data.title
+			titleView.text = data.getListTitle(itemView.context)
 			dateView.text = data.getDateCreated(DateFormat.SHORT)
 			importanceView.visibility = if (data.isImportant) View.VISIBLE else View.INVISIBLE
 		}
