@@ -1,6 +1,7 @@
 package com.ancientlore.stickies.noteslist
 
 import android.content.Context
+import android.graphics.Paint
 import android.support.annotation.UiThread
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.CardView
@@ -115,6 +116,16 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 			titleView.text = data.getListTitle(itemView.context)
 			dateView.text = data.getDateCreated(DateFormat.SHORT)
 			importanceView.visibility = if (data.isImportant) View.VISIBLE else View.INVISIBLE
+			switchCompletion(data.isCompleted)
+		}
+
+		private fun switchCompletion(isCompleted: Boolean) {
+			titleView.alpha = if (isCompleted) 0.6f else 1f
+			titleView.paintFlags = if (isCompleted) {
+				titleView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+			} else {
+				titleView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+			}
 		}
 	}
 
