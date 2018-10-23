@@ -1,9 +1,13 @@
 package com.ancientlore.stickies.noteslist
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.PopupMenu
 import com.ancientlore.stickies.*
 import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
@@ -63,8 +67,11 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	}
 
 	private fun setupList() {
-		val listAdapter = NotesListAdapter(this, mutableListOf())
-		notesListView.adapter = listAdapter
+		notesListView.adapter = NotesListAdapter(this, mutableListOf())
+		notesListView.layoutManager = object: LinearLayoutManager(this) {
+			override fun requestChildRectangleOnScreen(parent: RecyclerView, child: View, rect: Rect, immediate: Boolean) = false
+			override fun requestChildRectangleOnScreen(parent: RecyclerView, child: View, rect: Rect, immediate: Boolean, focusedChildVisible: Boolean) = false
+		}
 	}
 
 	private fun getListAdapter() = notesListView.adapter as NotesListAdapter
