@@ -149,7 +149,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	}
 
 	private fun onKeyboardStateChanged(opened: Boolean) {
-		switchOpenNoteFormButton(!opened)
+//		switchOpenNoteFormButton(!opened)
 		viewModel.onKeyboardStateChanged(opened)
 	}
 
