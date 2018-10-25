@@ -19,6 +19,7 @@
 	<string name="alert_note_body_long">Текст заметки слишком большой</string>
 	<string name="list_empty_msg">Список заметок пуст</string>
 	<string name="hint_add_note_full">Добавить новую заметку</string>
+	<string name="hint_add_note_quick">Добавить быструю заметку</string>
 	<string name="app_name">Заметки</string>
 	<string name="menu_important">Важная</string>
 	<string name="menu_completed">Завершенная</string>
