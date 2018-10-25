@@ -12,6 +12,7 @@
 			/>
 		</data>
 	<android.support.constraint.ConstraintLayout
+		android:id="@+id/rootContainer"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:background="@android:color/white"
@@ -43,58 +44,85 @@
 
 		<android.support.v7.widget.AppCompatTextView
 			android:layout_width="0dp"
-			android:layout_height="0dp"
+			android:layout_height="wrap_content"
 			android:gravity="center"
 			android:text="@string/list_empty_msg"
 			android:background="@android:color/white"
 			android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}"
-			app:layout_constraintTop_toBottomOf="@+id/appbar"
+			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			/>
 
-		<LinearLayout
-			android:id="@+id/addNoteHint"
-			android:layout_width="0dp"
-			android:layout_height="0dp"
-			android:layout_marginLeft="16dp"
-			android:layout_marginStart="16dp"
-			android:layout_marginRight="16dp"
-			android:layout_marginEnd="16dp"
+		<com.ancientlore.stickies.view.DrawableCompatTextView
+			android:id="@+id/hintFullNote"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="8dp"
+			android:layout_marginRight="8dp"
+			android:maxLines="2"
+			android:ellipsize="end"
+			android:gravity="center"
+			android:text="@string/hint_add_note_full"
 			android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}"
-			android:orientation="horizontal"
-			app:layout_constraintBottom_toBottomOf="@+id/addNoteButton"
-			app:layout_constraintTop_toTopOf="@+id/addNoteButton"
-			app:layout_constraintEnd_toStartOf="@+id/addNoteButton"
+			android:drawablePadding="5dp"
+			app:drawableEnd="@drawable/ic_arrow_right"
+			app:layout_constraintTop_toTopOf="@+id/openNoteFormButton"
+			app:layout_constraintBottom_toBottomOf="@+id/openNoteFormButton"
 			app:layout_constraintStart_toStartOf="parent"
-			>
-			<android.support.v7.widget.AppCompatTextView
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:layout_weight="1"
-				android:maxLines="2"
-				android:ellipsize="end"
-				android:gravity="center"
-				android:text="@string/list_empty_hint"
-				/>
-			<android.support.v7.widget.AppCompatImageView
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				app:srcCompat="@drawable/ic_arrow_right"
-				/>
-		</LinearLayout>
+			app:layout_constraintEnd_toStartOf="@+id/openNoteFormButton"
+			tools:drawableEnd="@drawable/ic_arrow_right"
+			app:layout_constraintHorizontal_bias="1.0"
+			/>
+
+		<com.ancientlore.stickies.view.DrawableCompatTextView
+			android:id="@+id/hintQuickNote"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="8dp"
+			android:layout_marginRight="8dp"
+			android:maxLines="2"
+			android:ellipsize="end"
+			android:gravity="center"
+			android:text="@string/hint_add_note_quick"
+			android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}"
+			android:drawablePadding="5dp"
+			app:drawableEnd="@drawable/ic_arrow_right"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/addQuickNoteButton"
+			app:layout_constraintBottom_toBottomOf="@+id/addQuickNoteButton"
+			app:layout_constraintTop_toTopOf="@+id/addQuickNoteButton"
+			tools:drawableEnd="@drawable/ic_arrow_right"
+			app:layout_constraintHorizontal_bias="1.0"
+			/>
 
 		<android.support.design.widget.FloatingActionButton
-			android:id="@+id/addNoteButton"
+			android:id="@+id/openNoteFormButton"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_margin="16dp"
-			android:onClick="@{() -> viewModel.onAddNoteClicked()}"
-			app:srcCompat="@drawable/ic_plus"
+			android:onClick="@{() -> viewModel.onOpenNoteFormClicked()}"
+			app:srcCompat="@drawable/ic_add_note"
+			app:backgroundTint="@color/fabSubmitNote"
+			app:fabSize="mini"
+			app:layout_constraintEnd_toEndOf="@+id/addQuickNoteButton"
+			app:layout_constraintBottom_toTopOf="@+id/addQuickNoteButton"
+			app:layout_constraintStart_toStartOf="@+id/addQuickNoteButton"
+			/>
+
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/addQuickNoteButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="16dp"
+			android:onClick="@{() -> viewModel.onAddQuickNoteClicked()}"
+			app:srcCompat="@{viewModel.isQuickNoteMode() ? @drawable/ic_done : @drawable/ic_plus}"
 			app:backgroundTint="@color/fabAddNote"
+			app:fabSize="normal"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
+			tools:srcCompat="@drawable/ic_plus"
 			/>
 
 	</android.support.constraint.ConstraintLayout>

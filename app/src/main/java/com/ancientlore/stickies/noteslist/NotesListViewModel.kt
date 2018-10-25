@@ -3,6 +3,7 @@ package com.ancientlore.stickies.noteslist
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.util.Log
 import com.ancientlore.stickies.*
@@ -12,7 +13,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 class NotesListViewModel(application: Application,
-						 private val listAdapter: MutableAdapter<Note>)
+						 private val listAdapter: NotesListAdapter)
 	: NotesViewModel(application) {
 
 	companion object {
@@ -30,10 +31,11 @@ class NotesListViewModel(application: Application,
 	}
 
 	val isEmpty = ObservableField<Boolean>(true)
+	val isQuickNoteMode = ObservableBoolean()
 
 	private var currentSortOrder = C.ORDER_ASC
 
-	private val addNoteEvent = PublishSubject.create<Any>()
+	private val onOpenNoteFormRequest = PublishSubject.create<Any>()
 	private val editNoteEvent = PublishSubject.create<Long>()
 	private val showNoteEvent = PublishSubject.create<Long>()
 	private val showFilterMenuEvent = PublishSubject.create<Any>()
@@ -81,9 +83,18 @@ class NotesListViewModel(application: Application,
 		listAdapter.sort(field, order)
 	}
 
-	fun onAddNoteClicked() = addNoteEvent.onNext(EmptyObject)
+	fun onKeyboardStateChanged(opened: Boolean) = isQuickNoteMode.set(opened)
 
-	fun observeAddNote() = addNoteEvent as Observable<*>
+	fun onOpenNoteFormClicked() = onOpenNoteFormRequest.onNext(EmptyObject)
+
+	fun onAddQuickNoteClicked() {
+		when (isQuickNoteMode.get()) {
+			true -> listAdapter.submitCurrentText()
+			false -> requestQuickNote()
+		}
+	}
+
+	fun observeOpenNoteFormRequest() = onOpenNoteFormRequest as Observable<*>
 
 	fun observeEditNote() = editNoteEvent as Observable<Long>
 
@@ -94,6 +105,11 @@ class NotesListViewModel(application: Application,
 	fun observeShowSortMenu() = showSortMenuEvent as Observable<String>
 
 	fun observeScrollToTopRequest() = requestScrollToTop as Observable<*>
+
+	private fun requestQuickNote() {
+		requestScrollToTop.onNext(EmptyObject)
+		listAdapter.requestNoteAddition()
+	}
 
 	private fun handleNoteAdditionResult(resultCode: Int, data: Intent?) {
 		when (resultCode) {

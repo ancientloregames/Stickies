@@ -18,16 +18,24 @@ import com.ancientlore.stickies.SortField
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.utils.getListTitle
 import com.ancientlore.stickies.utils.hideKeyboard
+import com.ancientlore.stickies.utils.showKeybouard
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import java.lang.ref.WeakReference
 import java.text.DateFormat
 import java.util.*
 
 class NotesListAdapter(context: Context, items: MutableList<Note>)
 	: BasicRecyclerAdapter<Note, NotesListAdapter.ViewHolder>(context, items, true, true) {
 
+	data class HeaderParams(var requestFocus: Boolean = false)
+
 	private var timeComparator = Comparator<Note> { o1, o2 -> o1.timeCreated.compareTo(o2.timeCreated) }
 	private var titleComparator = Comparator<Note> { o1, o2 -> o1.compareByText(o2) }
+
+	private var headerParams = HeaderParams()
+
+	private var headerTextFieldRef: WeakReference<HeaderViewHolder>? = null
 
 	private val onNewNoteEvent = PublishSubject.create<Note>()
 
@@ -38,7 +46,11 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 			FooterViewHolder(layoutInflater.inflate(R.layout.notes_list_footer, parent, false))
 
 	override fun bindHeaderViewHolder(holder: RecyclerView.ViewHolder) {
-		(holder as HeaderViewHolder).listener = object : HeaderViewHolder.Listener {
+		val headerHolder = holder as HeaderViewHolder
+		headerHolder.bind(headerParams)
+		headerParams.requestFocus = false
+		headerTextFieldRef = WeakReference(headerHolder)
+		headerHolder.listener = object : HeaderViewHolder.Listener {
 			override fun onTextSubmited(text: String) = addNoteWithin(text)
 		}
 	}
@@ -66,6 +78,13 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 	}
 
 	override fun observeNewItem() = onNewNoteEvent as Observable<Note>
+
+	fun requestNoteAddition() {
+		headerParams.requestFocus = true
+		notifyHeaderChanged()
+	}
+
+	fun submitCurrentText() = headerTextFieldRef?.get()?.submitText()
 
 	private fun addNoteWithin(text: String) {
 		val newNote = Note(body = text)
@@ -95,7 +114,13 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 			}
 		}
 
-		private fun submitText() {
+		fun bind(params: HeaderParams) {
+			if (params.requestFocus) {
+			  itemView.postDelayed({ itemView.context.showKeybouard(textField) }, 200)
+			}
+		}
+
+		fun submitText() {
 			val text = textField.text
 			if (text.isNotEmpty()) {
 				listener?.onTextSubmited(text.toString())

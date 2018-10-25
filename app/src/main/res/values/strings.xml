@@ -30,7 +30,8 @@
 	<string name="alert_note_body_long">Note message is too long</string>
 
 	<string name="list_empty_msg">The notes list is currently empty</string>
-	<string name="list_empty_hint">Click this button to add a note</string>
+	<string name="hint_add_note_full">Click this to open a note form</string>
+	<string name="hint_add_note_quick">Click this to add a quick note</string>
 
 	<string name="hint_quick_note">Enter a quick note</string>
 </resources>

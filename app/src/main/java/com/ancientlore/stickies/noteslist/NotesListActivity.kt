@@ -69,7 +69,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	override fun setupViewModel() {
 		super.setupViewModel()
 
-		subscriptions.add(viewModel.observeAddNote()
+		subscriptions.add(viewModel.observeOpenNoteFormRequest()
 				.subscribe { startNoteAddition() })
 
 		subscriptions.add(viewModel.observeEditNote()
@@ -148,5 +148,21 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		dialog.show(supportFragmentManager, "SortDialog")
 	}
 
-	private fun onKeyboardStateChanged(opened: Boolean) {}
+	private fun onKeyboardStateChanged(opened: Boolean) {
+		switchOpenNoteFormButton(!opened)
+		viewModel.onKeyboardStateChanged(opened)
+	}
+
+	private fun switchOpenNoteFormButton(show: Boolean) {
+		hintFullNote.animate()
+				.alpha(if(show) 1f else 0f)
+				.translationY(if (show) 0f else -50f)
+				.setDuration(100)
+				.start()
+		openNoteFormButton.animate()
+				.alpha(if(show) 1f else 0f)
+				.translationY(if (show) 0f else -50f)
+				.setDuration(100)
+				.start()
+	}
 }
