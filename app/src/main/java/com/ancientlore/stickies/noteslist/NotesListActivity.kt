@@ -1,13 +1,16 @@
 package com.ancientlore.stickies.noteslist
 
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.PopupMenu
 import com.ancientlore.stickies.*
 import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
@@ -18,13 +21,32 @@ import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_SO
 import com.ancientlore.stickies.sortdialog.SortDialogFragment
 import kotlinx.android.synthetic.main.activity_noteslist.*
 
-class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewModel>() {
+class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewModel>(), ViewTreeObserver.OnGlobalLayoutListener {
+
+	private val sreenHeight get() = Resources.getSystem().displayMetrics.heightPixels
+
+	override fun onGlobalLayout() {
+		val maybeKeyboard = rootContainer.height < sreenHeight * 2 / 3
+		onKeyboardStateChanged(maybeKeyboard)
+	}
 
 	override fun getLayoutId() = R.layout.activity_noteslist
 
 	override fun getBindingVariable() = BR.viewModel
 
 	override fun createViewModel() = NotesListViewModel(application, getListAdapter())
+
+	override fun onResume() {
+		super.onResume()
+		rootContainer.viewTreeObserver.addOnGlobalLayoutListener(this)
+	}
+
+	override fun onPause() {
+		super.onPause()
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			rootContainer.viewTreeObserver.removeOnGlobalLayoutListener(this)
+		} else rootContainer.viewTreeObserver.removeGlobalOnLayoutListener(this)
+	}
 
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 		menuInflater.inflate(R.menu.notes_list_menu, menu)
@@ -47,7 +69,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	override fun setupViewModel() {
 		super.setupViewModel()
 
-		subscriptions.add(viewModel.observeAddNote()
+		subscriptions.add(viewModel.observeOpenNoteFormRequest()
 				.subscribe { startNoteAddition() })
 
 		subscriptions.add(viewModel.observeEditNote()
@@ -124,5 +146,23 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		}
 
 		dialog.show(supportFragmentManager, "SortDialog")
+	}
+
+	private fun onKeyboardStateChanged(opened: Boolean) {
+		switchOpenNoteFormButton(!opened)
+		viewModel.onKeyboardStateChanged(opened)
+	}
+
+	private fun switchOpenNoteFormButton(show: Boolean) {
+		hintFullNote.animate()
+				.alpha(if(show) 1f else 0f)
+				.translationY(if (show) 0f else -50f)
+				.setDuration(100)
+				.start()
+		openNoteFormButton.animate()
+				.alpha(if(show) 1f else 0f)
+				.translationY(if (show) 0f else -50f)
+				.setDuration(100)
+				.start()
 	}
 }
