@@ -3,11 +3,11 @@ package com.ancientlore.stickies
 import android.content.Context
 import android.support.annotation.CallSuper
 import android.support.annotation.UiThread
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ancientlore.stickies.utils.recyclerdiff.HeadedRecyclerDiffUtil
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -28,7 +28,7 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P>>(
 
 	abstract fun getViewHolder(layout: View): T
 
-	abstract fun getDiffCallback(newItems: List<P>): DiffUtil.Callback
+	abstract fun getDiffCallback(newItems: List<P>): HeadedRecyclerDiffUtil.Callback
 
 	abstract fun isTheSame(first: P, second: P) : Boolean
 
@@ -55,7 +55,7 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P>>(
 
 	@UiThread
 	override fun setItems(newItems: List<P>) {
-		val diffResult = DiffUtil.calculateDiff(getDiffCallback(newItems))
+		val diffResult = HeadedRecyclerDiffUtil.calculateDiff(getDiffCallback(newItems))
 
 		items.clear()
 		items.addAll(newItems)

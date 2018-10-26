@@ -2,7 +2,6 @@ package com.ancientlore.stickies.noteslist
 
 import android.content.Context
 import android.support.annotation.UiThread
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -15,6 +14,7 @@ import com.ancientlore.stickies.C
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.SortField
 import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.utils.recyclerdiff.HeadedRecyclerDiffUtil
 import com.ancientlore.stickies.utils.getListTitle
 import com.ancientlore.stickies.utils.hideKeyboard
 import com.ancientlore.stickies.utils.showKeybouard
@@ -145,7 +145,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	class DiffCallback(private val oldItems: List<Note>,
 					   private val newItems: List<Note>)
-		: DiffUtil.Callback() {
+		: HeadedRecyclerDiffUtil.Callback() {
 
 		override fun getOldListSize() = oldItems.size
 
