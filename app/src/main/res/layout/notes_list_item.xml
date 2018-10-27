@@ -1,69 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools">
 	<data>
 		<import type="android.view.View" />
 		<variable
 			name="viewModel"
 			type="com.ancientlore.stickies.noteslist.NotesListAdapter.ViewHolder"/>
 	</data>
-
-<android.support.v7.widget.CardView
-	android:layout_width="match_parent"
-	android:layout_height="60dp"
-	android:layout_marginTop="5dp"
-	android:layout_marginLeft="5dp"
-	android:layout_marginRight="5dp"
-	app:cardCornerRadius="4dp"
-	app:cardBackgroundColor="@{viewModel.backColor}"
-	tools:cardBackgroundColor="@color/noteYellow"
-	>
-	<android.support.constraint.ConstraintLayout
-		android:id="@+id/content"
+	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="@dimen/notesListItemHeight"
 		android:orientation="vertical"
-		android:onClick="@{() -> viewModel.onClick()}"
+		android:background="@drawable/notes_list_item_bg"
 		>
-		<View
-			android:id="@+id/importanceView"
-			android:layout_width="8dp"
+		<com.ancientlore.stickies.view.SwipeLayout
+			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:background="@color/colorAccent"
-			android:visibility="@{viewModel.isImportant ? View.VISIBLE : View.INVISIBLE}"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			/>
-		<android.support.v7.widget.AppCompatTextView
-			android:id="@+id/titleView"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:textColor="@color/stickyTitle"
-			android:text="@={viewModel.titleField}"
-			app:layout_constraintStart_toEndOf="@+id/importanceView"
-			app:layout_constraintHorizontal_chainStyle="packed"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			app:layout_constraintEnd_toStartOf="@+id/dateView"
-			tools:text="Note Title"
-			style="@style/noteTitle"
-			/>
-		<TextView
-			android:id="@+id/dateView"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginEnd="8dp"
-			android:layout_marginRight="8dp"
-			android:text="@={viewModel.dateField}"
-			app:layout_constraintStart_toEndOf="@id/titleView"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			tools:text="08/08/2018"
-			/>
-	</android.support.constraint.ConstraintLayout>
-</android.support.v7.widget.CardView>
+			>
+			<android.support.constraint.ConstraintLayout
+				android:id="@+id/content"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				android:background="@{viewModel.backColor}"
+				android:onClick="@{() -> viewModel.onClick()}"
+				tools:background="@color/noteYellow"
+				>
+				<View
+					android:id="@+id/importanceView"
+					android:layout_width="8dp"
+					android:layout_height="match_parent"
+					android:background="@color/colorAccent"
+					android:visibility="@{viewModel.isImportant ? View.VISIBLE : View.INVISIBLE}"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					/>
+				<android.support.v7.widget.AppCompatTextView
+					android:id="@+id/titleView"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:textColor="@color/stickyTitle"
+					android:text="@={viewModel.titleField}"
+					app:layout_constraintStart_toEndOf="@+id/importanceView"
+					app:layout_constraintHorizontal_chainStyle="packed"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintEnd_toStartOf="@+id/dateView"
+					tools:text="Note Title"
+					style="@style/noteTitle"
+					/>
+				<TextView
+					android:id="@+id/dateView"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginEnd="8dp"
+					android:layout_marginRight="8dp"
+					android:text="@={viewModel.dateField}"
+					app:layout_constraintStart_toEndOf="@id/titleView"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					tools:text="08/08/2018"
+					/>
+			</android.support.constraint.ConstraintLayout>
+			<LinearLayout
+				android:id="@+id/rightMenu"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:orientation="horizontal"
+				app:sticky_sensitivity="0.5"
+				app:bring_to_clamp="3dp"
+				app:gravity="right"
+				app:clamp="self"
+				>
+				<com.ancientlore.stickies.view.DrawableCompatTextView
+					android:id="@+id/importantButton"
+					android:layout_width="@dimen/notesListItemHeight"
+					android:layout_height="match_parent"
+					android:gravity="center"
+					android:paddingTop="12dp"
+					android:paddingBottom="10dp"
+					android:textColor="@android:color/white"
+					android:textSize="12sp"
+					android:ellipsize="end"
+					android:maxLines="1"
+					android:text="@string/menu_important"
+					android:background="@android:color/holo_orange_dark"
+					android:onClick="@{() -> viewModel.onImportantButtonClicked()}"
+					app:drawableTop="@drawable/ic_important_on"
+					tools:text="Test"
+					tools:drawableTop="@drawable/ic_important_on"
+					/>
+				<com.ancientlore.stickies.view.DrawableCompatTextView
+					android:id="@+id/completedButton"
+					android:layout_width="@dimen/notesListItemHeight"
+					android:layout_height="match_parent"
+					android:gravity="center"
+					android:paddingTop="12dp"
+					android:paddingBottom="10dp"
+					android:textColor="@android:color/white"
+					android:textSize="12sp"
+					android:ellipsize="end"
+					android:maxLines="1"
+					android:text="@string/menu_completed"
+					android:background="@android:color/holo_blue_dark"
+					android:onClick="@{() -> viewModel.onCompletedButtonClicked()}"
+					app:drawableTop="@drawable/ic_completed_on"
+					tools:text="Test"
+					tools:drawableTop="@drawable/ic_completed_on"
+					/>
+				<com.ancientlore.stickies.view.DrawableCompatTextView
+					android:id="@+id/deleteButton"
+					android:layout_width="@dimen/notesListItemHeight"
+					android:layout_height="match_parent"
+					android:gravity="center"
+					android:paddingTop="12dp"
+					android:paddingBottom="10dp"
+					android:textColor="@android:color/white"
+					android:textSize="12sp"
+					android:ellipsize="end"
+					android:maxLines="1"
+					android:text="@string/delete"
+					android:background="@android:color/holo_red_dark"
+					android:onClick="@{() -> viewModel.onDeleteButtonClicked()}"
+					app:drawableTop="@drawable/ic_delete"
+					tools:text="Test"
+					tools:drawableTop="@drawable/ic_delete"
+					/>
+			</LinearLayout>
+		</com.ancientlore.stickies.view.SwipeLayout>
+	</LinearLayout>
 </layout>

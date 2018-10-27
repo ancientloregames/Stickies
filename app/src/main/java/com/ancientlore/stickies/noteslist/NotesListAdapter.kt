@@ -116,7 +116,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 		fun bind(params: HeaderParams) {
 			if (params.requestFocus) {
-			  itemView.postDelayed({ itemView.context.showKeybouard(textField) }, 200)
+				itemView.postDelayed({ itemView.context.showKeybouard(textField) }, 200)
 			}
 		}
 
@@ -148,10 +148,19 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 			dateField.set(data.getDateCreated(DateFormat.SHORT))
 			isImportant.set(data.isImportant)
 		}
+
+		fun onImportantButtonClicked() {
+		}
+
+		fun onCompletedButtonClicked() {
+		}
+
+		fun onDeleteButtonClicked() {
+		}
 	}
 
 	class DiffCallback(private val oldItems: List<Note>,
-					   private val newItems: List<Note>)
+										 private val newItems: List<Note>)
 		: HeadedRecyclerDiffUtil.Callback() {
 
 		override fun getOldListSize() = oldItems.size
