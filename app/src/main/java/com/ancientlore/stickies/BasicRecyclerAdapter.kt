@@ -1,18 +1,18 @@
 package com.ancientlore.stickies
 
 import android.content.Context
+import android.databinding.ViewDataBinding
 import android.support.annotation.CallSuper
 import android.support.annotation.UiThread
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.ancientlore.stickies.utils.recyclerdiff.HeadedRecyclerDiffUtil
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
-abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P>>(
+abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P, B>, B: ViewDataBinding>(
 		context: Context, items: MutableList<P>, withHeader: Boolean = false, withFooter: Boolean = false)
 	: HeadedRecyclerAdapter<P, T>(items, withHeader, withFooter), MutableAdapter<P> {
 
@@ -24,9 +24,9 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P>>(
 
 	private val itemSelectedEvent = PublishSubject.create<P>()
 
-	abstract fun getViewHolderLayoutRes(viewType: Int): Int
+	abstract fun createItemViewDataBinding(parent: ViewGroup): B
 
-	abstract fun getViewHolder(layout: View): T
+	abstract fun getViewHolder(binding: B): T
 
 	abstract fun getDiffCallback(newItems: List<P>): HeadedRecyclerDiffUtil.Callback
 
@@ -39,18 +39,19 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P>>(
 	override fun getItemViewTypeInner(position: Int) = VIEW_TYPE_ITEM
 
 	override fun onCreateViewHolderInner(parent: ViewGroup, viewType: Int): T {
-		val layoutRes = getViewHolderLayoutRes(viewType)
-		val layout = getViewHolderLayout(parent, layoutRes)
-		return getViewHolder(layout)
+		val binding = createItemViewDataBinding(parent)
+		return getViewHolder(binding)
 	}
 
 	@CallSuper
 	override fun onBindViewHolderInner(holder: T, position: Int) {
 		val item = items[position]
 		holder.bind(item)
-		holder.onClick(Runnable {
-			itemSelectedEvent.onNext(item)
-		})
+		holder.listener = object : ViewHolder.Listener {
+			override fun onClicked() {
+				itemSelectedEvent.onNext(item)
+			}
+		}
 	}
 
 	@UiThread
@@ -148,8 +149,15 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P>>(
 
 	private fun getItemPosition(updatedItem: P) = items.indexOfFirst { isTheSame(it, updatedItem) }
 
-	abstract class ViewHolder<T>(itemView: View): RecyclerView.ViewHolder(itemView), Bindable<T>, Clickable {
+	abstract class ViewHolder<T, B: ViewDataBinding>(protected val binding: B)
+		: RecyclerView.ViewHolder(binding.root), Bindable<T> {
+		interface Listener {
+			fun onClicked()
+		}
+		var listener: Listener? = null
 
-		override fun onClick(action: Runnable) { itemView.setOnClickListener { action.run() } }
+		fun onClick() {
+			listener?.onClicked()
+		}
 	}
 }

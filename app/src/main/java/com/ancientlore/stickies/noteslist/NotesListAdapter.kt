@@ -1,22 +1,22 @@
 package com.ancientlore.stickies.noteslist
 
 import android.content.Context
+import android.databinding.ObservableBoolean
+import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import android.support.annotation.UiThread
-import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
-import com.ancientlore.stickies.BasicRecyclerAdapter
-import com.ancientlore.stickies.C
-import com.ancientlore.stickies.R
-import com.ancientlore.stickies.SortField
+import com.ancientlore.stickies.*
 import com.ancientlore.stickies.data.model.Note
-import com.ancientlore.stickies.utils.recyclerdiff.HeadedRecyclerDiffUtil
+import com.ancientlore.stickies.databinding.NotesListItemBinding
 import com.ancientlore.stickies.utils.getListTitle
 import com.ancientlore.stickies.utils.hideKeyboard
+import com.ancientlore.stickies.utils.recyclerdiff.HeadedRecyclerDiffUtil
 import com.ancientlore.stickies.utils.showKeybouard
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -25,7 +25,7 @@ import java.text.DateFormat
 import java.util.*
 
 class NotesListAdapter(context: Context, items: MutableList<Note>)
-	: BasicRecyclerAdapter<Note, NotesListAdapter.ViewHolder>(context, items, true, true) {
+	: BasicRecyclerAdapter<Note, NotesListAdapter.ViewHolder, NotesListItemBinding>(context, items, true, true) {
 
 	data class HeaderParams(var requestFocus: Boolean = false)
 
@@ -54,9 +54,10 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		}
 	}
 
-	override fun getViewHolderLayoutRes(viewType: Int) = R.layout.notes_list_item
+	override fun createItemViewDataBinding(parent: ViewGroup) =
+			NotesListItemBinding.inflate(layoutInflater, parent, false)
 
-	override fun getViewHolder(layout: View) = ViewHolder(layout)
+	override fun getViewHolder(binding: NotesListItemBinding) = ViewHolder(binding)
 
 	override fun getDiffCallback(newItems: List<Note>) = DiffCallback(items, newItems)
 
@@ -130,16 +131,22 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	class FooterViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
-	class ViewHolder(itemView: View): BasicRecyclerAdapter.ViewHolder<Note>(itemView) {
-		private val titleView = itemView.findViewById<TextView>(R.id.titleView)
-		private val dateView = itemView.findViewById<TextView>(R.id.dateView)
-		private val importanceView = itemView.findViewById<View>(R.id.importanceView)
+	class ViewHolder(binding: NotesListItemBinding): BasicRecyclerAdapter.ViewHolder<Note, NotesListItemBinding>(binding) {
+
+		val titleField = ObservableField<String>("")
+		val dateField = ObservableField<String>("")
+		val backColor = ObservableInt()
+		val isImportant = ObservableBoolean()
+
+		init {
+			binding.setVariable(BR.viewModel, this)
+		}
 
 		override fun bind(data: Note) {
-			(itemView as CardView).setCardBackgroundColor(data.color)
-			titleView.text = data.getListTitle(itemView.context)
-			dateView.text = data.getDateCreated(DateFormat.SHORT)
-			importanceView.visibility = if (data.isImportant) View.VISIBLE else View.INVISIBLE
+			backColor.set(data.color)
+			titleField.set(data.getListTitle(itemView.context))
+			dateField.set(data.getDateCreated(DateFormat.SHORT))
+			isImportant.set(data.isImportant)
 		}
 	}
 

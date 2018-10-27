@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<layout
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/card_view"
+	xmlns:tools="http://schemas.android.com/tools">
+	<data>
+		<import type="android.view.View" />
+		<variable
+			name="viewModel"
+			type="com.ancientlore.stickies.noteslist.NotesListAdapter.ViewHolder"/>
+	</data>
+
+<android.support.v7.widget.CardView
 	android:layout_width="match_parent"
 	android:layout_height="60dp"
 	android:layout_marginTop="5dp"
 	android:layout_marginLeft="5dp"
 	android:layout_marginRight="5dp"
 	app:cardCornerRadius="4dp"
+	app:cardBackgroundColor="@{viewModel.backColor}"
 	tools:cardBackgroundColor="@color/noteYellow"
 	>
 	<android.support.constraint.ConstraintLayout
@@ -17,12 +25,14 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:orientation="vertical"
+		android:onClick="@{() -> viewModel.onClick()}"
 		>
 		<View
 			android:id="@+id/importanceView"
 			android:layout_width="8dp"
 			android:layout_height="match_parent"
 			android:background="@color/colorAccent"
+			android:visibility="@{viewModel.isImportant ? View.VISIBLE : View.INVISIBLE}"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
@@ -32,6 +42,7 @@
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:textColor="@color/stickyTitle"
+			android:text="@={viewModel.titleField}"
 			app:layout_constraintStart_toEndOf="@+id/importanceView"
 			app:layout_constraintHorizontal_chainStyle="packed"
 			app:layout_constraintBottom_toBottomOf="parent"
@@ -46,6 +57,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="8dp"
 			android:layout_marginRight="8dp"
+			android:text="@={viewModel.dateField}"
 			app:layout_constraintStart_toEndOf="@id/titleView"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintBottom_toBottomOf="parent"
@@ -54,3 +66,4 @@
 			/>
 	</android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>
+</layout>
