@@ -2,11 +2,10 @@ package com.ancientlore.stickies.menu.swipe
 
 import com.ancientlore.stickies.view.SwipeLayout
 import java.lang.ref.WeakReference
-import java.util.Collections
-import java.util.HashMap
+import java.util.*
 
-class SwipeLayoutManager(private val openOnlyOne: Boolean) {
-	private val layouts = Collections.synchronizedMap(HashMap<String, WeakReference<SwipeLayout>>())
+class SwipeLayoutManager(private val openOnlyOne: Boolean = true) {
+	private val layouts = Collections.synchronizedMap(HashMap<Any, WeakReference<SwipeLayout>>())
 
 	private val lockerObject = Any()
 
@@ -17,7 +16,7 @@ class SwipeLayoutManager(private val openOnlyOne: Boolean) {
 					.count()
 		}
 
-	fun bind(swipeLayout: SwipeLayout, id: String) {
+	fun bind(swipeLayout: SwipeLayout, id: Any) {
 		layouts[id] = WeakReference(swipeLayout)
 
 		swipeLayout.setOnSwipeListener(object : SwipeLayout.OnSwipeListener {
@@ -44,27 +43,27 @@ class SwipeLayoutManager(private val openOnlyOne: Boolean) {
 
 	fun hasOpened() = openCount > 0
 
-	fun closeAll(animate: Boolean) {
+	fun closeAll(animate: Boolean = false) {
 		synchronized(lockerObject) {
 			layouts.values.mapNotNull { it.get() }
 					.forEach { reset(it, animate) }
 		}
 	}
 
-	fun closeLayout(layout: SwipeLayout, animate: Boolean) {
+	fun closeLayout(layout: SwipeLayout, animate: Boolean = true) {
 		synchronized(lockerObject) {
 			reset(layout, animate)
 		}
 	}
 
-	fun closeLayout(id: String, animate: Boolean) {
+	fun closeLayout(id: Any, animate: Boolean = true) {
 		synchronized(lockerObject) {
 			layouts[id]?.get()
 					?.let { reset(it, animate) }
 		}
 	}
 
-	fun closeOthers(excludedLayout: SwipeLayout, animate: Boolean) {
+	fun closeOthers(excludedLayout: SwipeLayout, animate: Boolean = true) {
 		synchronized(lockerObject) {
 			layouts.values.mapNotNull { it.get() }
 					.filter { it !== excludedLayout }
@@ -72,7 +71,7 @@ class SwipeLayoutManager(private val openOnlyOne: Boolean) {
 		}
 	}
 
-	private fun reset(layoutToClose: SwipeLayout, animate: Boolean) {
+	private fun reset(layoutToClose: SwipeLayout, animate: Boolean = false) {
 		if (animate)
 			layoutToClose.animateReset()
 		else
