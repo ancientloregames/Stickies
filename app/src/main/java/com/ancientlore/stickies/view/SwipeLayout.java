@@ -690,6 +690,7 @@ public class SwipeLayout extends ViewGroup
 			return false;
 		}
 
+		@Contract(pure = true)
 		private boolean isBetween(float left, float right, float check)
 		{
 			return check >= left && check <= right;
@@ -766,24 +767,20 @@ public class SwipeLayout extends ViewGroup
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent event)
 	{
-		return isSwipeEnabled()
-				? internalOnInterceptTouchEvent(event)
-				: super.onInterceptTouchEvent(event);
+		return onTouchEvent(event);
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		boolean defaultResult = super.onTouchEvent(event);
-		if (!isSwipeEnabled())
-		{
-			return defaultResult;
-		}
+		if (!isSwipeEnabled()) return super.onTouchEvent(event);
 
 		switch (event.getActionMasked())
 		{
 			case MotionEvent.ACTION_DOWN:
-				onTouchBegin(event);
+				touchState = TOUCH_STATE_WAIT;
+				touchX = event.getX();
+				touchY = event.getY();
 				break;
 
 			case MotionEvent.ACTION_MOVE:
@@ -799,12 +796,12 @@ public class SwipeLayout extends ViewGroup
 							getOffset() == 0)
 					{
 
-						return defaultResult;
+						return super.onTouchEvent(event);
 					}
 
 					if (dx >= touchSlop || dy >= touchSlop)
 					{
-						touchState = dy == 0 || dx / dy > 1f ? TOUCH_STATE_SWIPE : TOUCH_STATE_SKIP;
+						touchState = dx / 3 > dy ? TOUCH_STATE_SWIPE : TOUCH_STATE_SKIP;
 						if (touchState == TOUCH_STATE_SWIPE)
 						{
 							requestDisallowInterceptTouchEvent(true);
@@ -828,6 +825,7 @@ public class SwipeLayout extends ViewGroup
 				touchState = TOUCH_STATE_WAIT;
 				break;
 
+			case MotionEvent.ACTION_POINTER_UP:
 			case MotionEvent.ACTION_UP:
 				if (touchState == TOUCH_STATE_SWIPE)
 				{
@@ -843,7 +841,7 @@ public class SwipeLayout extends ViewGroup
 			dragHelper.processTouchEvent(event);
 		}
 
-		return true;
+		return touchState == TOUCH_STATE_SWIPE;
 	}
 
 	@Override
@@ -868,22 +866,6 @@ public class SwipeLayout extends ViewGroup
 	protected boolean checkLayoutParams(ViewGroup.LayoutParams p)
 	{
 		return p instanceof LayoutParams;
-	}
-
-	private boolean internalOnInterceptTouchEvent(@NotNull MotionEvent event)
-	{
-		if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
-		{
-			onTouchBegin(event);
-		}
-		return dragHelper.shouldInterceptTouchEvent(event);
-	}
-
-	private void onTouchBegin(@NotNull MotionEvent event)
-	{
-		touchState = TOUCH_STATE_WAIT;
-		touchX = event.getX();
-		touchY = event.getY();
 	}
 
 	@Contract(pure = true)
