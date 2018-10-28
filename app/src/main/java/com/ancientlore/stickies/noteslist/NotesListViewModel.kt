@@ -48,6 +48,9 @@ class NotesListViewModel(application: Application,
 		listAdapter.setListener(object : NotesListAdapter.Listener {
 			override fun onItemClicked(note: Note) = showNoteEvent.onNext(note.id)
 			override fun onNewNote(note: Note) = insertAndAddNote(note)
+			override fun onImportantButtonClicked(id: Long, newState: Boolean) = switchImportance(id, newState)
+			override fun onCompletedButtonClicked(id: Long, newState: Boolean) = switchComptetion(id, newState)
+			override fun onDeleteButtonClicked(id: Long) = deleteNote(id)
 		})
 	}
 
@@ -171,6 +174,14 @@ class NotesListViewModel(application: Application,
 		repository.getItem(id, object : DataSource.SimpleRequestCallback<Note>() {
 			override fun onSuccess(result: Note) = updateListItem(result)
 		})
+	}
+
+	private fun switchImportance(id: Long, isImportant: Boolean) {
+		repository.switchImportance(id, isImportant)
+	}
+
+	private fun switchComptetion(id: Long, isCompleted: Boolean) {
+		repository.switchCompletion(id, isCompleted)
 	}
 
 	private fun deleteNote(id: Long) = deleteListItem(id)

@@ -26,6 +26,9 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 	interface Listener {
 		fun onItemClicked(note: Note)
 		fun onNewNote(note: Note)
+		fun onImportantButtonClicked(id: Long, newState: Boolean)
+		fun onCompletedButtonClicked(id: Long, newState: Boolean)
+		fun onDeleteButtonClicked(id: Long)
 	}
 
 	data class HeaderParams(var requestFocus: Boolean = false)
@@ -61,6 +64,9 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		val note = items[position]
 
 		holder.listener = object : ViewHolder.Listener {
+			override fun onImportantButtonClicked() { listener?.onImportantButtonClicked(note.id, !note.isImportant) }
+			override fun onCompletedButtonClicked() { listener?.onCompletedButtonClicked(note.id, !note.isCompleted) }
+			override fun onDeleteButtonClicked() { listener?.onDeleteButtonClicked(note.id) }
 			override fun onItemClicked() { listener?.onItemClicked(note) }
 		}
 	}
@@ -146,6 +152,9 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 	class ViewHolder(binding: NotesListItemBinding): BasicRecyclerAdapter.ViewHolder<Note, NotesListItemBinding>(binding) {
 		interface Listener {
 			fun onItemClicked()
+			fun onImportantButtonClicked()
+			fun onCompletedButtonClicked()
+			fun onDeleteButtonClicked()
 		}
 		var listener: Listener? = null
 
@@ -166,6 +175,12 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		}
 
 		fun onClick() = listener?.onItemClicked()
+
+		fun onImportantButtonClick() = listener?.onImportantButtonClicked()
+
+		fun onCompletedButtonClick() = listener?.onCompletedButtonClicked()
+
+		fun onDeleteButtonClick() = listener?.onDeleteButtonClicked()
 	}
 
 	class DiffCallback(private val oldItems: List<Note>,
