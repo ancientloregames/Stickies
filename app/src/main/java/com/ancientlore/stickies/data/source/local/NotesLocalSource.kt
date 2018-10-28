@@ -65,4 +65,16 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 			dao.deleteById(id)
 		}
 	}
+
+	override fun switchImportance(id: Long, isImportant: Boolean) {
+		executor.submit {
+			dao.switchImportance(id, isImportant)
+		}
+	}
+
+	override fun switchCompletion(id: Long, isCompleted: Boolean) {
+		executor.submit {
+			dao.switchImportance(id, isCompleted)
+		}
+	}
 }

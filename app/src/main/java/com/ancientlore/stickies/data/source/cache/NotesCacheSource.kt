@@ -26,6 +26,18 @@ object NotesCacheSource {
 
 	fun deleteItem(id: Long) = cache.remove(id)
 
+	fun switchImportance(id: Long, isImportant: Boolean) {
+		if (cache.containsKey(id)) {
+			cache[id]?.isImportant = isImportant
+		}
+	}
+
+	fun switchComptetion(id: Long, isCompleted: Boolean) {
+		if (cache.containsKey(id)) {
+			cache[id]?.isCompleted = isCompleted
+		}
+	}
+
 	fun resetWith(newItems: List<Note>) {
 		cache.clear()
 		for (item in newItems) {

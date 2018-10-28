@@ -35,4 +35,10 @@ interface NotesDao {
 
 	@Query("DELETE FROM notes")
 	fun deleteAll()
+
+	@Query("UPDATE notes SET isImportant = :isImportant WHERE id = :id")
+	fun switchImportance(id: Long, isImportant: Boolean)
+
+	@Query("UPDATE notes SET isCompleted = :isCompleted WHERE id = :id")
+	fun switchCompletion(id: Long, isCompleted: Boolean)
 }

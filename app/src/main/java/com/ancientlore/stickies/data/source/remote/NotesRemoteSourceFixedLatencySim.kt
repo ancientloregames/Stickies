@@ -72,4 +72,20 @@ object NotesRemoteSourceFixedLatencySim : NotesSource {
 			data.remove(id)
 		}, LATENCY_MILLIS, TimeUnit.MILLISECONDS)
 	}
+
+	override fun switchImportance(id: Long, isImportant: Boolean) {
+		executor.schedule({
+			if (data.containsKey(id)) {
+				data[id]?.isImportant = isImportant
+			}
+		}, LATENCY_MILLIS, TimeUnit.MILLISECONDS)
+	}
+
+	override fun switchCompletion(id: Long, isCompleted: Boolean) {
+		executor.schedule({
+			if (data.containsKey(id)) {
+				data[id]?.isCompleted = isCompleted
+			}
+		}, LATENCY_MILLIS, TimeUnit.MILLISECONDS)
+	}
 }

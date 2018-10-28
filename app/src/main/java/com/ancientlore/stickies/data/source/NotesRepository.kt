@@ -97,6 +97,16 @@ object NotesRepository: NotesSource {
 		localSource?.deleteItem(id)
 	}
 
+	override fun switchImportance(id: Long, isImportant: Boolean) {
+		cacheSource.switchImportance(id, isImportant)
+		localSource?.switchImportance(id, isImportant)
+	}
+
+	override fun switchCompletion(id: Long, isCompleted: Boolean) {
+		cacheSource.switchComptetion(id, isCompleted)
+		localSource?.switchCompletion(id, isCompleted)
+	}
+
 	fun initLocalSource(dao: NotesDao) {
 		localSource = NotesLocalSource.getInstance(dao)
 	}
