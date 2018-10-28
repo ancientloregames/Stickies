@@ -1,7 +1,5 @@
 package com.ancientlore.stickies
 
-import io.reactivex.Observable
-
 interface MutableAdapter<T> {
 	fun setItems(newItems: List<T>)
 	fun prependItem(newItem: T): Boolean
@@ -14,7 +12,4 @@ interface MutableAdapter<T> {
 	fun isEmpty(): Boolean
 
 	fun sort(@SortField field: String, @SortOrder order: String)
-
-	fun onItemSelected(): Observable<T>
-	fun observeNewItem(): Observable<T>
 }

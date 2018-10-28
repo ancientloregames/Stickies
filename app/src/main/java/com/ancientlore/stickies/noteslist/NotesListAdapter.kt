@@ -18,25 +18,26 @@ import com.ancientlore.stickies.utils.getListTitle
 import com.ancientlore.stickies.utils.hideKeyboard
 import com.ancientlore.stickies.utils.recyclerdiff.HeadedRecyclerDiffUtil
 import com.ancientlore.stickies.utils.showKeybouard
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import java.lang.ref.WeakReference
 import java.text.DateFormat
-import java.util.*
 
 class NotesListAdapter(context: Context, items: MutableList<Note>)
 	: BasicRecyclerAdapter<Note, NotesListAdapter.ViewHolder, NotesListItemBinding>(context, items, true, true) {
+	interface Listener {
+		fun onItemClicked(note: Note)
+		fun onNewNote(note: Note)
+	}
 
 	data class HeaderParams(var requestFocus: Boolean = false)
 
-	private var timeComparator = Comparator<Note> { o1, o2 -> o1.timeCreated.compareTo(o2.timeCreated) }
-	private var titleComparator = Comparator<Note> { o1, o2 -> o1.compareByText(o2) }
+	private val timeComparator = Comparator<Note> { o1, o2 -> o1.timeCreated.compareTo(o2.timeCreated) }
+	private val titleComparator = Comparator<Note> { o1, o2 -> o1.compareByText(o2) }
 
-	private var headerParams = HeaderParams()
+	private val headerParams = HeaderParams()
 
 	private var headerTextFieldRef: WeakReference<HeaderViewHolder>? = null
 
-	private val onNewNoteEvent = PublishSubject.create<Note>()
+	private var listener: Listener? = null
 
 	override fun createHeaderViewHolder(parent: ViewGroup) =
 			HeaderViewHolder(layoutInflater.inflate(R.layout.notes_list_header, parent, false))
@@ -54,7 +55,17 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		}
 	}
 
-	override fun createItemViewDataBinding(parent: ViewGroup) =
+	override fun onBindViewHolderInner(holder: ViewHolder, position: Int) {
+		super.onBindViewHolderInner(holder, position)
+
+		val note = items[position]
+
+		holder.listener = object : ViewHolder.Listener {
+			override fun onItemClicked() { listener?.onItemClicked(note) }
+		}
+	}
+
+	override fun createItemViewDataBinding(parent: ViewGroup): NotesListItemBinding =
 			NotesListItemBinding.inflate(layoutInflater, parent, false)
 
 	override fun getViewHolder(binding: NotesListItemBinding) = ViewHolder(binding)
@@ -72,12 +83,12 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	override fun isUnique(item: Note) = items.none { it.id == item.id }
 
-	override fun getSortComparator(@SortField sortField: String) = when (sortField) {
-		C.FIELD_DATE -> timeComparator
-		else -> titleComparator
+	override fun getSortComparator(@SortField sortField: String): Comparator<Note> {
+		return when (sortField) {
+			C.FIELD_DATE -> timeComparator
+			else -> titleComparator
+		}
 	}
-
-	override fun observeNewItem() = onNewNoteEvent as Observable<Note>
 
 	fun requestNoteAddition() {
 		headerParams.requestFocus = true
@@ -86,9 +97,10 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	fun submitCurrentText() = headerTextFieldRef?.get()?.submitText()
 
+	fun setListener(listener: Listener) { this.listener = listener }
+
 	private fun addNoteWithin(text: String) {
-		val newNote = Note(body = text)
-		onNewNoteEvent.onNext(newNote)
+		listener?.onNewNote(Note(body = text))
 	}
 
 	class HeaderViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -132,6 +144,10 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 	class FooterViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
 	class ViewHolder(binding: NotesListItemBinding): BasicRecyclerAdapter.ViewHolder<Note, NotesListItemBinding>(binding) {
+		interface Listener {
+			fun onItemClicked()
+		}
+		var listener: Listener? = null
 
 		val titleField = ObservableField<String>("")
 		val dateField = ObservableField<String>("")
@@ -149,14 +165,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 			isImportant.set(data.isImportant)
 		}
 
-		fun onImportantButtonClicked() {
-		}
-
-		fun onCompletedButtonClicked() {
-		}
-
-		fun onDeleteButtonClicked() {
-		}
+		fun onClick() = listener?.onItemClicked()
 	}
 
 	class DiffCallback(private val oldItems: List<Note>,

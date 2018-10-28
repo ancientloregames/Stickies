@@ -8,8 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ancientlore.stickies.utils.recyclerdiff.HeadedRecyclerDiffUtil
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import java.util.*
 
 abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P, B>, B: ViewDataBinding>(
@@ -21,8 +19,6 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P, B>,
 	}
 
 	protected val layoutInflater: LayoutInflater = LayoutInflater.from(context)
-
-	private val itemSelectedEvent = PublishSubject.create<P>()
 
 	abstract fun createItemViewDataBinding(parent: ViewGroup): B
 
@@ -44,15 +40,7 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P, B>,
 	}
 
 	@CallSuper
-	override fun onBindViewHolderInner(holder: T, position: Int) {
-		val item = items[position]
-		holder.bind(item)
-		holder.listener = object : ViewHolder.Listener {
-			override fun onClicked() {
-				itemSelectedEvent.onNext(item)
-			}
-		}
-	}
+	override fun onBindViewHolderInner(holder: T, position: Int) = holder.bind(items[position])
 
 	@UiThread
 	override fun setItems(newItems: List<P>) {
@@ -124,8 +112,6 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P, B>,
 		setItems(newList)
 	}
 
-	override fun onItemSelected() = itemSelectedEvent as Observable<P>
-
 	override fun isEmpty() = items.isEmpty()
 
 	private fun getViewHolderLayout(parent: ViewGroup, layoutRes: Int) = layoutInflater.inflate(layoutRes, parent, false)
@@ -149,15 +135,5 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P, B>,
 
 	private fun getItemPosition(updatedItem: P) = items.indexOfFirst { isTheSame(it, updatedItem) }
 
-	abstract class ViewHolder<T, B: ViewDataBinding>(protected val binding: B)
-		: RecyclerView.ViewHolder(binding.root), Bindable<T> {
-		interface Listener {
-			fun onClicked()
-		}
-		var listener: Listener? = null
-
-		fun onClick() {
-			listener?.onClicked()
-		}
-	}
+	abstract class ViewHolder<T, B: ViewDataBinding>(protected val binding: B) : RecyclerView.ViewHolder(binding.root), Bindable<T>
 }

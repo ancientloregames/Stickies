@@ -45,11 +45,10 @@ class NotesListViewModel(application: Application,
 	init {
 		loadAllNotes()
 
-		listAdapter.onItemSelected()
-				.subscribe { showNoteEvent.onNext(it.id) }
-
-		listAdapter.observeNewItem()
-				.subscribe { insertAndAddNote(it) }
+		listAdapter.setListener(object : NotesListAdapter.Listener {
+			override fun onItemClicked(note: Note) = showNoteEvent.onNext(note.id)
+			override fun onNewNote(note: Note) = insertAndAddNote(note)
+		})
 	}
 
 	override fun handleOptionSelection(option: Int): Boolean {
