@@ -14,10 +14,13 @@ import android.widget.TextView
 import com.ancientlore.stickies.*
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.databinding.NotesListItemBinding
+import com.ancientlore.stickies.menu.swipe.SwipeLayoutManager
 import com.ancientlore.stickies.utils.getListTitle
 import com.ancientlore.stickies.utils.hideKeyboard
 import com.ancientlore.stickies.utils.recyclerdiff.HeadedRecyclerDiffUtil
 import com.ancientlore.stickies.utils.showKeybouard
+import com.ancientlore.stickies.view.SwipeLayout
+import kotlinx.android.synthetic.main.notes_list_item.view.*
 import java.lang.ref.WeakReference
 import java.text.DateFormat
 
@@ -35,6 +38,8 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	private val timeComparator = Comparator<Note> { o1, o2 -> o1.timeCreated.compareTo(o2.timeCreated) }
 	private val titleComparator = Comparator<Note> { o1, o2 -> o1.compareByText(o2) }
+
+	private val swipeLayoutManager = SwipeLayoutManager()
 
 	private val headerParams = HeaderParams()
 
@@ -63,11 +68,27 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 		val note = items[position]
 
+		swipeLayoutManager.bind(holder.swipeLayout, note.id)
+		swipeLayoutManager.closeLayout(note.id, false)
+
 		holder.listener = object : ViewHolder.Listener {
-			override fun onImportantButtonClicked() { listener?.onImportantButtonClicked(note.id, !note.isImportant) }
-			override fun onCompletedButtonClicked() { listener?.onCompletedButtonClicked(note.id, !note.isCompleted) }
-			override fun onDeleteButtonClicked() { listener?.onDeleteButtonClicked(note.id) }
-			override fun onItemClicked() { listener?.onItemClicked(note) }
+			override fun onImportantButtonClicked() {
+				swipeLayoutManager.closeLayout(note.id)
+				listener?.onImportantButtonClicked(note.id, !note.isImportant)
+			}
+			override fun onCompletedButtonClicked() {
+				swipeLayoutManager.closeLayout(note.id)
+				listener?.onCompletedButtonClicked(note.id, !note.isCompleted)
+			}
+			override fun onDeleteButtonClicked() {
+				swipeLayoutManager.closeLayout(note.id)
+				listener?.onDeleteButtonClicked(note.id)
+			}
+			override fun onItemClicked() {
+				if (swipeLayoutManager.hasOpened())
+					swipeLayoutManager.closeAll(true)
+				else listener?.onItemClicked(note)
+			}
 		}
 	}
 
@@ -157,6 +178,8 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 			fun onDeleteButtonClicked()
 		}
 		var listener: Listener? = null
+
+		val swipeLayout: SwipeLayout get() = itemView.swipeLayout
 
 		val titleField = ObservableField<String>("")
 		val dateField = ObservableField<String>("")

@@ -15,6 +15,7 @@
 		android:background="@drawable/notes_list_item_bg"
 		>
 		<com.ancientlore.stickies.view.SwipeLayout
+			android:id="@+id/swipeLayout"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			>
@@ -70,6 +71,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="match_parent"
 				android:orientation="horizontal"
+				android:onClick="@{() -> viewModel.onImportantButtonClick()}"
 				app:sticky_sensitivity="0.5"
 				app:bring_to_clamp="3dp"
 				app:gravity="right"
