@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
@@ -66,11 +67,41 @@ public class DrawableCompatTextView extends AppCompatTextView
 					drawableTop = AppCompatResources.getDrawable(context, drawableTopId);
 			}
 
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-				setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStart, drawableTop, drawableEnd, drawableBottom);
-			else setCompoundDrawablesWithIntrinsicBounds(drawableStart, drawableTop, drawableEnd, drawableBottom);
+			setCompoundDrawablesCompat(drawableStart, drawableTop, drawableEnd, drawableBottom);
 
 			attributeArray.recycle();
 		}
+	}
+
+	public void setDrawableStart(Drawable drawable)
+	{
+		Drawable[] drawables = getCompoundDrawables();
+		setCompoundDrawablesCompat(drawable, drawables[1], drawables[2], drawables[3]);
+	}
+
+	public void setDrawableTop(Drawable drawable)
+	{
+		Drawable[] drawables = getCompoundDrawables();
+		setCompoundDrawablesCompat(drawables[0], drawable, drawables[2], drawables[3]);
+	}
+
+	public void setDrawableEnd(Drawable drawable)
+	{
+		Drawable[] drawables = getCompoundDrawables();
+		setCompoundDrawablesCompat(drawables[0], drawables[1], drawable, drawables[3]);
+	}
+
+	public void setDrawableBottom(Drawable drawable)
+	{
+		Drawable[] drawables = getCompoundDrawables();
+		setCompoundDrawablesCompat(drawables[0], drawables[1], drawables[2], drawable);
+	}
+
+	public void setCompoundDrawablesCompat(@Nullable Drawable drawableStart, @Nullable Drawable drawableTop,
+														@Nullable Drawable drawableEnd, @Nullable Drawable drawableBottom)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+			setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStart, drawableTop, drawableEnd, drawableBottom);
+		else setCompoundDrawablesWithIntrinsicBounds(drawableStart, drawableTop, drawableEnd, drawableBottom);
 	}
 }
