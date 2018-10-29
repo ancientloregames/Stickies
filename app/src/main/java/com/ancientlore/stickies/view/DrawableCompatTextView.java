@@ -2,6 +2,7 @@ package com.ancientlore.stickies.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
@@ -103,5 +104,13 @@ public class DrawableCompatTextView extends AppCompatTextView
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
 			setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStart, drawableTop, drawableEnd, drawableBottom);
 		else setCompoundDrawablesWithIntrinsicBounds(drawableStart, drawableTop, drawableEnd, drawableBottom);
+	}
+
+	public void setStrikeThrough(boolean strikeThrough)
+	{
+		int paintFlags = strikeThrough
+				? getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+				: getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG;
+		setPaintFlags(paintFlags);
 	}
 }
