@@ -178,10 +178,12 @@ class NotesListViewModel(application: Application,
 
 	private fun switchImportance(id: Long, isImportant: Boolean) {
 		repository.switchImportance(id, isImportant)
+		listAdapter.updateImportance(id, isImportant)
 	}
 
 	private fun switchComptetion(id: Long, isCompleted: Boolean) {
 		repository.switchCompletion(id, isCompleted)
+		listAdapter.updateCompletion(id, isCompleted)
 	}
 
 	private fun deleteNote(id: Long) = deleteListItem(id)

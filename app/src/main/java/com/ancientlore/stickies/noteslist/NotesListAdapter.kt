@@ -126,6 +126,20 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	fun setListener(listener: Listener) { this.listener = listener }
 
+	fun updateImportance(id: Long, isImportant: Boolean) {
+		findPosition(id).takeIf { it != -1 }?.let { position ->
+			items[position].isImportant = isImportant
+			notifyListItemChanged(position)
+		}
+	}
+
+	fun updateCompletion(id: Long, isCompleted: Boolean) {
+		findPosition(id).takeIf { it != -1 }?.let { position ->
+			items[position].isCompleted = isCompleted
+			notifyListItemChanged(position)
+		}
+	}
+
 	private fun addNoteWithin(text: String) {
 		listener?.onNewNote(Note(body = text))
 	}
@@ -185,6 +199,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		val dateField = ObservableField<String>("")
 		val backColor = ObservableInt()
 		val isImportant = ObservableBoolean()
+		val isCompleted = ObservableBoolean()
 
 		init {
 			binding.setVariable(BR.viewModel, this)
@@ -195,6 +210,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 			titleField.set(data.getListTitle(itemView.context))
 			dateField.set(data.getDateCreated(DateFormat.SHORT))
 			isImportant.set(data.isImportant)
+			isCompleted.set(data.isCompleted)
 		}
 
 		fun onClick() = listener?.onItemClicked()

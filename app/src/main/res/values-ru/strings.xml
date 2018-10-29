@@ -26,4 +26,6 @@
 	<string name="menu_colorpicker">Изменить цвет</string>
 	<string name="note_num">Заметка №%1$d</string>
 	<string name="hint_quick_note">Введите быструю заметку</string>
+	<string name="menu_unimportant">Обычная</string>
+	<string name="menu_uncompleted">Открытая</string>
 </resources>

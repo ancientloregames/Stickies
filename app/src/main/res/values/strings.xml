@@ -17,6 +17,9 @@
 
 	<string name="menu_important">Important</string>
 	<string name="menu_completed">Completed</string>
+
+	<string name="menu_unimportant">Regular</string>
+	<string name="menu_uncompleted">In progress</string>
 	<string name="menu_colorpicker">Change Color</string>
 
 	<string name="sort">Sort</string>
