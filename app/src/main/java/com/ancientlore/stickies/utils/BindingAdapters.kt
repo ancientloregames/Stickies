@@ -22,6 +22,9 @@ fun setBackgroundColor(imageView: CardView, color: Int) {
 	imageView.setCardBackgroundColor(color)
 }
 
+@BindingAdapter("strikeThrough")
+fun setStrikeThrough(textView: DrawableCompatTextView, strikeThrough: Boolean) = textView.setStrikeThrough(strikeThrough)
+
 @BindingAdapter("drawableStart")
 fun setDrawableStart(imageView: DrawableCompatTextView, drawable: Drawable) = imageView.setDrawableStart(drawable)
 @BindingAdapter("drawableTop")
