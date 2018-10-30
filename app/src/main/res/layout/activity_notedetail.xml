@@ -21,7 +21,7 @@
 		<android.support.design.widget.AppBarLayout
 			android:id="@+id/appbar"
 			android:layout_width="0dp"
-			android:layout_height="59dp"
+			android:layout_height="?attr/actionBarSize"
 			android:theme="@style/AppTheme.AppBarOverlay"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
