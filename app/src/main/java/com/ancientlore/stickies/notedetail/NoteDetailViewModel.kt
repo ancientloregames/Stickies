@@ -7,7 +7,6 @@ import android.databinding.ObservableInt
 import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
-import com.ancientlore.stickies.utils.getListTitle
 import com.ancientlore.stickies.utils.getTitle
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -27,6 +26,7 @@ class NoteDetailViewModel(application: Application,
 	val dateUpdatedField = ObservableField<String>("")
 	val colorField = ObservableInt()
 	val isImportant = ObservableBoolean()
+	val isCompleted = ObservableBoolean()
 	val wasUpdated = ObservableBoolean()
 
 	private val editNoteEvent = PublishSubject.create<Long>()
@@ -66,6 +66,7 @@ class NoteDetailViewModel(application: Application,
 		dateCreatedField.set(note.getDateCreated(DateFormat.SHORT, DateFormat.SHORT))
 		dateUpdatedField.set(note.getDateUpdated(DateFormat.SHORT, DateFormat.SHORT))
 		isImportant.set(note.isImportant)
+		isCompleted.set(note.isCompleted)
 		wasUpdated.set(note.timeUpdated != 0L)
 	}
 }

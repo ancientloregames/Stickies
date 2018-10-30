@@ -37,12 +37,13 @@
 				app:popupTheme="@style/AppTheme.PopupOverlay"
 				>
 
-				<android.support.v7.widget.AppCompatTextView
+				<com.ancientlore.stickies.view.DrawableCompatTextView
 					android:id="@+id/titleView"
 					android:layout_width="wrap_content"
 					android:layout_height="match_parent"
 					android:text="@={viewModel.titleField}"
 					android:textIsSelectable="true"
+					app:strikeThrough="@{viewModel.isCompleted}"
 					app:layout_constraintTop_toBottomOf="@+id/appbar"
 					app:layout_constraintBottom_toTopOf="@+id/messageView"
 					app:layout_constraintStart_toStartOf="parent"
