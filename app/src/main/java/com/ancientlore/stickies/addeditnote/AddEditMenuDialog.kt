@@ -8,20 +8,34 @@ import com.ancientlore.stickies.menu.bottomsheet.BottomMenuDialog
 internal class AddEditMenuDialog: BottomMenuDialog() {
 
 	companion object {
-		fun newInstance(): AddEditMenuDialog {
+		fun newInstance(currentState: AddEditNoteViewModel.State): AddEditMenuDialog {
 			val dialog = AddEditMenuDialog()
 			val args = Bundle()
-			args.putParcelableArrayList(ARG_ITEMS, dialog.createMenu())
+			args.putParcelableArrayList(ARG_ITEMS, dialog.createMenu(currentState))
 			dialog.arguments = args
 			return dialog
 		}
 	}
 
-	private fun createMenu(): ArrayList<MenuItem> {
+	private fun createMenu(currentState: AddEditNoteViewModel.State): ArrayList<MenuItem> {
 		return arrayListOf<MenuItem>().apply {
-			add(MenuItem(R.id.im_important, R.string.menu_important, R.drawable.ic_important_on))
-			add(MenuItem(R.id.im_completed, R.string.menu_completed, R.drawable.ic_completed_on))
+			add(getImportanceMenuItem(currentState.isImportant))
+			add(getCompletedMenuItem(currentState.isCompleted))
 			add(MenuItem(R.id.im_colorpicker, R.string.menu_colorpicker, R.drawable.ic_colorpicker))
+		}
+	}
+
+	private fun getImportanceMenuItem(isImportant: Boolean): MenuItem {
+		return when (isImportant) {
+			true -> MenuItem(R.id.im_important, R.string.menu_unimportant, R.drawable.ic_important_off)
+			else -> MenuItem(R.id.im_important, R.string.menu_important, R.drawable.ic_important_on)
+		}
+	}
+
+	private fun getCompletedMenuItem(isCompleted: Boolean): MenuItem {
+		return when (isCompleted) {
+			true -> MenuItem(R.id.im_completed, R.string.menu_uncompleted, R.drawable.ic_completed_off)
+			else -> MenuItem(R.id.im_completed, R.string.menu_completed, R.drawable.ic_completed_on)
 		}
 	}
 }

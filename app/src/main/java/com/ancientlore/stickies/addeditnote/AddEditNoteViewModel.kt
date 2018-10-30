@@ -5,7 +5,6 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import com.ancientlore.stickies.EmptyObject
 import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
@@ -35,6 +34,8 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		private const val STATE_COMPLETED = "state_completed"
 	}
 
+	data class State(val isImportant: Boolean, val isCompleted: Boolean)
+
 	val titleField = ObservableField<String>("")
 	val messageField = ObservableField<String>("")
 	val colorField = ObservableInt(ContextCompat.getColor(context, R.color.noteYellow))
@@ -48,7 +49,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	private var isCompleted = false
 
 	private val onNoteAdded = PublishSubject.create<Long>()
-	private val onMenuCalled = PublishSubject.create<Any>()
+	private val onMenuCalled = PublishSubject.create<State>()
 	private val onColorPickerCalled = PublishSubject.create<Int>()
 	private val onAlert = PublishSubject.create<Int>()
 
@@ -89,11 +90,11 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 			addNote()
 	}
 
-	fun onMenuButtonClicked() = onMenuCalled.onNext(EmptyObject)
+	fun onMenuButtonClicked() = onMenuCalled.onNext(State(isImportant, isCompleted))
 
 	fun observeNoteAdded() = onNoteAdded as Observable<Long>
 
-	fun observeMenuCalled() = onMenuCalled as Observable<*>
+	fun observeMenuCalled() = onMenuCalled as Observable<State>
 
 	fun observeColorPickerCalled() = onColorPickerCalled as Observable<Int>
 

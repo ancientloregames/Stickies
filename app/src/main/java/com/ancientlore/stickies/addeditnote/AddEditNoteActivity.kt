@@ -49,7 +49,7 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 				.subscribe { finishWithResult(it) })
 
 		subscriptions.add(viewModel.observeMenuCalled()
-				.subscribe { openMenu() })
+				.subscribe { openMenu(it) })
 
 		subscriptions.add(viewModel.observeColorPickerCalled()
 				.subscribe { openColorPicker(it) })
@@ -70,8 +70,8 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 		finish()
 	}
 
-	private fun openMenu() {
-		val menu = AddEditMenuDialog.newInstance()
+	private fun openMenu(currentState: AddEditNoteViewModel.State) {
+		val menu = AddEditMenuDialog.newInstance(currentState)
 
 		menu.setListener(object : BottomMenuDialog.Listener {
 			override fun onItemSelected(item: MenuItem) {
