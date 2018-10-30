@@ -126,6 +126,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	fun setListener(listener: Listener) { this.listener = listener }
 
+	@UiThread
 	fun updateImportance(id: Long, isImportant: Boolean) {
 		findPosition(id).takeIf { it != -1 }?.let { position ->
 			items[position].isImportant = isImportant
@@ -133,6 +134,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		}
 	}
 
+	@UiThread
 	fun updateCompletion(id: Long, isCompleted: Boolean) {
 		findPosition(id).takeIf { it != -1 }?.let { position ->
 			items[position].isCompleted = isCompleted
