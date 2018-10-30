@@ -186,7 +186,10 @@ class NotesListViewModel(application: Application,
 		listAdapter.updateCompletion(id, isCompleted)
 	}
 
-	private fun deleteNote(id: Long) = deleteListItem(id)
+	private fun deleteNote(id: Long) {
+		repository.deleteItem(id)
+		deleteListItem(id)
+	}
 
 	private fun setListItems(items: List<Note>) {
 		isEmpty.set(items.isEmpty())
