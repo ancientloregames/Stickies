@@ -24,9 +24,10 @@
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:orientation="vertical"
-				android:background="@{viewModel.backColor}"
+				android:background="@drawable/ripple_effect_background"
 				android:onClick="@{() -> viewModel.onClick()}"
 				tools:background="@color/noteYellow"
+				app:backgroundTint="@{viewModel.backColor}"
 				>
 				<View
 					android:id="@+id/importanceView"

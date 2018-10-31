@@ -1,7 +1,12 @@
 package com.ancientlore.stickies.utils
 
+import android.content.res.ColorStateList
 import android.databinding.BindingAdapter
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
+import android.os.Build
+import android.support.annotation.ColorInt
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.CardView
@@ -21,6 +26,9 @@ fun setImageResource(fab: FloatingActionButton, drawable: Drawable) {
 fun setBackgroundColor(imageView: CardView, color: Int) {
 	imageView.setCardBackgroundColor(color)
 }
+
+@BindingAdapter("backgroundTint")
+fun setBackgroundTintCompat(view: ConstraintLayout, @ColorInt color: Int) = ViewUtils.setBackgroundTint(view, color)
 
 @BindingAdapter("backgroundTint")
 fun setBackgroundTintCompat(view: DrawableCompatTextView, color: Int) = view.setBackgroundTint(color)
