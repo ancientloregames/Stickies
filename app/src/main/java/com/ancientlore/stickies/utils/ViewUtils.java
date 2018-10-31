@@ -1,14 +1,17 @@
 package com.ancientlore.stickies.utils;
 
+import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.TintableBackgroundView;
 import android.view.Gravity;
 import android.view.View;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +21,16 @@ import static android.view.View.LAYER_TYPE_SOFTWARE;
 
 public class ViewUtils
 {
+	public static boolean setBackgroundTint(@NotNull View view, @ColorInt int color)
+	{
+		if (view instanceof TintableBackgroundView)
+		{
+			((TintableBackgroundView) view).setSupportBackgroundTintList(ColorStateList.valueOf(color));
+			return true;
+		}
+		return false;
+	}
+
 	public static Drawable generateBackgroundWithShadow(@NotNull View view,
 														@ColorRes int backgroundColor,
 														@DimenRes int cornerRadius,

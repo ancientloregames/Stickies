@@ -1,15 +1,21 @@
 package com.ancientlore.stickies.view;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.v4.view.TintableBackgroundView;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
+
 import com.ancientlore.stickies.R;
+
+import org.jetbrains.annotations.NotNull;
 
 
 public class DrawableCompatTextView extends AppCompatTextView
@@ -38,6 +44,8 @@ public class DrawableCompatTextView extends AppCompatTextView
 			TypedArray attributeArray = context.obtainStyledAttributes(
 					attrs,
 					R.styleable.DrawableCompatTextView);
+
+			obtainBackgroundTint(attributeArray);
 
 			Drawable drawableStart = null;
 			Drawable drawableEnd = null;
@@ -72,6 +80,12 @@ public class DrawableCompatTextView extends AppCompatTextView
 
 			attributeArray.recycle();
 		}
+	}
+
+	private void obtainBackgroundTint(@NotNull TypedArray attributes)
+	{
+		int color = attributes.getColor(R.styleable.DrawableCompatTextView_backgroundTint, -1);
+		if (color != -1) setBackgroundTint(color);
 	}
 
 	public void setDrawableStart(Drawable drawable)
@@ -112,5 +126,10 @@ public class DrawableCompatTextView extends AppCompatTextView
 				? getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
 				: getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG;
 		setPaintFlags(paintFlags);
+	}
+
+	public void setBackgroundTint(@ColorInt int color)
+	{
+		((TintableBackgroundView) this).setSupportBackgroundTintList(ColorStateList.valueOf(color));
 	}
 }
