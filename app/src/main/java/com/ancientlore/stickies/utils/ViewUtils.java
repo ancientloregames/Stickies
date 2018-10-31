@@ -2,11 +2,13 @@ package com.ancientlore.stickies.utils;
 
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
@@ -21,14 +23,13 @@ import static android.view.View.LAYER_TYPE_SOFTWARE;
 
 public class ViewUtils
 {
-	public static boolean setBackgroundTint(@NotNull View view, @ColorInt int color)
+	public static void setBackgroundTint(@NotNull View view, @ColorInt int color)
 	{
-		if (view instanceof TintableBackgroundView)
-		{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+		view.setBackgroundTintList(ColorStateList.valueOf(color));
+		else if (view instanceof TintableBackgroundView)
 			((TintableBackgroundView) view).setSupportBackgroundTintList(ColorStateList.valueOf(color));
-			return true;
-		}
-		return false;
+		else view.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
 	}
 
 	public static Drawable generateBackgroundWithShadow(@NotNull View view,
