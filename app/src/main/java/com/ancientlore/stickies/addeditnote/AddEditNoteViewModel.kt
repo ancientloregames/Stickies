@@ -5,6 +5,8 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.text.Html
+import android.text.SpannableString
 import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
@@ -37,13 +39,13 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	data class State(val isImportant: Boolean, val isCompleted: Boolean)
 
 	val titleField = ObservableField<String>("")
-	val messageField = ObservableField<String>("")
+	val messageField = ObservableField<CharSequence>(SpannableString(""))
 	val colorField = ObservableInt(ContextCompat.getColor(context, R.color.noteYellow))
 
 	private var editedNote: Note? = null
 
 	private val noteTitle get() = titleField.get()!!
-	private val noteBody get() = messageField.get()!!
+	private val noteBody get() = Html.toHtml(SpannableString.valueOf(messageField.get()!!))
 	private val noteColor get() = colorField.get()
 	private var isImportant = false
 	private var isCompleted = false
@@ -60,7 +62,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	override fun saveState(bundle: Bundle) {
 		bundle.putInt(STATE_COLOR, colorField.get())
 		bundle.putString(STATE_TITLE, titleField.get())
-		bundle.putString(STATE_BODY, messageField.get())
+		bundle.putCharSequence(STATE_BODY, messageField.get())
 		bundle.putBoolean(STATE_IMPORTANCE, isImportant)
 		bundle.putBoolean(STATE_COMPLETED, isCompleted)
 	}
@@ -68,7 +70,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	override fun loadState(bundle: Bundle) {
 		colorField.set(bundle.getInt(STATE_COLOR))
 		titleField.set(bundle.getString(STATE_TITLE))
-		messageField.set(bundle.getString(STATE_BODY))
+		messageField.set(bundle.getCharSequence(STATE_BODY))
 		isImportant = bundle.getBoolean(STATE_IMPORTANCE)
 		isCompleted = bundle.getBoolean(STATE_COMPLETED)
 	}
