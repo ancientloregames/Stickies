@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto">
+		<item
+				android:id="@+id/bold"
+				android:checkable="true"
+				android:title="@string/text_style_bold"
+				app:showAsAction="always" />
+		<item
+				android:id="@+id/italic"
+				android:checkable="true"
+				android:title="@string/text_style_italic"
+				app:showAsAction="always" />
+		<item
+				android:id="@+id/underlined"
+				android:checkable="true"
+				android:title="@string/text_style_underlined"
+				app:showAsAction="always" />
+		<item
+				android:id="@+id/strikethrough"
+				android:checkable="true"
+				android:title="@string/text_style_strikedthrough"
+				app:showAsAction="always" />
+</menu>
