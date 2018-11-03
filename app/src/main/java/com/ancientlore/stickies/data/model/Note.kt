@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.text.TextUtils
+import com.ancientlore.stickies.utils.toPlainText
 import java.text.DateFormat
 import java.util.*
 
@@ -43,6 +44,7 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 	@delegate:Ignore private val dateUpdated by lazy { Date(timeUpdated) }
 	@delegate:Ignore private val dateCompleted by lazy { Date(timeCompleted) }
 	@delegate:Ignore private val dateNotify by lazy { Date(timeNotify) }
+	@delegate:Ignore val plainBody by lazy { body.toPlainText() }
 
 	override fun equals(other: Any?): Boolean {
 		return other is Note
