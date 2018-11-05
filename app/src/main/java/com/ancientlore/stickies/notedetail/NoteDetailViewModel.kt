@@ -8,6 +8,7 @@ import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.utils.getTitle
+import com.ancientlore.stickies.utils.spannedBody
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.text.DateFormat
@@ -21,7 +22,7 @@ class NoteDetailViewModel(application: Application,
 	}
 
 	val titleField = ObservableField<String>("")
-	val messageField = ObservableField<String>("")
+	val messageField = ObservableField<CharSequence>("")
 	val dateCreatedField = ObservableField<String>("")
 	val dateUpdatedField = ObservableField<String>("")
 	val colorField = ObservableInt()
@@ -62,7 +63,7 @@ class NoteDetailViewModel(application: Application,
 	private fun bind(note: Note) {
 		colorField.set(note.color)
 		titleField.set(note.getTitle(context))
-		messageField.set(note.body)
+		messageField.set(note.spannedBody())
 		dateCreatedField.set(note.getDateCreated(DateFormat.SHORT, DateFormat.SHORT))
 		dateUpdatedField.set(note.getDateUpdated(DateFormat.SHORT, DateFormat.SHORT))
 		isImportant.set(note.isImportant)

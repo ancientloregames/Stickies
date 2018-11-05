@@ -33,4 +33,6 @@ fun Note.getListTitle(context: Context): String = getText() ?: context.getString
 
 fun Note.getTitle(context: Context): String = if (title.isNotEmpty()) title else context.getString(R.string.note_num, id)
 
+fun Note.spannedBody() = Html.fromHtml(body)
+
 fun String.toPlainText() = Html.fromHtml(this).toString()
