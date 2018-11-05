@@ -11,6 +11,7 @@ import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
+import com.ancientlore.stickies.utils.spannedBody
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
@@ -112,7 +113,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		editedNote = note
 		colorField.set(note.color)
 		titleField.set(note.title)
-		messageField.set(note.body)
+		messageField.set(note.spannedBody())
 		isImportant = note.isImportant
 		isCompleted = note.isImportant
 	}
