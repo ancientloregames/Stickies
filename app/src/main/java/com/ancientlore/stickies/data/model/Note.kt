@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
+import android.os.Parcel
+import android.os.Parcelable
 import android.text.TextUtils
 import com.ancientlore.stickies.utils.toPlainText
 import java.text.DateFormat
@@ -21,9 +23,14 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 				@field:ColumnInfo var icon: String = "",
 				@field:ColumnInfo var topic: String = "",
 				@field:ColumnInfo var isImportant: Boolean = false,
-				@field:ColumnInfo var isCompleted: Boolean = false) {
+				@field:ColumnInfo var isCompleted: Boolean = false) : Parcelable {
 
-	companion object {
+	companion object CREATOR : Parcelable.Creator<Note> {
+
+		override fun createFromParcel(parcel: Parcel) = Note(parcel)
+
+		override fun newArray(size: Int) = arrayOfNulls<Note>(size)
+
 		fun newInstance(finalId: Long, note: Note): Note {
 			return Note(finalId,
 					note.timeCreated,
@@ -45,6 +52,21 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 	@delegate:Ignore private val dateCompleted by lazy { Date(timeCompleted) }
 	@delegate:Ignore private val dateNotify by lazy { Date(timeNotify) }
 	@delegate:Ignore val plainBody by lazy { body.toPlainText() }
+
+	constructor(parcel: Parcel) : this(
+			parcel.readLong(),
+			parcel.readLong(),
+			parcel.readLong(),
+			parcel.readLong(),
+			parcel.readLong(),
+			parcel.readString(),
+			parcel.readString(),
+			parcel.readInt(),
+			parcel.readString(),
+			parcel.readString(),
+			parcel.readByte() != 0.toByte(),
+			parcel.readByte() != 0.toByte()) {
+	}
 
 	override fun equals(other: Any?): Boolean {
 		return other is Note
@@ -77,6 +99,23 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 		result = 31 * result + isCompleted.hashCode()
 		return result
 	}
+
+	override fun writeToParcel(parcel: Parcel, flags: Int) {
+		parcel.writeLong(id)
+		parcel.writeLong(timeCreated)
+		parcel.writeLong(timeUpdated)
+		parcel.writeLong(timeCompleted)
+		parcel.writeLong(timeNotify)
+		parcel.writeString(title)
+		parcel.writeString(body)
+		parcel.writeInt(color)
+		parcel.writeString(icon)
+		parcel.writeString(topic)
+		parcel.writeByte(if (isImportant) 1 else 0)
+		parcel.writeByte(if (isCompleted) 1 else 0)
+	}
+
+	override fun describeContents() = 0
 
 	fun compareByText(other: Note): Int {
 		return when {
