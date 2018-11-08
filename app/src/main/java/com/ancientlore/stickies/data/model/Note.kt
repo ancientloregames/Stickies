@@ -138,4 +138,6 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 	fun getDateCreated(dateStyle: Int, timeStyle: Int) = DateFormat.getDateTimeInstance(dateStyle, timeStyle).format(dateCreated)!!
 
 	fun getDateUpdated(dateStyle: Int, timeStyle: Int) = DateFormat.getDateTimeInstance(dateStyle, timeStyle).format(dateUpdated)!!
+
+	fun getDateNotify(dateStyle: Int, timeStyle: Int) = DateFormat.getDateTimeInstance(dateStyle, timeStyle).format(dateNotify)!!
 }

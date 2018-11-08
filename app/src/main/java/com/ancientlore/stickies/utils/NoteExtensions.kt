@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
 import android.text.Html
 import android.text.Spanned
 import android.util.Log
@@ -13,6 +14,7 @@ import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.notice.NoticeActionReceiver
 import com.ancientlore.stickies.notice.AlarmReceiver
+import java.text.DateFormat
 
 val Note.noticeId get() = id.toInt()
 
@@ -33,7 +35,7 @@ fun Note.spannedBody(): Spanned = Html.fromHtml(body)
 
 fun Note.scheduleAlarm(context: Context) {
 	val intent = Intent(context, AlarmReceiver::class.java)
-	intent.putExtra(AlarmReceiver.EXTRA_NOTE, marshall())
+	intent.putExtra(AlarmReceiver.EXTRA_NOTE_ID, id)
 
 	val operation = PendingIntent.getBroadcast(context, noticeId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 	context.scheduleAlarm(timeNotify, operation)
@@ -46,9 +48,10 @@ private fun Note.createNotice(context: Context): Notification {
 			.setSmallIcon(R.drawable.ic_statusbar)
 			.setTicker(getText())
 			.setContentTitle(getTitle(context))
+			.setContentText(getDateNotify(DateFormat.MEDIUM, DateFormat.SHORT))
 			.setContentInfo(context.getString(R.string.app_name))
 			.setPriority(NotificationManager.IMPORTANCE_HIGH)
-			.setColor(color)
+			.setColor(ContextCompat.getColor(context, R.color.colorPrimary))
 			.addAction(R.drawable.ic_cancel, context.getString(R.string.cancel), createCancelPendingIntent(context))
 			.setOngoing(true)
 			.build()
@@ -70,6 +73,6 @@ private fun acquireNotificationChannel(context: Context, id: String): Notificati
 private fun Note.createCancelPendingIntent(context: Context): PendingIntent {
 	val intent = Intent(context, NoticeActionReceiver::class.java)
 	intent.action = NoticeActionReceiver.ACTION_CANCEL_NOTICE
-	intent.putExtra(NoticeActionReceiver.EXTRA_ALARM_ID, noticeId)
+	intent.putExtra(NoticeActionReceiver.EXTRA_NOTE_ID, noticeId)
 	return PendingIntent.getBroadcast(context, noticeId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
