@@ -3,6 +3,8 @@
 	<string name="new_note">New Note</string>
 	<string name="note_details">Note Details</string>
 
+	<string name="notes_channel_name">Notes</string>
+
 	<string name="note_num">Note №%1$d</string>
 
 	<string name="title">Title</string>
