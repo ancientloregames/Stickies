@@ -22,6 +22,7 @@ internal class AddEditMenuDialog: BottomMenuDialog() {
 			add(getImportanceMenuItem(currentState.isImportant))
 			add(getCompletedMenuItem(currentState.isCompleted))
 			add(MenuItem(R.id.im_colorpicker, R.string.menu_colorpicker, R.drawable.ic_colorpicker))
+			add(MenuItem(R.id.im_alarm, R.string.menu_schedule_alarm, R.drawable.ic_alarm))
 		}
 	}
 

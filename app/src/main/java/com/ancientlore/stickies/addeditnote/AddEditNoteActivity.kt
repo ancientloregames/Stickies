@@ -12,6 +12,7 @@ import com.ancientlore.stickies.R
 import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_COMPLETED
 import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_IMPORTANT
 import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_PICKCOLOR
+import com.ancientlore.stickies.addeditnote.AddEditNoteViewModel.Companion.OPTION_SCHEDULEALARM
 import com.ancientlore.stickies.menu.colorpicker.ColorPickerDialogFragment
 import com.ancientlore.stickies.databinding.ActivityAddeditnoteBinding
 import com.ancientlore.stickies.menu.MenuItem
@@ -88,6 +89,7 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 			R.id.im_important -> OPTION_IMPORTANT
 			R.id.im_completed -> OPTION_COMPLETED
 			R.id.im_colorpicker -> OPTION_PICKCOLOR
+			R.id.im_alarm -> OPTION_SCHEDULEALARM
 			else -> throw RuntimeException("Unknown options menu item!")
 		}
 		viewModel.handleOptionSelection(option)

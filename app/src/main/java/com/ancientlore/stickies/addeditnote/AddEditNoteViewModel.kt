@@ -11,6 +11,7 @@ import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
+import com.ancientlore.stickies.utils.scheduleAlarm
 import com.ancientlore.stickies.utils.spannedBody
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -21,6 +22,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		const val OPTION_IMPORTANT = 0
 		const val OPTION_COMPLETED = 1
 		const val OPTION_PICKCOLOR = 2
+		const val OPTION_SCHEDULEALARM = 3
 
 		private const val NOTE_VALID = 0
 		const val ALERT_EMPTY = 1
@@ -50,6 +52,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	private val noteColor get() = colorField.get()
 	private var isImportant = false
 	private var isCompleted = false
+	private var timeNotify = 0L
 
 	private val onNoteAdded = PublishSubject.create<Long>()
 	private val onMenuCalled = PublishSubject.create<State>()
@@ -81,6 +84,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 			OPTION_IMPORTANT -> switchImportance()
 			OPTION_COMPLETED -> switchCompletion()
 			OPTION_PICKCOLOR -> onColorPickerCalled.onNext(colorField.get())
+			OPTION_SCHEDULEALARM -> timeNotify = System.currentTimeMillis() + 30000
 			else -> return false
 		}
 		return true
@@ -119,9 +123,17 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	}
 
 	private fun addNote() {
-		repository.insertItem(composeNote(), object : DataSource.SimpleRequestCallback<Long>() {
-			override fun onSuccess(result: Long) = onNoteAdded.onNext(result)
+		val note = composeNote()
+		repository.insertItem(note, object : DataSource.SimpleRequestCallback<Long>() {
+			override fun onSuccess(result: Long) = onNoteIdAssigned(result, note)
 		})
+	}
+
+	private fun onNoteIdAssigned(result: Long, note: Note) {
+		note.id = result
+		if (note.timeNotify > 0)
+			note.scheduleAlarm(context)
+		onNoteAdded.onNext(result)
 	}
 
 	private fun switchImportance() { isImportant = !isImportant }
@@ -133,6 +145,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	private fun composeNewNote(): Note {
 		return Note(
 				timeCreated = System.currentTimeMillis(),
+				timeNotify = timeNotify,
 				title = noteTitle,
 				body = noteBody,
 				color = noteColor,
