@@ -11,6 +11,7 @@ import android.text.Spanned
 import android.util.Log
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.notice.NoticeActionReceiver
 import com.ancientlore.stickies.notice.AlarmReceiver
 
 val Note.noticeId get() = id.toInt()
@@ -48,6 +49,8 @@ private fun Note.createNotice(context: Context): Notification {
 			.setContentInfo(context.getString(R.string.app_name))
 			.setPriority(NotificationManager.IMPORTANCE_HIGH)
 			.setColor(color)
+			.addAction(R.drawable.ic_cancel, context.getString(R.string.cancel), createCancelPendingIntent(context))
+			.setOngoing(true)
 			.build()
 }
 
@@ -62,4 +65,11 @@ private fun acquireNotificationChannel(context: Context, id: String): Notificati
 	val noticeManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 	return noticeManager.getNotificationChannel(id)
 			?: noticeManager.createChannel(id, context.getString(R.string.notes_channel_name), NotificationManager.IMPORTANCE_HIGH)
+}
+
+private fun Note.createCancelPendingIntent(context: Context): PendingIntent {
+	val intent = Intent(context, NoticeActionReceiver::class.java)
+	intent.action = NoticeActionReceiver.ACTION_CANCEL_NOTICE
+	intent.putExtra(NoticeActionReceiver.EXTRA_ALARM_ID, noticeId)
+	return PendingIntent.getBroadcast(context, noticeId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
