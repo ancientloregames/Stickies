@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.ancientlore.stickies.C.DUMMY_ID
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.databinding.NoticeUiBinding
+import com.ancientlore.stickies.notedetail.NoteDetailViewModel
 
 class NoticeFragment: Fragment() {
 	companion object {
@@ -24,7 +25,7 @@ class NoticeFragment: Fragment() {
 		}
 	}
 
-	private lateinit var viewModel: NoticeViewModel
+	private lateinit var viewModel: NoteDetailViewModel
 
 	@LayoutRes private fun getLayoutId() = R.layout.notice_ui
 
@@ -39,9 +40,9 @@ class NoticeFragment: Fragment() {
 		bind(view, viewModel)
 	}
 
-	private fun createViewModel(application: Application, noteId: Long) = NoticeViewModel(application, noteId)
+	private fun createViewModel(application: Application, noteId: Long) = NoteDetailViewModel(application, noteId)
 
-	private fun bind(view: View, viewModel: NoticeViewModel) {
+	private fun bind(view: View, viewModel: NoteDetailViewModel) {
 		val binding = NoticeUiBinding.bind(view)
 		binding.viewModel = viewModel
 	}
