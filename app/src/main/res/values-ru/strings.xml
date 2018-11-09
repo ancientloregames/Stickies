@@ -28,4 +28,12 @@
 	<string name="hint_quick_note">Введите быструю заметку</string>
 	<string name="menu_unimportant">Обычная</string>
 	<string name="menu_uncompleted">Открытая</string>
+	<string name="menu_important_full">Отметить как важную</string>
+	<string name="menu_completed_full">Отметить как завершенную</string>
+	<string name="menu_unimportant_full">Отметить как обычную</string>
+	<string name="menu_uncompleted_full">Отметить как незавершенную</string>
+	<string name="menu_schedule_reminder">Назначить время напоминания</string>
+	<string name="pick_reminder_time">Выберете время</string>
+	<string name="cancel">Отменить</string>
+	<string name="notes_channel_name">Заметки</string>
 </resources>
