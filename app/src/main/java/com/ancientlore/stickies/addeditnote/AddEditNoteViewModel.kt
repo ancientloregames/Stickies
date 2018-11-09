@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.text.Html
 import android.text.SpannableString
+import com.ancientlore.stickies.EmptyObject
 import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
@@ -15,6 +16,7 @@ import com.ancientlore.stickies.utils.scheduleAlarm
 import com.ancientlore.stickies.utils.spannedBody
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 
 class AddEditNoteViewModel(application: Application): NotesViewModel(application) {
 
@@ -57,6 +59,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	private val onNoteAdded = PublishSubject.create<Long>()
 	private val onMenuCalled = PublishSubject.create<State>()
 	private val onColorPickerCalled = PublishSubject.create<Int>()
+	private val onTimePickerCalled = PublishSubject.create<Any>()
 	private val onAlert = PublishSubject.create<Int>()
 
 	constructor(application: Application, noteId: Long) : this(application) {
@@ -84,13 +87,15 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 			OPTION_IMPORTANT -> switchImportance()
 			OPTION_COMPLETED -> switchCompletion()
 			OPTION_PICKCOLOR -> onColorPickerCalled.onNext(colorField.get())
-			OPTION_SCHEDULEALARM -> timeNotify = System.currentTimeMillis() + 30000
+			OPTION_SCHEDULEALARM -> onTimePickerCalled.onNext(EmptyObject)
 			else -> return false
 		}
 		return true
 	}
 
 	fun setColor(color: Int) = colorField.set(color)
+
+	fun setReminderTime(date: Date) { timeNotify = date.time }
 
 	fun onSubmitClicked() {
 		if (isValid())
@@ -104,6 +109,8 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	fun observeMenuCalled() = onMenuCalled as Observable<State>
 
 	fun observeColorPickerCalled() = onColorPickerCalled as Observable<Int>
+
+	fun observeTimePickerCalled() = onTimePickerCalled as Observable<Any>
 
 	fun observeAlert() = onAlert as Observable<Int>
 

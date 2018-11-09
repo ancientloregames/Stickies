@@ -17,6 +17,7 @@ import com.ancientlore.stickies.menu.colorpicker.ColorPickerDialogFragment
 import com.ancientlore.stickies.databinding.ActivityAddeditnoteBinding
 import com.ancientlore.stickies.menu.MenuItem
 import com.ancientlore.stickies.menu.bottomsheet.BottomMenuDialog
+import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog
 
 class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNoteViewModel>() {
 
@@ -54,6 +55,9 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 
 		subscriptions.add(viewModel.observeColorPickerCalled()
 				.subscribe { openColorPicker(it) })
+
+		subscriptions.add(viewModel.observeTimePickerCalled()
+				.subscribe { openTimePicker() })
 
 		subscriptions.add(viewModel.observeAlert()
 				.subscribe { showAlert(getAlertMessage(it)) })
@@ -107,6 +111,17 @@ class AddEditNoteActivity : BasicActivity<ActivityAddeditnoteBinding, AddEditNot
 		})
 
 		colorPicker.show(supportFragmentManager)
+	}
+
+	private fun openTimePicker() {
+		SingleDateAndTimePickerDialog.Builder(this)
+				.title(getString(R.string.pick_reminder_time))
+				.listener { viewModel.setReminderTime(it) }
+				.minutesStep(1)
+				.mustBeOnFuture()
+				.curved()
+				.build()
+				.display()
 	}
 
 	private fun showAlert(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

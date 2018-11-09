@@ -61,6 +61,7 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$ROOM_VERSION"
 
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.github.florent37:singledateandtimepicker:2.1.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
