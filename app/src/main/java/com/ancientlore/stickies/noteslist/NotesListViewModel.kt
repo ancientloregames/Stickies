@@ -190,8 +190,8 @@ class NotesListViewModel(application: Application,
 		})
 	}
 
-	private fun deleteNote(id: Long) {
-		repository.deleteItem(id)
+	override fun deleteNote(id: Long) {
+		super.deleteNote(id)
 		deleteListItem(id)
 	}
 

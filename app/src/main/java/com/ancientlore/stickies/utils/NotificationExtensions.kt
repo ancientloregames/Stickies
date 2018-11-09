@@ -19,6 +19,11 @@ fun Context.scheduleAlarm(time: Long, operation: PendingIntent) {
 	getAlarmManager().schedule(AlarmManager.RTC_WAKEUP, time, operation)
 }
 
+fun <T: BroadcastReceiver> Context.cancelReminder(id: Int, clazz: Class<T>) {
+	cancelAlarm(id, clazz)
+	cancelNotification(id)
+}
+
 fun <T: BroadcastReceiver> Context.cancelAlarm(id: Int, clazz: Class<T>) {
 	val intent = Intent(this, clazz)
 	val pendingIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)

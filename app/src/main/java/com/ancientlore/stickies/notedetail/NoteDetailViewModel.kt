@@ -37,7 +37,7 @@ class NoteDetailViewModel(application: Application,
 
 	override fun handleOptionSelection(option: Int): Boolean {
 		when (option) {
-			OPTION_DELETE -> deleteNote()
+			OPTION_DELETE -> deleteNote(noteId)
 			else -> return false
 		}
 		return true
@@ -49,8 +49,8 @@ class NoteDetailViewModel(application: Application,
 
 	fun observeNoteDeletion() = noteDeletionEvent as Observable<Long>
 
-	private fun deleteNote() {
-		repository.deleteItem(noteId)
+	override fun deleteNote(id: Long) {
+		super.deleteNote(id)
 		noteDeletionEvent.onNext(noteId)
 	}
 

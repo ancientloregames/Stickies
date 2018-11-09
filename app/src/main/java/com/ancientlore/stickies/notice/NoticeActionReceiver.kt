@@ -4,8 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.ancientlore.stickies.utils.cancelAlarm
-import com.ancientlore.stickies.utils.cancelNotification
+import com.ancientlore.stickies.utils.cancelReminder
 
 class NoticeActionReceiver: BroadcastReceiver() {
 	companion object {
@@ -26,7 +25,6 @@ class NoticeActionReceiver: BroadcastReceiver() {
 	}
 
 	private fun cancelNotice(context: Context, id: Int) {
-		context.cancelAlarm(id, AlarmReceiver::class.java)
-		context.cancelNotification(id)
+		context.cancelReminder(id, AlarmReceiver::class.java)
 	}
 }
