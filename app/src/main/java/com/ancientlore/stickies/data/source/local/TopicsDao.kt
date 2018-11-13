@@ -3,6 +3,7 @@ package com.ancientlore.stickies.data.source.local
 import android.arch.persistence.room.*
 import com.ancientlore.stickies.data.model.Topic
 
+@Dao
 interface TopicsDao {
 
 	@Query("SELECT * FROM topics")
