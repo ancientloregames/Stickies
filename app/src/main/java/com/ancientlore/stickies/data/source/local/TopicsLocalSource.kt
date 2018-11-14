@@ -15,7 +15,7 @@ class TopicsLocalSource private constructor(private val dao: TopicsDao)
 
 	private val executor: ExecutorService = Executors.newSingleThreadExecutor { r -> Thread(r, "db_worker_topic") }
 
-	override fun getAll(callback: DataSource.RequestCallback<List<Topic>>) {
+	override fun getAllTopics(callback: DataSource.RequestCallback<List<Topic>>) {
 		executor.submit {
 			dao.getAll()
 					.takeIf { it.isNotEmpty() }
@@ -24,36 +24,29 @@ class TopicsLocalSource private constructor(private val dao: TopicsDao)
 		}
 	}
 
-	override fun getItem(id: Long, callback: DataSource.RequestCallback<Topic>) {
+	override fun getTopic(name: String, callback: DataSource.RequestCallback<Topic>) {
 		executor.submit {
-			dao.findById(id)
+			dao.findById(name)
 					?.let { callback.onSuccess(it) }
 					?: callback.onFailure(EmptyResultException())
 		}
 	}
 
-	override fun insertItem(item: Topic, callback: DataSource.RequestCallback<Long>) {
+	override fun insertTopic(topic: Topic) {
 		executor.submit {
-			dao.insert(item)
-					.let { callback.onSuccess(it) }
+			dao.insert(topic)
 		}
 	}
 
-	override fun updateItem(item: Topic) {
-		executor.submit {
-			dao.update(item)
-		}
-	}
-
-	override fun deleteAll() {
+	override fun deleteAllTopics() {
 		executor.submit {
 			dao.deleteAll()
 		}
 	}
 
-	override fun deleteItem(id: Long) {
+	override fun deleteTopic(name: String) {
 		executor.submit {
-			dao.deleteById(id)
+			dao.deleteById(name)
 		}
 	}
 }

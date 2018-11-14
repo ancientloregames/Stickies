@@ -9,21 +9,21 @@ interface TopicsDao {
 	@Query("SELECT * FROM topics")
 	fun getAll(): List<Topic>
 
-	@Query("SELECT * FROM topics WHERE id LIKE :id")
-	fun findById(id: Long): Topic?
+	@Query("SELECT * FROM topics WHERE name LIKE :name")
+	fun findById(name: String): Topic?
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	fun insert(note: Topic): Long
+	fun insert(topic: Topic)
 
 	@Update
-	fun update(vararg note: Topic)
+	fun update(vararg topic: Topic)
 
 	@Delete
-	fun delete(note: Topic)
+	fun delete(topic: Topic)
 
-	@Query("DELETE FROM topics WHERE id = :id")
-	fun deleteById(id: Long)
+	@Query("DELETE FROM topics WHERE name = :name")
+	fun deleteById(name: String)
 
-	@Query("DELETE FROM notes")
+	@Query("DELETE FROM topics")
 	fun deleteAll()
 }

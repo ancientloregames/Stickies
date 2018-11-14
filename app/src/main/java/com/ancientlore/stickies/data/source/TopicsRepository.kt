@@ -13,13 +13,11 @@ object TopicsRepository: TopicsSource {
 
 	private var isCacheSynced = false
 
-	override fun getAll(callback: DataSource.RequestCallback<List<Topic>>) {
-		if (isCacheSynced) {
-			callback.onSuccess(cacheSource.getAll())
-			return
-		}
+	override fun getAllTopics(callback: DataSource.RequestCallback<List<Topic>>) {
+		if (isCacheSynced)
+			return callback.onSuccess(cacheSource.getAllTopics())
 
-		localSource?.getAll(object : DataSource.RequestCallback<List<Topic>> {
+		localSource?.getAllTopics(object : DataSource.RequestCallback<List<Topic>> {
 			override fun onSuccess(result: List<Topic>) {
 				cacheSource.resetWith(result)
 				isCacheSynced = true
@@ -34,50 +32,38 @@ object TopicsRepository: TopicsSource {
 		})
 	}
 
-	override fun getItem(id: Long, callback: DataSource.RequestCallback<Topic>) {
-		cacheSource.getItem(id)?.let {
+	override fun getTopic(name: String, callback: DataSource.RequestCallback<Topic>) {
+		cacheSource.getTopic(name)?.let {
 			callback.onSuccess(it)
-			return@getItem
+			return@getTopic
 		}
 
-		localSource?.getItem(id, object : DataSource.RequestCallback<Topic> {
+		localSource?.getTopic(name, object : DataSource.RequestCallback<Topic> {
 			override fun onSuccess(result: Topic) {
-				cacheSource.insertItem(result)
+				cacheSource.insertTopic(result)
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
 				if (error is EmptyResultException)
-					Log.w("TopicsRepository", "No item with id $id in the local database")
+					Log.w("TopicsRepository", "No item with id $name in the local database")
 				// TODO load from the remote db
 			}
 		})
 	}
 
-	override fun insertItem(item: Topic, callback: DataSource.RequestCallback<Long>) {
-		localSource?.insertItem(item, object : DataSource.RequestCallback<Long> {
-			override fun onSuccess(result: Long) {
-				cacheSource.insertItem(Topic.newInstance(result, item))
-				callback.onSuccess(result)
-			}
-			override fun onFailure(error: Throwable) {
-				Log.w("TopicsRepository", "Item with title ${item.title} wan't been add to the local database")
-			}
-		})
+	override fun insertTopic(topic: Topic) {
+		localSource?.insertTopic(topic)
+		cacheSource.insertTopic(topic)
 	}
 
-	override fun updateItem(item: Topic) {
-		cacheSource.updateItem(item)
-		localSource?.updateItem(item)
+	override fun deleteAllTopics() {
+		localSource?.deleteAllTopics()
+		cacheSource.deleteAllTopics()
 	}
 
-	override fun deleteAll() {
-		cacheSource.deleteAll()
-		localSource?.deleteAll()
-	}
-
-	override fun deleteItem(id: Long) {
-		cacheSource.deleteItem(id)
-		localSource?.deleteItem(id)
+	override fun deleteTopic(name: String) {
+		localSource?.deleteTopic(name)
+		cacheSource.deleteTopic(name)
 	}
 
 	fun initLocalSource(dao: TopicsDao) {
