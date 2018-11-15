@@ -27,13 +27,14 @@ abstract class FilterableListAdapter<T>(context: Context)
 	}
 
 	abstract inner class ListFilter: Filter() {
-		override fun performFiltering(constraint: CharSequence): FilterResults {
-			val resultList =
-					if (constraint.isNotEmpty()) {
-						val candidate = constraint.toString().toLowerCase()
 
+		abstract fun satisfy(item: T, candidate: String): Boolean
+
+		override fun performFiltering(constraint: CharSequence?): FilterResults {
+			val candidate = constraint?.toString()?.toLowerCase() ?: ""
+			val resultList =
+					if (candidate.isNotEmpty())
 						origItems.filter { satisfy(it, candidate) }
-					}
 					else origItems
 
 			val result = FilterResults()
@@ -43,11 +44,11 @@ abstract class FilterableListAdapter<T>(context: Context)
 			return result
 		}
 
-		abstract fun satisfy(item: T, candidate: String): Boolean
-
-		override fun publishResults(constraint: CharSequence, results: FilterResults) {
-			setFilteredItems(results.values as MutableList<T>)
-			notifyDataSetChanged()
+		override fun publishResults(constraint: CharSequence?, results: FilterResults) {
+			results.values?.let {
+				setFilteredItems(it as MutableList<T>)
+				notifyDataSetChanged()
+			}
 		}
 	}
 }
