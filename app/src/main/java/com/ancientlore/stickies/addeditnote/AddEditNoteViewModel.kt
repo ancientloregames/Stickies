@@ -11,6 +11,7 @@ import com.ancientlore.stickies.EmptyObject
 import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.menu.topic.TopicsListAdapter
 import com.ancientlore.stickies.utils.scheduleAlarm
@@ -67,6 +68,8 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	private val onTimePickerCalled = PublishSubject.create<Any>()
 	private val onAlert = PublishSubject.create<Int>()
 
+	init { loadTopics() }
+
 	constructor(application: Application, noteId: Long) : this(application) {
 		loadNote(noteId)
 	}
@@ -121,6 +124,12 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	fun observeAlert() = onAlert as Observable<Int>
 
+	private fun loadTopics() {
+		topicsRep.getAllTopics(object : DataSource.SimpleRequestCallback<List<Topic>>() {
+			override fun onSuccess(result: List<Topic>) = topicsAdapter.setItems(result)
+		})
+	}
+
 	private fun loadNote(id: Long) {
 		repository.getItem(id, object : DataSource.SimpleRequestCallback<Note>() {
 			override fun onSuccess(result: Note) = bind(result)
@@ -139,6 +148,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	private fun addNote() {
 		val note = composeNote()
+		topicsRep.insertTopic(Topic(name = note.topic))
 		repository.insertItem(note, object : DataSource.SimpleRequestCallback<Long>() {
 			override fun onSuccess(result: Long) = onNoteIdAssigned(result, note)
 		})
