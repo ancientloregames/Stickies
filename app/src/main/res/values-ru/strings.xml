@@ -36,4 +36,5 @@
 	<string name="pick_reminder_time">Выберете время</string>
 	<string name="cancel">Отменить</string>
 	<string name="notes_channel_name">Заметки</string>
+	<string name="typeTopic">Введите тему</string>
 </resources>

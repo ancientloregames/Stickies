@@ -10,6 +10,7 @@
 	<string name="title">Title</string>
 	<string name="typeTitle">Type a title</string>
 	<string name="typeMessage">Type a message</string>
+	<string name="typeTopic">Type a topic</string>
 
 	<string name="filter">Filter</string>
 	<string name="filter_all">All</string>

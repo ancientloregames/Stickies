@@ -6,8 +6,10 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.widget.AppCompatAutoCompleteTextView
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.CardView
+import com.ancientlore.stickies.menu.topic.TopicsListAdapter
 import com.ancientlore.stickies.view.DrawableCompatTextView
 import com.ancientlore.stickies.view.StyleableEditText
 
@@ -46,3 +48,8 @@ fun setDrawableBottom(imageView: DrawableCompatTextView, drawable: Drawable) = i
 
 @InverseBindingAdapter(attribute = "android:text", event = "android:textAttrChanged")
 fun getTextString(view: StyleableEditText) = view.text
+
+@BindingAdapter("android:adapter")
+fun setAdapter(view: AppCompatAutoCompleteTextView, adapter: TopicsListAdapter) {
+	view.setAdapter(adapter)
+}

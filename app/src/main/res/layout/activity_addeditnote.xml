@@ -68,6 +68,25 @@
 			app:layout_constraintBottom_toBottomOf="parent"
 			/>
 
+		<android.support.v7.widget.AppCompatAutoCompleteTextView
+			android:id="@+id/topicField"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:layout_marginLeft="16dp"
+			android:layout_marginEnd="16dp"
+			android:layout_marginRight="16dp"
+			android:hint="@string/typeTopic"
+			android:imeOptions="actionNext"
+			android:inputType="text|textCapWords"
+			android:nextFocusForward="@+id/messageField"
+			android:text="@={viewModel.topicField}"
+			android:adapter="@{viewModel.topicsAdapter}"
+			app:layout_constraintBottom_toBottomOf="@+id/addNoteButton"
+			app:layout_constraintEnd_toStartOf="@+id/addNoteButton"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@+id/addNoteButton" />
+
 		<android.support.design.widget.FloatingActionButton
 			android:id="@+id/openMenuButton"
 			android:layout_width="wrap_content"

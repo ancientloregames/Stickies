@@ -12,6 +12,7 @@ import com.ancientlore.stickies.NotesViewModel
 import com.ancientlore.stickies.R
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.source.DataSource
+import com.ancientlore.stickies.menu.topic.TopicsListAdapter
 import com.ancientlore.stickies.utils.scheduleAlarm
 import com.ancientlore.stickies.utils.spannedBody
 import io.reactivex.Observable
@@ -36,6 +37,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 		private const val STATE_TITLE = "state_title"
 		private const val STATE_BODY = "state_body"
+		private const val STATE_TOPIC = "state_topic"
 		private const val STATE_COLOR = "state_color"
 		private const val STATE_IMPORTANCE = "state_importance"
 		private const val STATE_COMPLETED = "state_completed"
@@ -45,13 +47,16 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	val titleField = ObservableField<String>("")
 	val messageField = ObservableField<CharSequence>(SpannableString(""))
+	val topicField = ObservableField<String>("")
 	val colorField = ObservableInt(ContextCompat.getColor(context, R.color.noteYellow))
+	val topicsAdapter = TopicsListAdapter(context)
 
 	private var editedNote: Note? = null
 
 	private val noteTitle get() = titleField.get()!!
 	private val noteBody get() = Html.toHtml(SpannableString.valueOf(messageField.get()!!))
 	private val noteColor get() = colorField.get()
+	private val noteTopic get() = topicField.get()!!
 	private var isImportant = false
 	private var isCompleted = false
 	private var timeNotify = 0L
@@ -70,6 +75,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		bundle.putInt(STATE_COLOR, colorField.get())
 		bundle.putString(STATE_TITLE, titleField.get())
 		bundle.putCharSequence(STATE_BODY, messageField.get())
+		bundle.putString(STATE_TOPIC, topicField.get())
 		bundle.putBoolean(STATE_IMPORTANCE, isImportant)
 		bundle.putBoolean(STATE_COMPLETED, isCompleted)
 	}
@@ -78,6 +84,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		colorField.set(bundle.getInt(STATE_COLOR))
 		titleField.set(bundle.getString(STATE_TITLE))
 		messageField.set(bundle.getCharSequence(STATE_BODY))
+		topicField.set(bundle.getString(STATE_TOPIC))
 		isImportant = bundle.getBoolean(STATE_IMPORTANCE)
 		isCompleted = bundle.getBoolean(STATE_COMPLETED)
 	}
@@ -124,6 +131,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		editedNote = note
 		colorField.set(note.color)
 		titleField.set(note.title)
+		topicField.set(note.topic)
 		messageField.set(note.spannedBody())
 		isImportant = note.isImportant
 		isCompleted = note.isImportant
@@ -156,6 +164,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 				title = noteTitle,
 				body = noteBody,
 				color = noteColor,
+				topic = noteTopic,
 				isImportant = isImportant,
 				isCompleted = isCompleted)
 	}
@@ -169,7 +178,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 				body = noteBody,
 				color = noteColor,
 				icon = note.icon,
-				topic = note.topic,
+				topic = noteTopic,
 				isImportant = isImportant,
 				isCompleted = isCompleted)
 	}
