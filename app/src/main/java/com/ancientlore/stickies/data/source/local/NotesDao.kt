@@ -12,6 +12,9 @@ interface NotesDao {
 	@Query("SELECT * FROM notes WHERE isImportant = 1 ORDER BY id DESC")
 	fun getImportant(): List<Note>
 
+	@Query("SELECT * FROM notes WHERE topic = :topicName")
+	fun getAllByTopic(topicName: String): List<Note>
+
 	@Query("SELECT * FROM notes WHERE id IN (:ids)")
 	fun loadAllByIds(ids: LongArray): List<Note>
 

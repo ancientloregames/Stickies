@@ -2,6 +2,7 @@ package com.ancientlore.stickies.data.source
 
 import android.util.Log
 import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.cache.NotesCacheSource
 import com.ancientlore.stickies.data.source.local.NotesDao
 import com.ancientlore.stickies.data.source.local.NotesLocalSource
@@ -45,6 +46,22 @@ object NotesRepository: NotesSource {
 			override fun onFailure(error: Throwable) {
 				if (error is EmptyResultException)
 					Log.w("NotesRepository", "Local database is empty")
+				// TODO load from the remote db
+				callback.onSuccess(emptyList())
+			}
+		})
+	}
+	override fun getAllByTopic(topic: Topic, callback: DataSource.RequestCallback<List<Note>>) {
+		if (isCacheSynced) {
+			callback.onSuccess(cacheSource.getAllByTopic(topic))
+			return
+		}
+
+		localSource?.getAllByTopic(topic, object : DataSource.RequestCallback<List<Note>> {
+			override fun onSuccess(result: List<Note>) = callback.onSuccess(result)
+			override fun onFailure(error: Throwable) {
+				if (error is EmptyResultException)
+					Log.w("NotesRepository", "No notes with topic ${topic.name}")
 				// TODO load from the remote db
 				callback.onSuccess(emptyList())
 			}

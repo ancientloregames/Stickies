@@ -1,6 +1,7 @@
 package com.ancientlore.stickies.data.source.cache
 
 import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.data.model.Topic
 
 object NotesCacheSource {
 
@@ -11,6 +12,8 @@ object NotesCacheSource {
 	fun getAll() = notesList
 
 	fun getImportant() = notesList.filter { it.isImportant }
+
+	fun getAllByTopic(topic: Topic) = notesList.filter { it.topic == topic.name }
 
 	fun getItem(id: Long) = notesList.find { it.id == id }
 

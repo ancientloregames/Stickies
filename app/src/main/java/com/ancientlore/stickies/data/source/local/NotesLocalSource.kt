@@ -2,6 +2,7 @@ package com.ancientlore.stickies.data.source.local
 
 import com.ancientlore.stickies.SingletonHolder
 import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.data.source.EmptyResultException
 import com.ancientlore.stickies.data.source.NotesSource
@@ -27,6 +28,15 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 	override fun getImportant(callback: DataSource.RequestCallback<List<Note>>) {
 		executor.submit {
 			dao.getImportant()
+					.takeIf { it.isNotEmpty() }
+					?.let { callback.onSuccess(it) }
+					?: callback.onFailure(EmptyResultException())
+		}
+	}
+
+	override fun getAllByTopic(topic: Topic, callback: DataSource.RequestCallback<List<Note>>) {
+		executor.submit {
+			dao.getAllByTopic(topic.name)
 					.takeIf { it.isNotEmpty() }
 					?.let { callback.onSuccess(it) }
 					?: callback.onFailure(EmptyResultException())

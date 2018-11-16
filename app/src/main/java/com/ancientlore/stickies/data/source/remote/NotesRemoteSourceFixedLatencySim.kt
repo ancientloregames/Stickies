@@ -1,6 +1,7 @@
 package com.ancientlore.stickies.data.source.remote
 
 import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.data.source.EmptyResultException
 import com.ancientlore.stickies.data.source.NotesSource
@@ -35,6 +36,10 @@ object NotesRemoteSourceFixedLatencySim : NotesSource {
 		executor.schedule({
 			callback.onSuccess(notesList.filter { it.isImportant })
 		}, LATENCY_MILLIS, TimeUnit.MILLISECONDS)
+	}
+
+	override fun getAllByTopic(topic: Topic, callback: DataSource.RequestCallback<List<Note>>) {
+		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 	}
 
 	override fun getItem(id: Long, callback: DataSource.RequestCallback<Note>) {
