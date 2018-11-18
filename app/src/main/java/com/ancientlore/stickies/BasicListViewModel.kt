@@ -7,7 +7,7 @@ import android.widget.ListAdapter
 
 abstract class BasicListViewModel<T>(context: Context): BaseObservable() {
 
-	private val adapter = createListAdapter(context)
+	protected val adapter = createListAdapter(context)
 
 	protected abstract fun createListAdapter(context: Context): BasicListAdapter<T>
 
