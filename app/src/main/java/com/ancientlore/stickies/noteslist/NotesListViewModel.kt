@@ -8,6 +8,7 @@ import android.databinding.ObservableField
 import android.util.Log
 import com.ancientlore.stickies.*
 import com.ancientlore.stickies.data.model.Note
+import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.DataSource
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -22,18 +23,21 @@ class NotesListViewModel(application: Application,
 		const val INTENT_ADD_NOTE = 100
 		const val INTENT_EDIT_NOTE = 101
 		const val INTENT_SHOW_NOTE = 102
+		const val INTENT_SHOW_TOPIC_PICKER = 103
 
 		const val OPTION_FILTER = 0
 		const val OPTION_SORT = 1
 
 		const val FILTER_ALL = 0
 		const val FILTER_IMPORTANT = 1
+		const val FILTER_TOPIC = 2
 	}
 
 	val isEmpty = ObservableField<Boolean>(true)
 	val isQuickNoteMode = ObservableBoolean()
 
 	private var currentSortOrder = C.ORDER_ASC
+	private var currentTopic = ""
 
 	private val onOpenNoteFormRequest = PublishSubject.create<Any>()
 	private val editNoteEvent = PublishSubject.create<Long>()
@@ -41,6 +45,7 @@ class NotesListViewModel(application: Application,
 	private val showFilterMenuEvent = PublishSubject.create<Any>()
 	private val showSortMenuEvent = PublishSubject.create<String>()
 	private val requestScrollToTop = PublishSubject.create<Any>()
+	private val showTopicPickerEvent = PublishSubject.create<String>()
 
 	init {
 		loadAllNotes()
@@ -68,6 +73,7 @@ class NotesListViewModel(application: Application,
 			INTENT_ADD_NOTE -> handleNoteAdditionResult(resultCode, data)
 			INTENT_EDIT_NOTE -> handleNoteEditingResult(resultCode, data)
 			INTENT_SHOW_NOTE -> handleNoteShowingResult(resultCode, data)
+			INTENT_SHOW_TOPIC_PICKER -> handleTopicPickerResult(resultCode, data)
 			else -> Log.w(TAG, "Unknown requestCode $requestCode")
 		}
 	}
@@ -76,6 +82,7 @@ class NotesListViewModel(application: Application,
 		when (filter) {
 			FILTER_ALL -> loadAllNotes()
 			FILTER_IMPORTANT -> loadImportantNotes()
+			FILTER_TOPIC -> showTopicPickerEvent.onNext(currentTopic)
 			else -> Log.w(TAG, "Unknown filter $filter")
 		}
 	}
@@ -108,6 +115,8 @@ class NotesListViewModel(application: Application,
 
 	fun observeScrollToTopRequest() = requestScrollToTop as Observable<*>
 
+	fun observeShowTopicPickerRequest() = showTopicPickerEvent as Observable<String>
+
 	private fun requestQuickNote() {
 		requestScrollToTop.onNext(EmptyObject)
 		listAdapter.requestNoteAddition()
@@ -138,6 +147,15 @@ class NotesListViewModel(application: Application,
 		}
 	}
 
+	private fun handleTopicPickerResult(resultCode: Int, data: Intent?) {
+		when (resultCode) {
+			Activity.RESULT_OK -> data?.getParcelableExtra<Topic>(C.EXTRA_TOPIC)?.let {
+				loadTopicNotes(it)
+			}
+			else -> Log.w(TAG, "Note showing intent finished with resultCode $resultCode")
+		}
+	}
+
 	private fun handleNoteShowingResult(action: String, data: Intent?) {
 		when (action) {
 			C.ACTION_EDIT -> getNoteId(data)?.let { editNoteEvent.onNext(it) }
@@ -154,6 +172,12 @@ class NotesListViewModel(application: Application,
 
 	private fun loadImportantNotes() {
 		repository.getImportant(object : DataSource.SimpleRequestCallback<List<Note>>()  {
+			override fun onSuccess(result: List<Note>) = setListItems(result)
+		})
+	}
+
+	private fun loadTopicNotes(topic: Topic) {
+		repository.getAllByTopic(topic, object : DataSource.SimpleRequestCallback<List<Note>>()  {
 			override fun onSuccess(result: List<Note>) = setListItems(result)
 		})
 	}

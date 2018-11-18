@@ -19,6 +19,7 @@ import com.ancientlore.stickies.notedetail.NoteDetailActivity
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_FILTER
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_SORT
 import com.ancientlore.stickies.sortdialog.SortDialogFragment
+import com.ancientlore.stickies.topicpicker.TopicPickerActivity
 import kotlinx.android.synthetic.main.activity_noteslist.*
 
 class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewModel>(), ViewTreeObserver.OnGlobalLayoutListener {
@@ -86,6 +87,9 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 
 		subscriptions.add(viewModel.observeScrollToTopRequest()
 				.subscribe { notesListView.smoothScrollToPosition(0) })
+
+		subscriptions.add(viewModel.observeShowTopicPickerRequest()
+				.subscribe { showTopicPicker() })
 	}
 
 	private fun setupList() {
@@ -111,6 +115,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		when (itemId) {
 			R.id.all -> viewModel.handleFilterSelection(NotesListViewModel.FILTER_ALL)
 			R.id.important -> viewModel.handleFilterSelection(NotesListViewModel.FILTER_IMPORTANT)
+			R.id.topic -> viewModel.handleFilterSelection(NotesListViewModel.FILTER_TOPIC)
 			else -> return false
 		}
 
@@ -146,6 +151,11 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		}
 
 		dialog.show(supportFragmentManager, "SortDialog")
+	}
+
+	private fun showTopicPicker() {
+		val intent = Intent(this, TopicPickerActivity::class.java)
+		startActivityForResult(intent, NotesListViewModel.INTENT_SHOW_TOPIC_PICKER)
 	}
 
 	private fun onKeyboardStateChanged(opened: Boolean) {
