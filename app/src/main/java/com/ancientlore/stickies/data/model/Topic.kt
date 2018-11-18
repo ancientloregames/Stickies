@@ -21,4 +21,6 @@ data class Topic(@field:PrimaryKey var name: String) : Parcelable {
 	}
 
 	override fun describeContents() = 0
+
+	override fun toString() = name
 }
