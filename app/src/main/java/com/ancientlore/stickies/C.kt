@@ -11,6 +11,7 @@ object C {
 	const val ACTION_EDIT = "action_edit"
 
 	const val EXTRA_NOTE_ID = "extra_note_id"
+	const val EXTRA_TOPIC = "extra_topic"
 
 	const val DUMMY_ID = -1L
 }

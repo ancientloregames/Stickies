@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	<data>
+		<variable
+			name="viewModel"
+			type="com.ancientlore.stickies.topicpicker.TopicPickerViewModel"/>
+	</data>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		>
+		<com.ancientlore.stickies.view.DrawableCompatEditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="@string/typeTopic"
+			android:text="@={viewModel.searchField}"
+			app:drawableStart="@drawable/ic_search"
+			/>
+		<ListView
+			android:id="@+id/list"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:adapter="@{viewModel.listAdapter}"
+			android:background="@android:color/white"
+			/>
+	</LinearLayout>
+</layout>

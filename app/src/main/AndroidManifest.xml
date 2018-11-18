@@ -30,6 +30,8 @@
 				  android:configChanges="orientation"/>
 		<activity android:name=".notice.NoticeActivity"
 				  android:label="@string/app_name"/>
+		<activity android:name=".topicpicker.TopicPickerActivity"
+			android:label="@string/app_name"/>
 
 		<receiver android:name=".notice.AlarmReceiver"/>
 		<receiver android:name=".notice.NoticeActionReceiver"
