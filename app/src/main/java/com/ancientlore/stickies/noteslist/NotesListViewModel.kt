@@ -92,6 +92,8 @@ class NotesListViewModel(application: Application,
 		listAdapter.sort(field, order)
 	}
 
+	fun filterNotesList(constraint: String) = listAdapter.filter(constraint)
+
 	fun onKeyboardStateChanged(opened: Boolean) = isQuickNoteMode.set(opened)
 
 	fun onOpenNoteFormClicked() = onOpenNoteFormRequest.onNext(EmptyObject)

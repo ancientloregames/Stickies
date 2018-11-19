@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -22,9 +23,12 @@ import com.ancientlore.stickies.sortdialog.SortDialogFragment
 import com.ancientlore.stickies.topicpicker.TopicPickerActivity
 import kotlinx.android.synthetic.main.activity_noteslist.*
 
-class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewModel>(), ViewTreeObserver.OnGlobalLayoutListener {
+class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewModel>(),
+		ViewTreeObserver.OnGlobalLayoutListener, SearchView.OnQueryTextListener {
 
 	private val sreenHeight get() = Resources.getSystem().displayMetrics.heightPixels
+
+	private lateinit var searchView: SearchView
 
 	override fun onGlobalLayout() {
 		val maybeKeyboard = rootContainer.height < sreenHeight * 2 / 3
@@ -49,8 +53,13 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		} else rootContainer.viewTreeObserver.removeGlobalOnLayoutListener(this)
 	}
 
-	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+	override fun onCreateOptionsMenu(menu: Menu): Boolean {
 		menuInflater.inflate(R.menu.notes_list_menu, menu)
+
+		val searchItem = menu.findItem(R.id.miSearch)
+		searchView = searchItem.actionView as SearchView
+		searchView.setOnQueryTextListener(this)
+		searchView.maxWidth = Integer.MAX_VALUE
 
 		return true
 	}
@@ -59,6 +68,16 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		R.id.filter -> viewModel.handleOptionSelection(OPTION_FILTER)
 		R.id.sort -> viewModel.handleOptionSelection(OPTION_SORT)
 		else -> super.onOptionsItemSelected(item)
+	}
+
+	override fun onQueryTextSubmit(query: String): Boolean {
+		viewModel.filterNotesList(query)
+		return false
+	}
+
+	override fun onQueryTextChange(newText: String): Boolean {
+		viewModel.filterNotesList(newText)
+		return false
 	}
 
 	override fun setupView(savedInstanceState: Bundle?) {

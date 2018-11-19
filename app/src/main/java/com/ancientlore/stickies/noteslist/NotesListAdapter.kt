@@ -25,7 +25,7 @@ import java.lang.ref.WeakReference
 import java.text.DateFormat
 
 class NotesListAdapter(context: Context, items: MutableList<Note>)
-	: BasicRecyclerAdapter<Note, NotesListAdapter.ViewHolder, NotesListItemBinding>(context, items, true, true) {
+	: FilterableRecyclerAdapter<Note, NotesListAdapter.ViewHolder, NotesListItemBinding>(context, items, true, true) {
 	interface Listener {
 		fun onItemClicked(note: Note)
 		fun onNewNote(note: Note)
@@ -116,6 +116,8 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 			else -> titleComparator
 		}
 	}
+
+	override fun createFilter() = NotesFilter()
 
 	fun requestNoteAddition() {
 		headerParams.requestFocus = true
@@ -235,5 +237,9 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		override fun areItemsTheSame(oldPos: Int, newPos: Int) = oldItems[oldPos].id == newItems[newPos].id
 
 		override fun areContentsTheSame(oldPos: Int, newPos: Int) = oldItems[oldPos] == newItems[newPos]
+	}
+
+	inner class NotesFilter: ListFilter() {
+		override fun satisfy(item: Note, candidate: String) = item.title.toLowerCase().startsWith(candidate)
 	}
 }

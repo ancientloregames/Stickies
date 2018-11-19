@@ -38,4 +38,5 @@
 	<string name="notes_channel_name">Заметки</string>
 	<string name="typeTopic">Введите тему</string>
 	<string name="filter_topic">По теме</string>
+	<string name="search">Поиск</string>
 </resources>

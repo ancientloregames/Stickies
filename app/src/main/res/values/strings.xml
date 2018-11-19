@@ -32,6 +32,7 @@
 	<string name="menu_schedule_reminder">Schedule a reminder</string>
 	<string name="pick_reminder_time">Pick the reminder\'s time</string>
 
+	<string name="search">Search</string>
 	<string name="sort">Sort</string>
 	<string name="sort_title">By title</string>
 	<string name="sort_date_creation">By date of creation</string>
