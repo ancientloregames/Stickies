@@ -108,7 +108,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	override fun isTheSame(first: Note, second: Note) = first.id == second.id
 
-	override fun isUnique(item: Note) = items.none { it.id == item.id }
+	override fun isUnique(item: Note) = fullList.none { it.id == item.id }
 
 	override fun getSortComparator(@SortField sortField: String): Comparator<Note> {
 		return when (sortField) {
@@ -240,6 +240,6 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 	}
 
 	inner class NotesFilter: ListFilter() {
-		override fun satisfy(item: Note, candidate: String) = item.title.toLowerCase().startsWith(candidate)
+		override fun satisfy(item: Note, candidate: String) = item.contains(candidate)
 	}
 }

@@ -16,6 +16,8 @@ abstract class FilterableRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P
 
 	private val filter: ListFilter by lazy { createFilter() }
 
+	private var currentConstraint = ""
+
 	abstract fun createFilter(): ListFilter
 
 	override fun getFilter(): Filter = filter
@@ -58,7 +60,10 @@ abstract class FilterableRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P
 		return super.deleteItem(itemToDelete)
 	}
 
-	fun filter(constraint: String) = filter.filter(constraint)
+	fun filter(constraint: String) {
+		currentConstraint = constraint
+		filter.filter(constraint)
+	}
 
 	private fun getFullListPosition(updatedItem: P) = fullList.indexOfFirst { isTheSame(it, updatedItem) }
 

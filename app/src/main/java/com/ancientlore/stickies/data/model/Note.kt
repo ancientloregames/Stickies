@@ -131,6 +131,11 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 		}
 	}
 
+	fun contains(text: String): Boolean {
+		return title.contains(text, true)
+				|| body.contains(text, true)
+	}
+
 	fun getDateCreated(dateStyle: Int) = DateFormat.getDateInstance(dateStyle).format(dateCreated)!!
 
 	fun getDateUpdated(dateStyle: Int) = DateFormat.getDateInstance(dateStyle).format(dateUpdated)!!
