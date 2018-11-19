@@ -29,19 +29,25 @@ abstract class FilterableRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P
 	}
 
 	override fun prependItem(newItem: P): Boolean {
-		val wasAdded = super.prependItem(newItem)
+		if (currentConstraint.isEmpty() || filter.satisfy(newItem, currentConstraint))
+			super.prependItem(newItem)
 
-		if (wasAdded) fullList.add(0, newItem)
-
-		return wasAdded
+		if (isUnique(newItem)) {
+			fullList.add(0, newItem)
+			return true
+		}
+		return false
 	}
 
 	override fun addItem(newItem: P): Boolean {
-		val wasAdded = super.addItem(newItem)
+		if (currentConstraint.isEmpty() || filter.satisfy(newItem, currentConstraint))
+			super.addItem(newItem)
 
-		if (wasAdded) fullList.add(newItem)
-
-		return wasAdded
+		if (isUnique(newItem)) {
+			fullList.add(newItem)
+			return true
+		}
+		return false
 	}
 
 	override fun updateItem(updatedItem: P): Boolean {
