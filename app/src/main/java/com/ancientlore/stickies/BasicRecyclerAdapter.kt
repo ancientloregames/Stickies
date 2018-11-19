@@ -75,27 +75,10 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P, B>,
 	}
 
 	@UiThread
-	override fun updateItem(updatedItem: P): Boolean {
-		val position = getItemPosition(updatedItem)
-		if (position != -1) {
-			updateItemAt(position, updatedItem)
-			return true
-		}
-
-		return false
-	}
+	override fun updateItem(updatedItem: P) = updateItemAt(getItemPosition(updatedItem), updatedItem)
 
 	@UiThread
-	override fun deleteItem(itemToDelete: P): Boolean {
-		val position = getItemPosition(itemToDelete)
-		if (position != -1) {
-			items.removeAt(position)
-			notifyListItemRemoved(position)
-			return true
-		}
-
-		return false
-	}
+	override fun deleteItem(itemToDelete: P) = deleteItemAt(getItemPosition(itemToDelete))
 
 	override fun sort(@SortField field: String, @SortOrder order: String) {
 		val comparator = getSortComparator(field)
@@ -128,9 +111,14 @@ abstract class BasicRecyclerAdapter<P, T: BasicRecyclerAdapter.ViewHolder<P, B>,
 	}
 
 	@UiThread
-	private fun updateItemAt(index: Int, updatedItem: P) {
-		items[index] = updatedItem
-		notifyListItemChanged(index)
+	private fun updateItemAt(position: Int, updatedItem: P): Boolean {
+		if (isValidPosition(position)) {
+			items[position] = updatedItem
+			notifyListItemChanged(position)
+			return true
+		}
+
+		return false
 	}
 
 	private fun getItemPosition(updatedItem: P) = items.indexOfFirst { isTheSame(it, updatedItem) }
