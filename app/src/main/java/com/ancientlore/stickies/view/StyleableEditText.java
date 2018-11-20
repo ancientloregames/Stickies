@@ -19,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class StyleableEditText extends AppCompatEditText
 {
+	private boolean shouldWaitWindowFocus;
+
 	public StyleableEditText(Context context)
 	{
 		super(context);
@@ -53,6 +55,13 @@ public class StyleableEditText extends AppCompatEditText
 	private void initTextStylesMenu(@NotNull Context context)
 	{
 		setCustomSelectionActionModeCallback(createTextStylesCallback(context));
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasWindowFocus)
+	{
+		if(!shouldWaitWindowFocus)
+			super.onWindowFocusChanged(hasWindowFocus);
 	}
 
 	@Contract(pure = true)
@@ -107,6 +116,20 @@ public class StyleableEditText extends AppCompatEditText
 		boolean onActionSelected(int actionId)
 		{
 			return handleTextMenuOption(actionId);
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu)
+		{
+			shouldWaitWindowFocus = true;
+			return super.onPrepareActionMode(mode, menu);
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode)
+		{
+			shouldWaitWindowFocus = false;
+			super.onDestroyActionMode(mode);
 		}
 	}
 
