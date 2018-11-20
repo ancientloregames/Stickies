@@ -39,4 +39,7 @@
 	<string name="typeTopic">Введите тему</string>
 	<string name="filter_topic">По теме</string>
 	<string name="search">Поиск</string>
+	<string name="share">Поделиться</string>
+	<string name="warning_no_app_to_share">У вас нет приложений с которыми можно поделиться заметкой</string>
+	<string name="sharing_title">Поделитсья заметкой с…</string>
 </resources>

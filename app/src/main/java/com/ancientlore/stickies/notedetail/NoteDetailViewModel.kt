@@ -19,6 +19,7 @@ class NoteDetailViewModel(application: Application,
 
 	companion object {
 		const val OPTION_DELETE = 0
+		const val OPTION_SHARE = 1
 	}
 
 	val titleField = ObservableField<String>("")
@@ -30,14 +31,18 @@ class NoteDetailViewModel(application: Application,
 	val isCompleted = ObservableBoolean()
 	val wasUpdated = ObservableBoolean()
 
+	private lateinit var note: Note
+
 	private val editNoteEvent = PublishSubject.create<Long>()
 	private val noteDeletionEvent = PublishSubject.create<Long>()
+	private val noteSharingEvent = PublishSubject.create<Note>()
 
 	init { loadNote(noteId) }
 
 	override fun handleOptionSelection(option: Int): Boolean {
 		when (option) {
 			OPTION_DELETE -> deleteNote(noteId)
+			OPTION_SHARE -> noteSharingEvent.onNext(note)
 			else -> return false
 		}
 		return true
@@ -48,6 +53,8 @@ class NoteDetailViewModel(application: Application,
 	fun observeNoteEditing() = editNoteEvent as Observable<Long>
 
 	fun observeNoteDeletion() = noteDeletionEvent as Observable<Long>
+
+	fun observeNoteSharing() = noteSharingEvent as Observable<Note>
 
 	override fun deleteNote(id: Long) {
 		super.deleteNote(id)
@@ -61,6 +68,7 @@ class NoteDetailViewModel(application: Application,
 	}
 
 	private fun bind(note: Note) {
+		this.note = note
 		colorField.set(note.color)
 		titleField.set(note.getTitle(context))
 		messageField.set(note.spannedBody())

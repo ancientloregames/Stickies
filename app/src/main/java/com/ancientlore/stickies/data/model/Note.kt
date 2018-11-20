@@ -100,6 +100,12 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 		return result
 	}
 
+	fun toExternalText(): String {
+		return (if (title.isNotEmpty()) "$title\n" else "") +
+				"${getDateCreated(DateFormat.SHORT, DateFormat.SHORT)}\n" +
+				"$plainBody"
+	}
+
 	override fun writeToParcel(parcel: Parcel, flags: Int) {
 		parcel.writeLong(id)
 		parcel.writeLong(timeCreated)

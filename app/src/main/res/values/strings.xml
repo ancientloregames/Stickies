@@ -18,6 +18,7 @@
 	<string name="filter_topic">By topic</string>
 
 	<string name="delete">Delete</string>
+	<string name="share">Share</string>
 
 	<string name="menu_important">Important</string>
 	<string name="menu_completed">Completed</string>
@@ -48,6 +49,9 @@
 	<string name="hint_add_note_quick">Click this to add a quick note</string>
 
 	<string name="hint_quick_note">Enter a quick note</string>
+
+	<string name="sharing_title">Share the note with…</string>
+	<string name="warning_no_app_to_share">You do not have any App to shere this note with</string>
 
 	<string name="text_style_bold" translatable="false"><b>B</b></string>
 	<string name="text_style_italic" translatable="false"><i>I</i></string>
