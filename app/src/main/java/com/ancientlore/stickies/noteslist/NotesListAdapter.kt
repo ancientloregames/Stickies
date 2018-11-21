@@ -22,7 +22,6 @@ import com.ancientlore.stickies.utils.showKeybouard
 import com.ancientlore.stickies.view.SwipeLayout
 import kotlinx.android.synthetic.main.notes_list_item.view.*
 import java.lang.ref.WeakReference
-import java.text.DateFormat
 
 class NotesListAdapter(context: Context, items: MutableList<Note>)
 	: FilterableRecyclerAdapter<Note, NotesListAdapter.ViewHolder, NotesListItemBinding>(context, items, true, true) {
@@ -212,7 +211,7 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 		override fun bind(data: Note) {
 			backColor.set(data.color)
 			titleField.set(data.getListTitle(itemView.context))
-			dateField.set(data.getDateCreated(DateFormat.SHORT))
+			dateField.set(data.getRelativeDateCreated())
 			isImportant.set(data.isImportant)
 			isCompleted.set(data.isCompleted)
 		}

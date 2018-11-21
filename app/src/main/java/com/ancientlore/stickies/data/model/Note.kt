@@ -7,6 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import android.text.TextUtils
+import android.text.format.DateUtils
 import com.ancientlore.stickies.utils.toPlainText
 import java.text.DateFormat
 import java.util.*
@@ -151,4 +152,6 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 	fun getDateUpdated(dateStyle: Int, timeStyle: Int) = DateFormat.getDateTimeInstance(dateStyle, timeStyle).format(dateUpdated)!!
 
 	fun getDateNotify(dateStyle: Int, timeStyle: Int) = DateFormat.getDateTimeInstance(dateStyle, timeStyle).format(dateNotify)!!
+
+	fun getRelativeDateCreated() = DateUtils.getRelativeTimeSpanString(timeCreated).toString()
 }
