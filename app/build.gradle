@@ -13,8 +13,8 @@ android {
         applicationId "com.ancientlore.stickies"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 9
-        versionName "1.6.5"
+        versionCode 170
+        versionName "1.7.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
