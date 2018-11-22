@@ -13,14 +13,17 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.PopupMenu
+import android.widget.Toast
 import com.ancientlore.stickies.*
 import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
 import com.ancientlore.stickies.databinding.ActivityNoteslistBinding
 import com.ancientlore.stickies.notedetail.NoteDetailActivity
+import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_EXPORT
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_FILTER
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_SORT
 import com.ancientlore.stickies.sortdialog.SortDialogFragment
 import com.ancientlore.stickies.topicpicker.TopicPickerActivity
+import com.ancientlore.stickies.utils.tryStartActivity
 import kotlinx.android.synthetic.main.activity_noteslist.*
 
 class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewModel>(),
@@ -67,6 +70,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 		R.id.filter -> viewModel.handleOptionSelection(OPTION_FILTER)
 		R.id.sort -> viewModel.handleOptionSelection(OPTION_SORT)
+		R.id.export_list -> viewModel.handleOptionSelection(OPTION_EXPORT)
 		else -> super.onOptionsItemSelected(item)
 	}
 
@@ -109,6 +113,9 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 
 		subscriptions.add(viewModel.observeShowTopicPickerRequest()
 				.subscribe { showTopicPicker() })
+
+		subscriptions.add(viewModel.observeExportNotesRequest()
+				.subscribe { exportNotes() })
 	}
 
 	private fun setupList() {
@@ -175,6 +182,22 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	private fun showTopicPicker() {
 		val intent = Intent(this, TopicPickerActivity::class.java)
 		startActivityForResult(intent, NotesListViewModel.INTENT_SHOW_TOPIC_PICKER)
+	}
+
+	private fun exportNotes() {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+			Toast.makeText(this, R.string.warning_no_app_intent, Toast.LENGTH_SHORT).show()
+			return
+		}
+		val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+			addCategory(Intent.CATEGORY_OPENABLE)
+			type = "*/*"
+			putExtra(Intent.EXTRA_TITLE, ".txt")
+		}
+
+		val started = tryStartActivity(intent, NotesListViewModel.INTENT_EXPORT_NOTES)
+		if (started.not())
+			Toast.makeText(this, R.string.warning_no_app_intent, Toast.LENGTH_SHORT).show()
 	}
 
 	private fun onKeyboardStateChanged(opened: Boolean) {

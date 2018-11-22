@@ -20,5 +20,10 @@
 		android:id="@+id/sort"
 		android:title="@string/sort"
 		android:icon="@drawable/ic_sort"
-		app:showAsAction="ifRoom"/>
+		app:showAsAction="collapseActionView"/>
+	<item
+		android:id="@+id/export_list"
+		android:title="@string/menu_export"
+		android:icon="@drawable/ic_export"
+		app:showAsAction="collapseActionView"/>
 </menu>

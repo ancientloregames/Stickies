@@ -24,9 +24,11 @@ class NotesListViewModel(application: Application,
 		const val INTENT_EDIT_NOTE = 101
 		const val INTENT_SHOW_NOTE = 102
 		const val INTENT_SHOW_TOPIC_PICKER = 103
+		const val INTENT_EXPORT_NOTES = 104
 
 		const val OPTION_FILTER = 0
 		const val OPTION_SORT = 1
+		const val OPTION_EXPORT = 2
 
 		const val FILTER_ALL = 0
 		const val FILTER_IMPORTANT = 1
@@ -46,6 +48,7 @@ class NotesListViewModel(application: Application,
 	private val showSortMenuEvent = PublishSubject.create<String>()
 	private val requestScrollToTop = PublishSubject.create<Any>()
 	private val showTopicPickerEvent = PublishSubject.create<String>()
+	private val exportNotesEvent = PublishSubject.create<Any>()
 
 	init {
 		loadAllNotes()
@@ -63,6 +66,7 @@ class NotesListViewModel(application: Application,
 		when (option) {
 			OPTION_FILTER -> showFilterMenuEvent.onNext(EmptyObject)
 			OPTION_SORT -> showSortMenuEvent.onNext(currentSortOrder)
+			OPTION_EXPORT -> exportNotesEvent.onNext(EmptyObject)
 			else -> return false
 		}
 		return true
@@ -74,6 +78,7 @@ class NotesListViewModel(application: Application,
 			INTENT_EDIT_NOTE -> handleNoteEditingResult(resultCode, data)
 			INTENT_SHOW_NOTE -> handleNoteShowingResult(resultCode, data)
 			INTENT_SHOW_TOPIC_PICKER -> handleTopicPickerResult(resultCode, data)
+			INTENT_EXPORT_NOTES -> handleExportNotesResult(resultCode, data)
 			else -> Log.w(TAG, "Unknown requestCode $requestCode")
 		}
 	}
@@ -119,6 +124,8 @@ class NotesListViewModel(application: Application,
 
 	fun observeShowTopicPickerRequest() = showTopicPickerEvent as Observable<String>
 
+	fun observeExportNotesRequest() = exportNotesEvent as Observable<*>
+
 	private fun requestQuickNote() {
 		requestScrollToTop.onNext(EmptyObject)
 		listAdapter.requestNoteAddition()
@@ -163,6 +170,13 @@ class NotesListViewModel(application: Application,
 			C.ACTION_EDIT -> getNoteId(data)?.let { editNoteEvent.onNext(it) }
 			C.ACTION_DELETE -> getNoteId(data)?.let { deleteNote(it) }
 			else -> Log.w(TAG, "Note showing intent finished with unknown action $action")
+		}
+	}
+
+	private fun handleExportNotesResult(resultCode: Int, data: Intent?) {
+		when (resultCode) {
+			Activity.RESULT_OK -> data?.data?.let { } //TODO
+			else -> Log.w(TAG, "Note showing intent finished with resultCode $resultCode")
 		}
 	}
 

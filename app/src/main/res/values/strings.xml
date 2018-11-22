@@ -40,6 +40,9 @@
 	<string name="order_asc">Ascending</string>
 	<string name="order_desc">Descending</string>
 
+	<string name="menu_import">Import</string>
+	<string name="menu_export">Export</string>
+
 	<string name="alert_note_title_empty">Either title or message must be entered</string>
 	<string name="alert_note_title_long">Note title is too long</string>
 	<string name="alert_note_body_long">Note message is too long</string>
@@ -52,6 +55,8 @@
 
 	<string name="sharing_title">Share the note with…</string>
 	<string name="warning_no_app_to_share">You do not have any App to shere this note with</string>
+
+	<string name="warning_no_app_intent">You do not have any appropriate App for this operation</string>
 
 	<string name="text_style_bold" translatable="false"><b>B</b></string>
 	<string name="text_style_italic" translatable="false"><i>I</i></string>

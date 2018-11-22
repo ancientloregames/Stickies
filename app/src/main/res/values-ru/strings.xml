@@ -42,4 +42,7 @@
 	<string name="share">Поделиться</string>
 	<string name="warning_no_app_to_share">У вас нет приложений с которыми можно поделиться заметкой</string>
 	<string name="sharing_title">Поделитсья заметкой с…</string>
+	<string name="menu_import">Импортировать</string>
+	<string name="menu_export">Экспортировать</string>
+	<string name="warning_no_app_intent">На вашем устройстве нет приложений для данной операции</string>
 </resources>
