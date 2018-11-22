@@ -35,6 +35,8 @@ class NotesListAdapter(context: Context, items: MutableList<Note>)
 
 	data class HeaderParams(var requestFocus: Boolean = false)
 
+	val itemsSequence get() = items.asSequence()
+
 	private val timeComparator = Comparator<Note> { o1, o2 -> o1.timeCreated.compareTo(o2.timeCreated) }
 	private val titleComparator = Comparator<Note> { o1, o2 -> o1.compareByText(o2) }
 

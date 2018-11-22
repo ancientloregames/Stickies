@@ -5,13 +5,16 @@ import android.app.Application
 import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
+import android.net.Uri
 import android.util.Log
 import com.ancientlore.stickies.*
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.DataSource
+import com.ancientlore.stickies.utils.marshall
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import java.io.*
 
 class NotesListViewModel(application: Application,
 						 private val listAdapter: NotesListAdapter)
@@ -175,8 +178,23 @@ class NotesListViewModel(application: Application,
 
 	private fun handleExportNotesResult(resultCode: Int, data: Intent?) {
 		when (resultCode) {
-			Activity.RESULT_OK -> data?.data?.let { } //TODO
+			Activity.RESULT_OK -> data?.data?.let { exportNotes(it) }
 			else -> Log.w(TAG, "Note showing intent finished with resultCode $resultCode")
+		}
+	}
+
+	private fun exportNotes(uri: Uri) {
+		try {
+			val stream = context.contentResolver.openOutputStream(uri)
+			val writer = BufferedOutputStream(stream)
+			listAdapter.itemsSequence.forEach {
+				writer.write(it.marshall())
+				writer.write("\n\r".toByteArray())
+			}
+			writer.flush()
+			writer.close()
+		} catch (e: IOException) {
+			e.printStackTrace()
 		}
 	}
 
