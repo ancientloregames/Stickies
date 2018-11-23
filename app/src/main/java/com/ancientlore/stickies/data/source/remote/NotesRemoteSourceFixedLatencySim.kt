@@ -66,6 +66,15 @@ object NotesRemoteSourceFixedLatencySim : NotesSource {
 		}, LATENCY_MILLIS, TimeUnit.MILLISECONDS)
 	}
 
+	override fun reset(newItems: List<Note>) {
+		executor.schedule({
+			data.clear()
+			newItems.forEach {
+				data[it.id] = it
+			}
+		}, LATENCY_MILLIS, TimeUnit.MILLISECONDS)
+	}
+
 	override fun deleteAll() {
 		executor.schedule({
 			data.clear()

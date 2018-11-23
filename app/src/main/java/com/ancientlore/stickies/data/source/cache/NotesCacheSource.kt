@@ -25,6 +25,13 @@ object NotesCacheSource {
 		}
 	}
 
+	fun reset(newItems: List<Note>) {
+		cache.clear()
+		newItems.forEach {
+			cache[it.id] = it
+		}
+	}
+
 	fun deleteAll() = cache.clear()
 
 	fun deleteItem(id: Long) = cache.remove(id)

@@ -21,6 +21,8 @@ interface DataSource<DataModel> {
 
 	fun updateItem(item: DataModel)
 
+	fun reset(newItems: List<DataModel>)
+
 	fun deleteAll()
 
 	fun deleteItem(id: Long)

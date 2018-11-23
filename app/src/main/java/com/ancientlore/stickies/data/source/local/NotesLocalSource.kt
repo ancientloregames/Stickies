@@ -64,6 +64,13 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		}
 	}
 
+	override fun reset(newItems: List<Note>) {
+		executor.submit {
+			dao.deleteAll()
+			dao.insert(newItems)
+		}
+	}
+
 	override fun deleteAll() {
 		executor.submit {
 			dao.deleteAll()
