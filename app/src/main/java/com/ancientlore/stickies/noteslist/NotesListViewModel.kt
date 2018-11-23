@@ -12,8 +12,11 @@ import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.utils.marshall
+import com.ancientlore.stickies.utils.split
+import com.ancientlore.stickies.utils.unmarshall
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.IOException
 
@@ -193,7 +196,7 @@ class NotesListViewModel(application: Application,
 
 	private fun handleImportNotesResult(resultCode: Int, data: Intent?) {
 		when (resultCode) {
-			Activity.RESULT_OK -> data?.data?.let {  } //TODO
+			Activity.RESULT_OK -> data?.data?.let { importNotes(it) }
 			else -> Log.w(TAG, "Importing intent finished with resultCode $resultCode")
 		}
 	}
@@ -208,6 +211,19 @@ class NotesListViewModel(application: Application,
 			}
 			writer.flush()
 			writer.close()
+		} catch (e: IOException) {
+			e.printStackTrace()
+		}
+	}
+
+	private fun importNotes(uri: Uri) {
+		try {
+			val reader = BufferedInputStream(context.contentResolver.openInputStream(uri))
+			val bytes = reader.readBytes()
+			reader.close()
+			val list = bytes.split("\n\r".toByteArray())
+			val notes = list.unmarshall(Note.CREATOR)
+			resetNotes(notes)
 		} catch (e: IOException) {
 			e.printStackTrace()
 		}
@@ -247,6 +263,11 @@ class NotesListViewModel(application: Application,
 		repository.getItem(id, object : DataSource.SimpleRequestCallback<Note>() {
 			override fun onSuccess(result: Note) = updateListItem(result)
 		})
+	}
+
+	private fun resetNotes(newNotes: List<Note>) {
+		repository.reset(newNotes)
+		listAdapter.setItems(newNotes)
 	}
 
 	private fun switchImportance(id: Long, isImportant: Boolean) {
