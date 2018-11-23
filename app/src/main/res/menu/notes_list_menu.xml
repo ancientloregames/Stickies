@@ -26,4 +26,9 @@
 		android:title="@string/menu_export"
 		android:icon="@drawable/ic_export"
 		app:showAsAction="collapseActionView"/>
+	<item
+		android:id="@+id/import_list"
+		android:title="@string/menu_import"
+		android:icon="@drawable/ic_import"
+		app:showAsAction="collapseActionView"/>
 </menu>

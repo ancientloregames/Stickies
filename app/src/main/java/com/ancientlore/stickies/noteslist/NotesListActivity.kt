@@ -20,6 +20,7 @@ import com.ancientlore.stickies.databinding.ActivityNoteslistBinding
 import com.ancientlore.stickies.notedetail.NoteDetailActivity
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_EXPORT
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_FILTER
+import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_IMPORT
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_SORT
 import com.ancientlore.stickies.sortdialog.SortDialogFragment
 import com.ancientlore.stickies.topicpicker.TopicPickerActivity
@@ -71,6 +72,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		R.id.filter -> viewModel.handleOptionSelection(OPTION_FILTER)
 		R.id.sort -> viewModel.handleOptionSelection(OPTION_SORT)
 		R.id.export_list -> viewModel.handleOptionSelection(OPTION_EXPORT)
+		R.id.import_list -> viewModel.handleOptionSelection(OPTION_IMPORT)
 		else -> super.onOptionsItemSelected(item)
 	}
 
@@ -116,6 +118,9 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 
 		subscriptions.add(viewModel.observeExportNotesRequest()
 				.subscribe { exportNotes() })
+
+		subscriptions.add(viewModel.observeImportNotesRequest()
+				.subscribe { importNotes() })
 	}
 
 	private fun setupList() {
@@ -196,6 +201,21 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		}
 
 		val started = tryStartActivity(intent, NotesListViewModel.INTENT_EXPORT_NOTES)
+		if (started.not())
+			Toast.makeText(this, R.string.warning_no_app_intent, Toast.LENGTH_SHORT).show()
+	}
+
+	private fun importNotes() {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+			Toast.makeText(this, R.string.warning_no_app_intent, Toast.LENGTH_SHORT).show()
+			return
+		}
+		val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+			addCategory(Intent.CATEGORY_OPENABLE)
+			type = "*/*"
+		}
+
+		val started = tryStartActivity(intent, NotesListViewModel.INTENT_IMPORT_NOTES)
 		if (started.not())
 			Toast.makeText(this, R.string.warning_no_app_intent, Toast.LENGTH_SHORT).show()
 	}
