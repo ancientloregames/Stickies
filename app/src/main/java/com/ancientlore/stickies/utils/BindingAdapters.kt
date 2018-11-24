@@ -23,11 +23,6 @@ fun setImageResource(fab: FloatingActionButton, drawable: Drawable) {
 	fab.setImageDrawable(drawable)
 }
 
-@BindingAdapter("cardBackgroundColor")
-fun setBackgroundColor(imageView: CardView, color: Int) {
-	imageView.setCardBackgroundColor(color)
-}
-
 @BindingAdapter("backgroundTint")
 fun setBackgroundTintCompat(view: ConstraintLayout, @ColorInt color: Int) = ViewUtils.setBackgroundTint(view, color)
 
