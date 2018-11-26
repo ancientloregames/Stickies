@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
@@ -44,6 +45,11 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	override fun getBindingVariable() = BR.viewModel
 
 	override fun createViewModel() = NotesListViewModel(application, getListAdapter())
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		setTheme(R.style.AppTheme)
+		super.onCreate(savedInstanceState)
+	}
 
 	override fun onResume() {
 		super.onResume()
