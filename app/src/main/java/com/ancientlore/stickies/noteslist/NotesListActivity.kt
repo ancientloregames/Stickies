@@ -26,6 +26,9 @@ import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_SO
 import com.ancientlore.stickies.sortdialog.SortDialogFragment
 import com.ancientlore.stickies.topicpicker.TopicPickerActivity
 import com.ancientlore.stickies.utils.tryStartActivity
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
+import java.util.*
 import kotlinx.android.synthetic.main.activity_noteslist.*
 
 class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewModel>(),
@@ -231,7 +234,21 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 	}
 
 	private fun syncWithCloud() {
-		//TODO sync or auth
+		FirebaseAuth.getInstance().currentUser?.let {
+			//TODO sync
+		} ?:let { showAuthForm() }
+	}
+
+	private fun showAuthForm() {
+		val providers = Arrays.asList(
+				AuthUI.IdpConfig.EmailBuilder().build())
+
+		val intent = AuthUI.getInstance()
+				.createSignInIntentBuilder()
+				.setAvailableProviders(providers)
+				.build()
+
+		startActivityForResult(intent, NotesListViewModel.INTENT_CLOUD_AUTH)
 	}
 
 	private fun onKeyboardStateChanged(opened: Boolean) {
