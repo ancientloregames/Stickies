@@ -33,11 +33,13 @@ class NotesListViewModel(application: Application,
 		const val INTENT_SHOW_TOPIC_PICKER = 103
 		const val INTENT_EXPORT_NOTES = 104
 		const val INTENT_IMPORT_NOTES = 105
+		const val INTENT_CLOUD_AUTH = 106
 
 		const val OPTION_FILTER = 0
 		const val OPTION_SORT = 1
 		const val OPTION_EXPORT = 2
 		const val OPTION_IMPORT = 3
+		const val OPTION_CLOUD = 4
 
 		const val FILTER_ALL = 0
 		const val FILTER_IMPORTANT = 1
@@ -59,6 +61,7 @@ class NotesListViewModel(application: Application,
 	private val showTopicPickerEvent = PublishSubject.create<String>()
 	private val exportNotesEvent = PublishSubject.create<Any>()
 	private val importNotesEvent = PublishSubject.create<Any>()
+	private val cloudSyncEvent = PublishSubject.create<Any>()
 
 	init {
 		loadAllNotes()
@@ -78,6 +81,7 @@ class NotesListViewModel(application: Application,
 			OPTION_SORT -> showSortMenuEvent.onNext(currentSortOrder)
 			OPTION_EXPORT -> exportNotesEvent.onNext(EmptyObject)
 			OPTION_IMPORT -> importNotesEvent.onNext(EmptyObject)
+			OPTION_CLOUD -> cloudSyncEvent.onNext(EmptyObject)
 			else -> return false
 		}
 		return true
@@ -139,6 +143,8 @@ class NotesListViewModel(application: Application,
 	fun observeExportNotesRequest() = exportNotesEvent as Observable<*>
 
 	fun observeImportNotesRequest() = importNotesEvent as Observable<*>
+
+	fun observeCloudSyncRequest() = cloudSyncEvent as Observable<*>
 
 	private fun requestQuickNote() {
 		requestScrollToTop.onNext(EmptyObject)

@@ -31,4 +31,9 @@
 		android:title="@string/menu_import"
 		android:icon="@drawable/ic_import"
 		app:showAsAction="collapseActionView"/>
+	<item
+		android:id="@+id/cloudsync"
+		android:title="@string/menu_cloudsync"
+		android:icon="@drawable/ic_cloudsync"
+		app:showAsAction="collapseActionView"/>
 </menu>

@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
@@ -19,6 +18,7 @@ import com.ancientlore.stickies.*
 import com.ancientlore.stickies.addeditnote.AddEditNoteActivity
 import com.ancientlore.stickies.databinding.ActivityNoteslistBinding
 import com.ancientlore.stickies.notedetail.NoteDetailActivity
+import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_CLOUD
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_EXPORT
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_FILTER
 import com.ancientlore.stickies.noteslist.NotesListViewModel.Companion.OPTION_IMPORT
@@ -79,6 +79,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		R.id.sort -> viewModel.handleOptionSelection(OPTION_SORT)
 		R.id.export_list -> viewModel.handleOptionSelection(OPTION_EXPORT)
 		R.id.import_list -> viewModel.handleOptionSelection(OPTION_IMPORT)
+		R.id.cloudsync -> viewModel.handleOptionSelection(OPTION_CLOUD)
 		else -> super.onOptionsItemSelected(item)
 	}
 
@@ -127,6 +128,9 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 
 		subscriptions.add(viewModel.observeImportNotesRequest()
 				.subscribe { importNotes() })
+
+		subscriptions.add(viewModel.observeCloudSyncRequest()
+				.subscribe { syncWithCloud() })
 	}
 
 	private fun setupList() {
@@ -224,6 +228,10 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		val started = tryStartActivity(intent, NotesListViewModel.INTENT_IMPORT_NOTES)
 		if (started.not())
 			Toast.makeText(this, R.string.warning_no_app_intent, Toast.LENGTH_SHORT).show()
+	}
+
+	private fun syncWithCloud() {
+		//TODO sync or auth
 	}
 
 	private fun onKeyboardStateChanged(opened: Boolean) {
