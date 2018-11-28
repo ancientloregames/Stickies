@@ -93,11 +93,11 @@ object NotesRepository: NotesSource {
 	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>) {
 		localSource?.insertItem(item, object : DataSource.RequestCallback<Long> {
 			override fun onSuccess(result: Long) {
-				cacheSource.insertItem(Note.newInstance(result, item))
+				onInsertedLocaly(Note.newInstance(finalId = result, note = item))
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
-				Log.w("NotesRepository", "Item with title ${item.title} wan't been add to the local database")
+				Log.w("NotesRepository", "Item with title ${item.title} hasn't been added to the local database")
 			}
 		})
 	}
@@ -138,5 +138,17 @@ object NotesRepository: NotesSource {
 
 	fun initRemoteSource(user: FirebaseUser) {
 		remoteSource = FirestoreNotesSource.getInstance(user)
+	}
+
+	private fun onInsertedLocaly(item: Note) {
+		cacheSource.insertItem(item)
+		remoteSource?.insertItem(item, object : DataSource.RequestCallback<Long> {
+			override fun onSuccess(result: Long) {
+				Log.d("NotesRepository", "Item with title ${item.title} has been added to the remote database")
+			}
+			override fun onFailure(error: Throwable) {
+				Log.w("NotesRepository", "Item with title ${item.title} hasn't been added to the remote database")
+			}
+		})
 	}
 }

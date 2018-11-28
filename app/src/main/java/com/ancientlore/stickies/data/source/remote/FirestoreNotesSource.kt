@@ -10,7 +10,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreNotesSource private constructor(private val user: FirebaseUser): NotesSource {
 
-	internal companion object : SingletonHolder<FirestoreNotesSource, FirebaseUser>({ FirestoreNotesSource(it) })
+	internal companion object : SingletonHolder<FirestoreNotesSource, FirebaseUser>({ FirestoreNotesSource(it) }) {
+		const val USER_DATA = "data"
+		const val USER_NOTES = "notes"
+	}
 
 	private val db = FirebaseFirestore.getInstance()
 
@@ -31,7 +34,11 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		db.collection(USER_DATA).document(user.uid)
+				.collection(USER_NOTES).document(item.id.toString())
+				.set(item)
+				.addOnSuccessListener { callback.onSuccess(item.id) }
+				.addOnFailureListener { callback.onFailure(it) }
 	}
 
 	override fun updateItem(item: Note) {
