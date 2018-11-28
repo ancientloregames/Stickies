@@ -9,6 +9,7 @@ import android.os.Parcelable
 import android.text.TextUtils
 import android.text.format.DateUtils
 import com.ancientlore.stickies.utils.toPlainText
+import com.google.firebase.firestore.Exclude
 import java.text.DateFormat
 import java.util.*
 
@@ -52,7 +53,7 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 	@delegate:Ignore private val dateUpdated by lazy { Date(timeUpdated) }
 	@delegate:Ignore private val dateCompleted by lazy { Date(timeCompleted) }
 	@delegate:Ignore private val dateNotify by lazy { Date(timeNotify) }
-	@delegate:Ignore val plainBody by lazy { body.toPlainText() }
+	@delegate:Ignore @get:Exclude val plainBody by lazy { body.toPlainText() }
 
 	constructor(parcel: Parcel) : this(
 			parcel.readLong(),
@@ -153,5 +154,6 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 
 	fun getDateNotify(dateStyle: Int, timeStyle: Int) = DateFormat.getDateTimeInstance(dateStyle, timeStyle).format(dateNotify)!!
 
+	@Exclude
 	fun getRelativeDateCreated() = DateUtils.getRelativeTimeSpanString(timeCreated).toString()
 }
