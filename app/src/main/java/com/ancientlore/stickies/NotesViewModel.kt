@@ -8,6 +8,8 @@ import com.ancientlore.stickies.data.source.TopicsRepository
 import com.ancientlore.stickies.data.source.local.NotesDatabase
 import com.ancientlore.stickies.notice.AlarmReceiver
 import com.ancientlore.stickies.utils.cancelReminder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 
 abstract class NotesViewModel(application: Application) : BasicViewModel(application) {
@@ -19,9 +21,16 @@ abstract class NotesViewModel(application: Application) : BasicViewModel(applica
 		initRepository(application.baseContext)
 	}
 
+	public fun initRemoteNotesRepository(user: FirebaseUser) {
+		repository.initRemoteSource(user)
+	}
+
 	private fun initRepository(context: Context) {
 		val db = NotesDatabase.getInstance(context)
 		repository.initLocalSource(db.notesDao())
+		FirebaseAuth.getInstance().currentUser?.let {
+			initRemoteNotesRepository(it)
+		}
 		topicsRep.initLocalSource(db.topicsDao())
 	}
 

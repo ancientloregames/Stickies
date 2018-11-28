@@ -6,11 +6,14 @@ import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.cache.NotesCacheSource
 import com.ancientlore.stickies.data.source.local.NotesDao
 import com.ancientlore.stickies.data.source.local.NotesLocalSource
+import com.ancientlore.stickies.data.source.remote.FirestoreNotesSource
+import com.google.firebase.auth.FirebaseUser
 
 object NotesRepository: NotesSource {
 
 	private var cacheSource = NotesCacheSource
 	private var localSource: NotesSource? = null
+	private var remoteSource: FirestoreNotesSource? = null
 
 	private var isCacheSynced = false
 
@@ -131,5 +134,9 @@ object NotesRepository: NotesSource {
 
 	fun initLocalSource(dao: NotesDao) {
 		localSource = NotesLocalSource.getInstance(dao)
+	}
+
+	fun initRemoteSource(user: FirebaseUser) {
+		remoteSource = FirestoreNotesSource.getInstance(user)
 	}
 }

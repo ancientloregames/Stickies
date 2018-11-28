@@ -235,6 +235,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 
 	private fun syncWithCloud() {
 		FirebaseAuth.getInstance().currentUser?.let {
+			viewModel.initRemoteNotesRepository(it)
 			//TODO sync
 		} ?:let { showAuthForm() }
 	}
