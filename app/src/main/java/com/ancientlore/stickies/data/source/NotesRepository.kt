@@ -32,8 +32,8 @@ object NotesRepository: NotesSource {
 			override fun onFailure(error: Throwable) {
 				if (error is EmptyResultException)
 					Log.w("NotesRepository", "Local database is empty")
-				// TODO load from the remote db
-				callback.onSuccess(emptyList())
+				else error.printStackTrace()
+				getAllRemotely(callback)
 			}
 		})
 	}
@@ -138,6 +138,23 @@ object NotesRepository: NotesSource {
 
 	fun initRemoteSource(user: FirebaseUser) {
 		remoteSource = FirestoreNotesSource.getInstance(user)
+	}
+
+	private fun getAllRemotely(callback: DataSource.RequestCallback<List<Note>>) {
+		remoteSource?.getAll(object : DataSource.RequestCallback<List<Note>> {
+			override fun onSuccess(result: List<Note>) {
+				localSource?.reset(result)
+				cacheSource.resetWith(result)
+				isCacheSynced = true
+				callback.onSuccess(result)
+			}
+			override fun onFailure(error: Throwable) {
+				if (error is EmptyResultException)
+					Log.w("NotesRepository", "Remote database is empty")
+				else error.printStackTrace()
+				callback.onSuccess(emptyList())
+			}
+		})
 	}
 
 	private fun onInsertedLocaly(item: Note) {

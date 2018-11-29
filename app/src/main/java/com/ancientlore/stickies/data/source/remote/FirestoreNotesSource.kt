@@ -19,7 +19,16 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	private val db = FirebaseFirestore.getInstance()
 
 	override fun getAll(callback: DataSource.RequestCallback<List<Note>>) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		db.collection(USER_DATA).document(user.uid)
+				.collection(USER_NOTES)
+				.get()
+				.addOnSuccessListener { snapshot ->
+					snapshot.toObjects(Note::class.java)
+							.takeIf { it.isNotEmpty() }
+							?.let { callback.onSuccess(it) }
+							?: callback.onFailure(EmptyResultException())
+				}
+				.addOnFailureListener { callback.onFailure(it) }
 	}
 
 	override fun getImportant(callback: DataSource.RequestCallback<List<Note>>) {
