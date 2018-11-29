@@ -4,6 +4,7 @@ import com.ancientlore.stickies.SingletonHolder
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.DataSource
+import com.ancientlore.stickies.data.source.EmptyResultException
 import com.ancientlore.stickies.data.source.NotesSource
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,7 +31,15 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun getItem(id: Long, callback: DataSource.RequestCallback<Note>) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		db.collection(USER_DATA).document(user.uid)
+				.collection(USER_NOTES).document(id.toString())
+				.get()
+				.addOnSuccessListener { snapshot ->
+					snapshot.toObject(Note::class.java)?.let {
+						callback.onSuccess(it)
+					} ?: callback.onFailure(EmptyResultException())
+				}
+				.addOnFailureListener { callback.onFailure(it) }
 	}
 
 	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>) {

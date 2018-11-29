@@ -85,7 +85,7 @@ object NotesRepository: NotesSource {
 			override fun onFailure(error: Throwable) {
 				if (error is EmptyResultException)
 					Log.w("NotesRepository", "No item with id $id in the local database")
-				// TODO load from the remote db
+				getItemRemotly(id, callback)
 			}
 		})
 	}
@@ -148,6 +148,20 @@ object NotesRepository: NotesSource {
 			}
 			override fun onFailure(error: Throwable) {
 				Log.w("NotesRepository", "Item with title ${item.title} hasn't been added to the remote database")
+			}
+		})
+	}
+
+	private fun getItemRemotly(id: Long, callback: DataSource.RequestCallback<Note>) {
+		Log.w("NotesRepository", "Getting item with id $id from the remote database")
+		remoteSource?.getItem(id, object : DataSource.RequestCallback<Note> {
+			override fun onSuccess(result: Note) {
+				cacheSource.insertItem(result)
+				callback.onSuccess(result)
+			}
+			override fun onFailure(error: Throwable) {
+				if (error is EmptyResultException)
+					Log.w("NotesRepository", "No item with id $id in the remote database")
 			}
 		})
 	}
