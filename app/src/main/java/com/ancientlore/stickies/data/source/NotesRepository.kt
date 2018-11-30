@@ -134,6 +134,7 @@ object NotesRepository: NotesSource {
 	override fun switchCompletion(id: Long, isCompleted: Boolean) {
 		cacheSource.switchComptetion(id, isCompleted)
 		localSource?.switchCompletion(id, isCompleted)
+		remoteSource?.switchCompletion(id, isCompleted)
 	}
 
 	fun initLocalSource(dao: NotesDao) {

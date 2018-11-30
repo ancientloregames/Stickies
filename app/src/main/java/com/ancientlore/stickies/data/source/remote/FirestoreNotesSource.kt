@@ -17,6 +17,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 		const val USER_NOTES = "notes"
 
 		private const val FIELD_IMPORTANT = "isImportant"
+		private const val FIELD_COMPLETED = "isCompleted"
 		private const val FIELD_TOPIC = "topic"
 	}
 
@@ -126,7 +127,15 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun switchCompletion(id: Long, isCompleted: Boolean) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		requestUserNotes()
+				.document(id.toString())
+				.update(FIELD_COMPLETED, isCompleted)
+				.addOnSuccessListener {
+					Log.d("FirestoreNotesSource", "The note's $id completion has been set to $isCompleted")
+				}
+				.addOnFailureListener {
+					Log.w("FirestoreNotesSource", "Faild to update the note's $id completion")
+				}
 	}
 
 	private fun requestUserNotes() = db.collection(USER_DATA).document(user.uid).collection(USER_NOTES)
