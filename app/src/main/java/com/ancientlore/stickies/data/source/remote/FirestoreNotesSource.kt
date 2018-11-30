@@ -1,5 +1,6 @@
 package com.ancientlore.stickies.data.source.remote
 
+import android.util.Log
 import com.ancientlore.stickies.SingletonHolder
 import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.model.Topic
@@ -76,7 +77,15 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun updateItem(item: Note) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		requestUserNotes()
+				.document(item.id.toString())
+				.set(item)
+				.addOnSuccessListener {
+					Log.d("FirestoreNotesSource", "The note with id ${item.id} has been updated")
+				}
+				.addOnFailureListener {
+					Log.w("FirestoreNotesSource", "Faild to update the note with id ${item.id}")
+				}
 	}
 
 	override fun reset(newItems: List<Note>) {

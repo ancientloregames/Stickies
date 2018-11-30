@@ -104,6 +104,7 @@ object NotesRepository: NotesSource {
 	override fun updateItem(item: Note) {
 		cacheSource.updateItem(item)
 		localSource?.updateItem(item)
+		remoteSource?.updateItem(item)
 	}
 
 	override fun reset(newItems: List<Note>) {
