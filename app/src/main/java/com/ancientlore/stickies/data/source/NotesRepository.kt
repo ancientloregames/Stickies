@@ -48,9 +48,8 @@ object NotesRepository: NotesSource {
 			override fun onSuccess(result: List<Note>) = callback.onSuccess(result)
 			override fun onFailure(error: Throwable) {
 				if (error is EmptyResultException)
-					Log.w("NotesRepository", "Local database is empty")
-				// TODO load from the remote db
-				callback.onSuccess(emptyList())
+					Log.w("NotesRepository", "No important notes in the local database")
+				getImportantRemotely(callback)
 			}
 		})
 	}
@@ -151,6 +150,20 @@ object NotesRepository: NotesSource {
 			override fun onFailure(error: Throwable) {
 				if (error is EmptyResultException)
 					Log.w("NotesRepository", "Remote database is empty")
+				else error.printStackTrace()
+				callback.onSuccess(emptyList())
+			}
+		})
+	}
+
+	private fun getImportantRemotely(callback: DataSource.RequestCallback<List<Note>>) {
+		remoteSource?.getImportant(object : DataSource.RequestCallback<List<Note>> {
+			override fun onSuccess(result: List<Note>) {
+				callback.onSuccess(result)
+			}
+			override fun onFailure(error: Throwable) {
+				if (error is EmptyResultException)
+					Log.w("NotesRepository", "No important notes in the remote database")
 				else error.printStackTrace()
 				callback.onSuccess(emptyList())
 			}

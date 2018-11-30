@@ -32,7 +32,17 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun getImportant(callback: DataSource.RequestCallback<List<Note>>) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		db.collection(USER_DATA)
+				.document(user.uid)
+				.collection(USER_NOTES)
+				.whereEqualTo("isImportant", true).get()
+				.addOnSuccessListener { snapshot ->
+					snapshot.toObjects(Note::class.java)
+							.takeIf { it.isNotEmpty() }
+							?.let { callback.onSuccess(it) }
+							?: callback.onFailure(EmptyResultException())
+				}
+				.addOnFailureListener { callback.onFailure(it) }
 	}
 
 	override fun getAllByTopic(topic: Topic, callback: DataSource.RequestCallback<List<Note>>) {
