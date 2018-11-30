@@ -128,6 +128,7 @@ object NotesRepository: NotesSource {
 	override fun switchImportance(id: Long, isImportant: Boolean) {
 		cacheSource.switchImportance(id, isImportant)
 		localSource?.switchImportance(id, isImportant)
+		remoteSource?.switchImportance(id, isImportant)
 	}
 
 	override fun switchCompletion(id: Long, isCompleted: Boolean) {

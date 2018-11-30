@@ -114,7 +114,15 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun switchImportance(id: Long, isImportant: Boolean) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		requestUserNotes()
+				.document(id.toString())
+				.update(FIELD_IMPORTANT, isImportant)
+				.addOnSuccessListener {
+					Log.d("FirestoreNotesSource", "The note's $id importance has been set to $isImportant")
+				}
+				.addOnFailureListener {
+					Log.w("FirestoreNotesSource", "Faild to update the note's $id importance")
+				}
 	}
 
 	override fun switchCompletion(id: Long, isCompleted: Boolean) {
