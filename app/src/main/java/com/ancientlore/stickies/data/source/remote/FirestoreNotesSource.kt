@@ -14,6 +14,9 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	internal companion object : SingletonHolder<FirestoreNotesSource, FirebaseUser>({ FirestoreNotesSource(it) }) {
 		const val USER_DATA = "data"
 		const val USER_NOTES = "notes"
+
+		private const val FIELD_IMPORTANT = "isImportant"
+		private const val FIELD_TOPIC = "topic"
 	}
 
 	private val db = FirebaseFirestore.getInstance()
@@ -31,7 +34,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 
 	override fun getImportant(callback: DataSource.RequestCallback<List<Note>>) {
 		requestUserNotes()
-				.whereEqualTo("isImportant", true).get()
+				.whereEqualTo(FIELD_IMPORTANT, true).get()
 				.addOnSuccessListener { snapshot ->
 					snapshot.toObjects(Note::class.java)
 							.takeIf { it.isNotEmpty() }
@@ -42,7 +45,15 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun getAllByTopic(topic: Topic, callback: DataSource.RequestCallback<List<Note>>) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		requestUserNotes()
+				.whereEqualTo(FIELD_TOPIC, topic.name).get()
+				.addOnSuccessListener { snapshot ->
+					snapshot.toObjects(Note::class.java)
+							.takeIf { it.isNotEmpty() }
+							?.let { callback.onSuccess(it) }
+							?: callback.onFailure(EmptyResultException())
+				}
+				.addOnFailureListener { callback.onFailure(it) }
 	}
 
 	override fun getItem(id: Long, callback: DataSource.RequestCallback<Note>) {

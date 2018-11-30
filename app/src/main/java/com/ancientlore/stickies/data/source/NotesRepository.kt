@@ -53,6 +53,7 @@ object NotesRepository: NotesSource {
 			}
 		})
 	}
+
 	override fun getAllByTopic(topic: Topic, callback: DataSource.RequestCallback<List<Note>>) {
 		if (isCacheSynced) {
 			callback.onSuccess(cacheSource.getAllByTopic(topic))
@@ -63,9 +64,8 @@ object NotesRepository: NotesSource {
 			override fun onSuccess(result: List<Note>) = callback.onSuccess(result)
 			override fun onFailure(error: Throwable) {
 				if (error is EmptyResultException)
-					Log.w("NotesRepository", "No notes with topic ${topic.name}")
-				// TODO load from the remote db
-				callback.onSuccess(emptyList())
+					Log.w("NotesRepository", "No notes with a topic ${topic.name} in the local database")
+				getAllByTopicRemotely(topic, callback)
 			}
 		})
 	}
@@ -158,12 +158,22 @@ object NotesRepository: NotesSource {
 
 	private fun getImportantRemotely(callback: DataSource.RequestCallback<List<Note>>) {
 		remoteSource?.getImportant(object : DataSource.RequestCallback<List<Note>> {
-			override fun onSuccess(result: List<Note>) {
-				callback.onSuccess(result)
-			}
+			override fun onSuccess(result: List<Note>) = callback.onSuccess(result)
 			override fun onFailure(error: Throwable) {
 				if (error is EmptyResultException)
 					Log.w("NotesRepository", "No important notes in the remote database")
+				else error.printStackTrace()
+				callback.onSuccess(emptyList())
+			}
+		})
+	}
+
+	private fun getAllByTopicRemotely(topic: Topic, callback: DataSource.RequestCallback<List<Note>>) {
+		remoteSource?.getAllByTopic(topic, object : DataSource.RequestCallback<List<Note>> {
+			override fun onSuccess(result: List<Note>) = callback.onSuccess(result)
+			override fun onFailure(error: Throwable) {
+				if (error is EmptyResultException)
+					Log.w("NotesRepository", "No notes with a topic ${topic.name} in the remote database")
 				else error.printStackTrace()
 				callback.onSuccess(emptyList())
 			}
