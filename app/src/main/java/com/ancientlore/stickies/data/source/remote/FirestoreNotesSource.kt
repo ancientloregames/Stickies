@@ -19,9 +19,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	private val db = FirebaseFirestore.getInstance()
 
 	override fun getAll(callback: DataSource.RequestCallback<List<Note>>) {
-		db.collection(USER_DATA).document(user.uid)
-				.collection(USER_NOTES)
-				.get()
+		requestUserNotes().get()
 				.addOnSuccessListener { snapshot ->
 					snapshot.toObjects(Note::class.java)
 							.takeIf { it.isNotEmpty() }
@@ -32,9 +30,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun getImportant(callback: DataSource.RequestCallback<List<Note>>) {
-		db.collection(USER_DATA)
-				.document(user.uid)
-				.collection(USER_NOTES)
+		requestUserNotes()
 				.whereEqualTo("isImportant", true).get()
 				.addOnSuccessListener { snapshot ->
 					snapshot.toObjects(Note::class.java)
@@ -50,9 +46,8 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun getItem(id: Long, callback: DataSource.RequestCallback<Note>) {
-		db.collection(USER_DATA).document(user.uid)
-				.collection(USER_NOTES).document(id.toString())
-				.get()
+		requestUserNotes()
+				.document(id.toString()).get()
 				.addOnSuccessListener { snapshot ->
 					snapshot.toObject(Note::class.java)?.let {
 						callback.onSuccess(it)
@@ -62,8 +57,8 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>) {
-		db.collection(USER_DATA).document(user.uid)
-				.collection(USER_NOTES).document(item.id.toString())
+		requestUserNotes()
+				.document(item.id.toString())
 				.set(item)
 				.addOnSuccessListener { callback.onSuccess(item.id) }
 				.addOnFailureListener { callback.onFailure(it) }
@@ -92,4 +87,6 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	override fun switchCompletion(id: Long, isCompleted: Boolean) {
 		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 	}
+
+	private fun requestUserNotes() = db.collection(USER_DATA).document(user.uid).collection(USER_NOTES)
 }
