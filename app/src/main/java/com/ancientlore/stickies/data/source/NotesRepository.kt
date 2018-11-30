@@ -115,6 +115,7 @@ object NotesRepository: NotesSource {
 	override fun deleteAll() {
 		cacheSource.deleteAll()
 		localSource?.deleteAll()
+		remoteSource?.deleteAll()
 	}
 
 	override fun deleteItem(id: Long) {

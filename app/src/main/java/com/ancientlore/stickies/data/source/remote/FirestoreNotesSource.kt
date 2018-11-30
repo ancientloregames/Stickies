@@ -93,7 +93,11 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun deleteAll() {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		val batch = db.batch()
+		requestUserNotes().get().result?.forEach {
+			batch.delete(it.reference)
+		}
+		batch.commit()
 	}
 
 	override fun deleteItem(id: Long) {
