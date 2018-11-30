@@ -59,8 +59,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun getItem(id: Long, callback: DataSource.RequestCallback<Note>) {
-		requestUserNotes()
-				.document(id.toString()).get()
+		requestUserNote(id).get()
 				.addOnSuccessListener { snapshot ->
 					snapshot.toObject(Note::class.java)?.let {
 						callback.onSuccess(it)
@@ -70,16 +69,14 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>) {
-		requestUserNotes()
-				.document(item.id.toString())
+		requestUserNote(item.id)
 				.set(item)
 				.addOnSuccessListener { callback.onSuccess(item.id) }
 				.addOnFailureListener { callback.onFailure(it) }
 	}
 
 	override fun updateItem(item: Note) {
-		requestUserNotes()
-				.document(item.id.toString())
+		requestUserNote(item.id)
 				.set(item)
 				.addOnSuccessListener {
 					Log.d("FirestoreNotesSource", "The note with id ${item.id} has been updated")
@@ -103,8 +100,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun deleteItem(id: Long) {
-		requestUserNotes()
-				.document(id.toString())
+		requestUserNote(id)
 				.delete()
 				.addOnSuccessListener {
 					Log.d("FirestoreNotesSource", "The note with id $id has been deleted")
@@ -115,8 +111,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun switchImportance(id: Long, isImportant: Boolean) {
-		requestUserNotes()
-				.document(id.toString())
+		requestUserNote(id)
 				.update(FIELD_IMPORTANT, isImportant)
 				.addOnSuccessListener {
 					Log.d("FirestoreNotesSource", "The note's $id importance has been set to $isImportant")
@@ -127,8 +122,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun switchCompletion(id: Long, isCompleted: Boolean) {
-		requestUserNotes()
-				.document(id.toString())
+		requestUserNote(id)
 				.update(FIELD_COMPLETED, isCompleted)
 				.addOnSuccessListener {
 					Log.d("FirestoreNotesSource", "The note's $id completion has been set to $isCompleted")
@@ -139,4 +133,6 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	private fun requestUserNotes() = db.collection(USER_DATA).document(user.uid).collection(USER_NOTES)
+
+	private fun requestUserNote(id: Long) = db.collection(USER_DATA).document(user.uid).collection(USER_NOTES).document(id.toString())
 }
