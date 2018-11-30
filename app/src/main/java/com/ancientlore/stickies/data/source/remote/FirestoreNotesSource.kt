@@ -102,7 +102,15 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun deleteItem(id: Long) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		requestUserNotes()
+				.document(id.toString())
+				.delete()
+				.addOnSuccessListener {
+					Log.d("FirestoreNotesSource", "The note with id $id has been deleted")
+				}
+				.addOnFailureListener {
+					Log.w("FirestoreNotesSource", "Faild to delete the note with id $id")
+				}
 	}
 
 	override fun switchImportance(id: Long, isImportant: Boolean) {

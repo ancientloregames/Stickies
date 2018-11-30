@@ -122,6 +122,7 @@ object NotesRepository: NotesSource {
 	override fun deleteItem(id: Long) {
 		cacheSource.deleteItem(id)
 		localSource?.deleteItem(id)
+		remoteSource?.deleteItem(id)
 	}
 
 	override fun switchImportance(id: Long, isImportant: Boolean) {
