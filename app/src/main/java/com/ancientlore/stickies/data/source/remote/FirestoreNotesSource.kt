@@ -89,7 +89,8 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	}
 
 	override fun reset(newItems: List<Note>) {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+		deleteAll()
+		requestUserNotes().add(newItems)
 	}
 
 	override fun deleteAll() {

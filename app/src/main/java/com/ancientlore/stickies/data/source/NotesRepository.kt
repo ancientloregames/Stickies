@@ -110,6 +110,7 @@ object NotesRepository: NotesSource {
 	override fun reset(newItems: List<Note>) {
 		cacheSource.reset(newItems)
 		localSource?.reset(newItems)
+		remoteSource?.reset(newItems)
 	}
 
 	override fun deleteAll() {
