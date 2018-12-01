@@ -19,6 +19,13 @@ object NotesCacheSource {
 
 	fun insertItem(item: Note) { cache[item.id] = item }
 
+	fun insertUniqueItems(remoteNotes: List<Note>) {
+		remoteNotes.forEach {
+			if (cache.containsKey(it.id).not())
+				insertItem(it)
+		}
+	}
+
 	fun updateItem(item: Note) {
 		if (cache.containsKey(item.id)) {
 			cache[item.id] = item

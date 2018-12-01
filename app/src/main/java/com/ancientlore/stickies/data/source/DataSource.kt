@@ -19,6 +19,8 @@ interface DataSource<DataModel> {
 
 	fun insertItem(item: DataModel, callback: RequestCallback<Long>? = null)
 
+	fun insertItems(items: List<DataModel>, callback: RequestCallback<LongArray>? = null)
+
 	fun updateItem(item: DataModel)
 
 	fun reset(newItems: List<DataModel>)

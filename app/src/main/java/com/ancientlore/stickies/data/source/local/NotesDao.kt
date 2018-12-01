@@ -21,10 +21,10 @@ interface NotesDao {
 	@Query("SELECT * FROM notes WHERE id LIKE :id")
 	fun findById(id: Long): Note?
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	fun insert(note: Note): Long
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	fun insert(note: List<Note>): LongArray
 
 	@Update

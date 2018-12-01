@@ -101,6 +101,10 @@ object NotesRepository: NotesSource {
 		})
 	}
 
+	override fun insertItems(items: List<Note>, callback: DataSource.RequestCallback<LongArray>?) {
+		// TODO
+	}
+
 	override fun updateItem(item: Note) {
 		cacheSource.updateItem(item)
 		localSource?.updateItem(item)
@@ -145,12 +149,10 @@ object NotesRepository: NotesSource {
 		remoteSource = FirestoreNotesSource.getInstance(user)
 	}
 
-	private fun getAllRemotely(callback: DataSource.RequestCallback<List<Note>>) {
+	fun getAllRemotely(callback: DataSource.RequestCallback<List<Note>>) {
 		remoteSource?.getAll(object : DataSource.RequestCallback<List<Note>> {
 			override fun onSuccess(result: List<Note>) {
-				localSource?.reset(result)
-				cacheSource.resetWith(result)
-				isCacheSynced = true
+				syncLocalWithRemote(result)
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
@@ -160,6 +162,17 @@ object NotesRepository: NotesSource {
 				callback.onSuccess(emptyList())
 			}
 		})
+	}
+
+	fun syncLocalWithRemote(remoteNotes: List<Note>) {
+		localSource?.getAll(object : DataSource.SimpleRequestCallback<List<Note>>() {
+			override fun onSuccess(result: List<Note>) {
+				remoteSource?.insertItems(result)
+			}
+		})
+		localSource?.insertItems(remoteNotes)
+		cacheSource.insertUniqueItems(remoteNotes)
+		isCacheSynced = true
 	}
 
 	private fun getImportantRemotely(callback: DataSource.RequestCallback<List<Note>>) {

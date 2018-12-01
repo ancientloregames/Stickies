@@ -75,6 +75,12 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 				.addOnFailureListener { callback?.onFailure(it) }
 	}
 
+	override fun insertItems(items: List<Note>, callback: DataSource.RequestCallback<LongArray>?) {
+		requestUserNotes()
+				.add(items)
+				.addOnFailureListener { callback?.onFailure(it) }
+	}
+
 	override fun updateItem(item: Note) {
 		requestUserNote(item.id)
 				.set(item)

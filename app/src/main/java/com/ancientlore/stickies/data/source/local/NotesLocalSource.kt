@@ -58,6 +58,13 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		}
 	}
 
+	override fun insertItems(items: List<Note>, callback: DataSource.RequestCallback<LongArray>?) {
+		executor.submit {
+			dao.insert(items)
+					.let { callback?.onSuccess(it) }
+		}
+	}
+
 	override fun updateItem(item: Note) {
 		executor.submit {
 			dao.update(item)

@@ -58,6 +58,10 @@ object NotesRemoteSourceFixedLatencySim : NotesSource {
 		}, LATENCY_MILLIS, TimeUnit.MILLISECONDS)
 	}
 
+	override fun insertItems(items: List<Note>, callback: DataSource.RequestCallback<LongArray>?) {
+		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+	}
+
 	override fun updateItem(item: Note) {
 		executor.schedule({
 			if (data.containsKey(item.id)) {
