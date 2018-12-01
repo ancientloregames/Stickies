@@ -45,4 +45,5 @@
 	<string name="menu_import">Импортировать</string>
 	<string name="menu_export">Экспортировать</string>
 	<string name="warning_no_app_intent">На вашем устройстве нет приложений для данной операции</string>
+	<string name="menu_cloudsync">Синхронизировать</string>
 </resources>
