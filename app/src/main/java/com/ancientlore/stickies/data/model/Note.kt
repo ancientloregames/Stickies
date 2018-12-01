@@ -12,6 +12,7 @@ import com.ancientlore.stickies.utils.toPlainText
 import com.google.firebase.firestore.Exclude
 import java.text.DateFormat
 import java.util.*
+import com.google.firebase.firestore.PropertyName
 
 @Entity(tableName = "notes")
 data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
@@ -24,8 +25,8 @@ data class Note(@PrimaryKey(autoGenerate = true) var id: Long = 0,
 				@field:ColumnInfo var color: Int = -0x45,
 				@field:ColumnInfo var icon: String = "",
 				@field:ColumnInfo var topic: String = "",
-				@field:ColumnInfo var isImportant: Boolean = false,
-				@field:ColumnInfo var isCompleted: Boolean = false) : Parcelable {
+				@field:ColumnInfo @get:PropertyName("isImportant") var isImportant: Boolean = false,
+				@field:ColumnInfo @get:PropertyName("isCompleted") var isCompleted: Boolean = false) : Parcelable {
 
 	companion object CREATOR : Parcelable.Creator<Note> {
 
