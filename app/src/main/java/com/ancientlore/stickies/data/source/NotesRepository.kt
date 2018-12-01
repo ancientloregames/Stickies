@@ -89,11 +89,11 @@ object NotesRepository: NotesSource {
 		})
 	}
 
-	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>) {
+	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>?) {
 		localSource?.insertItem(item, object : DataSource.RequestCallback<Long> {
 			override fun onSuccess(result: Long) {
 				onInsertedLocaly(Note.newInstance(finalId = result, note = item))
-				callback.onSuccess(result)
+				callback?.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
 				Log.w("NotesRepository", "Item with title ${item.title} hasn't been added to the local database")
@@ -203,6 +203,7 @@ object NotesRepository: NotesSource {
 		remoteSource?.getItem(id, object : DataSource.RequestCallback<Note> {
 			override fun onSuccess(result: Note) {
 				cacheSource.insertItem(result)
+				localSource?.insertItem(result)
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {

@@ -51,10 +51,10 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		}
 	}
 
-	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>) {
+	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>?) {
 		executor.submit {
 			dao.insert(item)
-					.let { callback.onSuccess(it) }
+					.let { callback?.onSuccess(it) }
 		}
 	}
 

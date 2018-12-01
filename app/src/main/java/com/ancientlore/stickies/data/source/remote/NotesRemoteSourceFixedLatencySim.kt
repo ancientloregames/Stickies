@@ -50,11 +50,11 @@ object NotesRemoteSourceFixedLatencySim : NotesSource {
 		}, LATENCY_MILLIS, TimeUnit.MILLISECONDS)
 	}
 
-	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>) {
+	override fun insertItem(item: Note, callback: DataSource.RequestCallback<Long>?) {
 		executor.schedule({
 			val id = data.size.toLong()
 			data[id] = item
-			callback.onSuccess(id)
+			callback?.onSuccess(id)
 		}, LATENCY_MILLIS, TimeUnit.MILLISECONDS)
 	}
 
