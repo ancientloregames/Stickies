@@ -14,6 +14,7 @@ import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.utils.marshall
 import com.ancientlore.stickies.utils.split
 import com.ancientlore.stickies.utils.unmarshall
+import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.BufferedInputStream
@@ -95,6 +96,7 @@ class NotesListViewModel(application: Application,
 			INTENT_SHOW_TOPIC_PICKER -> handleTopicPickerResult(resultCode, data)
 			INTENT_EXPORT_NOTES -> handleExportNotesResult(resultCode, data)
 			INTENT_IMPORT_NOTES -> handleImportNotesResult(resultCode, data)
+			INTENT_CLOUD_AUTH -> handleCloudAuthResult(resultCode, data)
 			else -> Log.w(TAG, "Unknown requestCode $requestCode")
 		}
 	}
@@ -207,6 +209,13 @@ class NotesListViewModel(application: Application,
 		}
 	}
 
+	private fun handleCloudAuthResult(resultCode: Int, data: Intent?) {
+		when (resultCode) {
+			Activity.RESULT_OK -> onCloudAuthSuccess()
+			else -> Log.w(TAG, "Importing intent finished with resultCode $resultCode")
+		}
+	}
+
 	private fun exportNotes(uri: Uri) {
 		try {
 			val stream = context.contentResolver.openOutputStream(uri)
@@ -232,6 +241,15 @@ class NotesListViewModel(application: Application,
 			resetNotes(notes)
 		} catch (e: IOException) {
 			e.printStackTrace()
+		}
+	}
+
+	private fun onCloudAuthSuccess() {
+		FirebaseAuth.getInstance().currentUser?.let {
+			initRemoteNotesRepository(it)
+			repository.getAllRemotely(object : DataSource.SimpleRequestCallback<List<Note>>()  {
+				override fun onSuccess(result: List<Note>) = setListItems(result)
+			})
 		}
 	}
 

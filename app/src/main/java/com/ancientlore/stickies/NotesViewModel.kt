@@ -21,7 +21,7 @@ abstract class NotesViewModel(application: Application) : BasicViewModel(applica
 		initRepository(application.baseContext)
 	}
 
-	public fun initRemoteNotesRepository(user: FirebaseUser) {
+	fun initRemoteNotesRepository(user: FirebaseUser) {
 		repository.initRemoteSource(user)
 	}
 
