@@ -13,7 +13,7 @@ object NotesRepository: NotesSource {
 
 	private var cacheSource = NotesCacheSource
 	private var localSource: NotesSource? = null
-	private var remoteSource: FirestoreNotesSource? = null
+	private var remoteSource: NotesSource? = null
 
 	private var isCacheSynced = false
 
