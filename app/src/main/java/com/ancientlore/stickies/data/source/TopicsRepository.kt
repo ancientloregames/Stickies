@@ -10,6 +10,7 @@ object TopicsRepository: TopicsSource {
 
 	private var cacheSource = TopicsCacheSource
 	private var localSource: TopicsSource? = null
+	private var remoteSource: TopicsSource? = null
 
 	private var isCacheSynced = false
 
@@ -59,6 +60,13 @@ object TopicsRepository: TopicsSource {
 	override fun insertTopics(topics: List<Topic>) {
 		localSource?.insertTopics(topics)
 		cacheSource.insertTopics(topics)
+	}
+
+	override fun reset(newTopics: List<Topic>) {
+		localSource?.reset(newTopics)
+		remoteSource?.reset(newTopics)
+		cacheSource.reset(newTopics)
+		isCacheSynced = true
 	}
 
 	override fun deleteAllTopics() {

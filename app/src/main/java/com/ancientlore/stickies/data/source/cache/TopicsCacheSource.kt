@@ -20,7 +20,7 @@ object TopicsCacheSource {
 
 	fun deleteTopic(title: String) = cache.remove(title)
 
-	fun resetWith(newItems: List<Topic>) {
+	fun reset(newItems: List<Topic>) {
 		cache.clear()
 		for (item in newItems)
 			cache[item.name] = item

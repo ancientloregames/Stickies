@@ -12,6 +12,8 @@ interface TopicsSource {
 
 	fun insertTopics(topics: List<Topic>)
 
+	fun reset(newTopics: List<Topic>)
+
 	fun deleteTopic(name: String)
 
 	fun deleteAllTopics()
