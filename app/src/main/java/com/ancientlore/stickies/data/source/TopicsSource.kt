@@ -10,6 +10,8 @@ interface TopicsSource {
 
 	fun insertTopic(topic: Topic)
 
+	fun insertTopics(topics: List<Topic>)
+
 	fun deleteTopic(name: String)
 
 	fun deleteAllTopics()

@@ -56,6 +56,11 @@ object TopicsRepository: TopicsSource {
 		cacheSource.insertTopic(topic)
 	}
 
+	override fun insertTopics(topics: List<Topic>) {
+		localSource?.insertTopics(topics)
+		cacheSource.insertTopics(topics)
+	}
+
 	override fun deleteAllTopics() {
 		localSource?.deleteAllTopics()
 		cacheSource.deleteAllTopics()

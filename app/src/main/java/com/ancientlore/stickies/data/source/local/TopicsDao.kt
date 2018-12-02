@@ -12,8 +12,11 @@ interface TopicsDao {
 	@Query("SELECT * FROM topics WHERE name LIKE :name")
 	fun findById(name: String): Topic?
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	fun insert(topic: Topic)
+
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
+	fun insert(topics: List<Topic>)
 
 	@Update
 	fun update(vararg topic: Topic)

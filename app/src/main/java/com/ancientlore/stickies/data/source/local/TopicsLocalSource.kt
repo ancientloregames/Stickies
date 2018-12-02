@@ -38,6 +38,12 @@ class TopicsLocalSource private constructor(private val dao: TopicsDao)
 		}
 	}
 
+	override fun insertTopics(topics: List<Topic>) {
+		executor.submit {
+			dao.insert(topics)
+		}
+	}
+
 	override fun deleteAllTopics() {
 		executor.submit {
 			dao.deleteAll()

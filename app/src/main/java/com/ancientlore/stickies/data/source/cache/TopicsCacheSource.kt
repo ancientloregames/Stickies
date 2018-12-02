@@ -14,6 +14,8 @@ object TopicsCacheSource {
 
 	fun insertTopic(item: Topic) { cache[item.name] = item }
 
+	fun insertTopics(topics: List<Topic>) = topics.forEach { insertTopic(it) }
+
 	fun deleteAllTopics() = cache.clear()
 
 	fun deleteTopic(title: String) = cache.remove(title)
