@@ -5,8 +5,12 @@ import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.cache.TopicsCacheSource
 import com.ancientlore.stickies.data.source.local.TopicsDao
 import com.ancientlore.stickies.data.source.local.TopicsLocalSource
+import com.ancientlore.stickies.data.source.remote.FirestoreTopicsSource
+import java.lang.RuntimeException
 
 object TopicsRepository: TopicsSource {
+
+	private const val TAG = "TopicsRepository"
 
 	private var cacheSource = TopicsCacheSource
 	private var localSource: TopicsSource? = null
@@ -20,15 +24,14 @@ object TopicsRepository: TopicsSource {
 
 		localSource?.getAllTopics(object : DataSource.RequestCallback<List<Topic>> {
 			override fun onSuccess(result: List<Topic>) {
-				cacheSource.resetWith(result)
-				isCacheSynced = true
+				resetCache(result)
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
 				if (error is EmptyResultException)
-					Log.w("TopicsRepository", "Local database is empty")
-				// TODO load from the remote db
-				callback.onSuccess(emptyList())
+					Log.w(TAG, "Local source is empty")
+				else error.printStackTrace()
+				onEmptyLocalSource()
 			}
 		})
 	}
@@ -65,8 +68,7 @@ object TopicsRepository: TopicsSource {
 	override fun reset(newTopics: List<Topic>) {
 		localSource?.reset(newTopics)
 		remoteSource?.reset(newTopics)
-		cacheSource.reset(newTopics)
-		isCacheSynced = true
+		resetCache(newTopics)
 	}
 
 	override fun deleteAllTopics() {
@@ -81,5 +83,34 @@ object TopicsRepository: TopicsSource {
 
 	fun initLocalSource(dao: TopicsDao) {
 		localSource = TopicsLocalSource.getInstance(dao)
+	}
+
+	fun initRemoteSource(userId: String) {
+		remoteSource = FirestoreTopicsSource.getInstance(userId)
+	}
+
+	private fun resetCache(newTopics: List<Topic>) {
+		cacheSource.reset(newTopics)
+		isCacheSynced = true
+	}
+
+	private fun onEmptyLocalSource() {
+		getAllRemotely(object : DataSource.RequestCallback<List<Topic>> {
+			override fun onSuccess(result: List<Topic>) {
+				Log.d(TAG, "Got ${result.size} topics from the remote source")
+				localSource?.reset(result)
+				resetCache(result)
+			}
+			override fun onFailure(error: Throwable) {
+				if (error is EmptyResultException)
+					Log.w(TAG, "The remote source is empty")
+				else Log.w(TAG, error)
+			}
+		})
+	}
+
+	private fun getAllRemotely(callback: DataSource.RequestCallback<List<Topic>>) {
+		remoteSource?.getAllTopics(callback)
+			?: callback.onFailure(RuntimeException("No remote source attached to the repository"))
 	}
 }
