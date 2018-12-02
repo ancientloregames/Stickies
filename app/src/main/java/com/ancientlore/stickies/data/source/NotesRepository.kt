@@ -102,7 +102,17 @@ object NotesRepository: NotesSource {
 	}
 
 	override fun insertItems(items: List<Note>, callback: DataSource.RequestCallback<LongArray>?) {
-		// TODO
+		localSource?.insertItems(items, object : DataSource.RequestCallback<LongArray> {
+			override fun onSuccess(result: LongArray) {
+				for (i in 0 until items.size)
+					items[i].id = result[i]
+				onInsertedLocaly(items)
+				callback?.onSuccess(result)
+			}
+			override fun onFailure(error: Throwable) {
+				Log.w("NotesRepository", "Items haven't been added to the local database")
+			}
+		})
 	}
 
 	override fun updateItem(item: Note) {
@@ -206,7 +216,19 @@ object NotesRepository: NotesSource {
 				Log.d("NotesRepository", "Item with title ${item.title} has been added to the remote database")
 			}
 			override fun onFailure(error: Throwable) {
-				Log.w("NotesRepository", "Item with title ${item.title} hasn't been added to the remote database")
+				Log.w("NotesRepository", "Item with title ${item.title} hasn't been added to the remote database", error)
+			}
+		})
+	}
+
+	private fun onInsertedLocaly(items: List<Note>) {
+		items.forEach { cacheSource.insertItem(it) }
+		remoteSource?.insertItems(items, object : DataSource.RequestCallback<LongArray> {
+			override fun onSuccess(result: LongArray) {
+				Log.d("NotesRepository", "Items have been added to the remote database")
+			}
+			override fun onFailure(error: Throwable) {
+				Log.w("NotesRepository", "Items haven't been added to the remote database", error)
 			}
 		})
 	}
