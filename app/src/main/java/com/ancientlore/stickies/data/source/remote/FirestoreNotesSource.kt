@@ -8,7 +8,9 @@ import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.data.source.EmptyResultException
 import com.ancientlore.stickies.data.source.NotesSource
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 class FirestoreNotesSource private constructor(private val user: FirebaseUser): NotesSource {
 
@@ -28,8 +30,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	override fun getAll(callback: DataSource.RequestCallback<List<Note>>) {
 		requestUserNotes().get()
 				.addOnSuccessListener { snapshot ->
-					snapshot.toObjects(Note::class.java)
-							.takeIf { it.isNotEmpty() }
+					deserialize(snapshot).takeIf { it.isNotEmpty() }
 							?.let { callback.onSuccess(it) }
 							?: callback.onFailure(EmptyResultException("$TAG: empty"))
 				}
@@ -40,8 +41,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 		requestUserNotes()
 				.whereEqualTo(FIELD_IMPORTANT, true).get()
 				.addOnSuccessListener { snapshot ->
-					snapshot.toObjects(Note::class.java)
-							.takeIf { it.isNotEmpty() }
+					deserialize(snapshot).takeIf { it.isNotEmpty() }
 							?.let { callback.onSuccess(it) }
 							?: callback.onFailure(EmptyResultException("$TAG: no important notes"))
 				}
@@ -52,8 +52,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 		requestUserNotes()
 				.whereEqualTo(FIELD_TOPIC, topic.name).get()
 				.addOnSuccessListener { snapshot ->
-					snapshot.toObjects(Note::class.java)
-							.takeIf { it.isNotEmpty() }
+					deserialize(snapshot).takeIf { it.isNotEmpty() }
 							?.let { callback.onSuccess(it) }
 							?: callback.onFailure(EmptyResultException("$TAG: no items with the topic ${topic.name}"))
 				}
@@ -63,9 +62,9 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	override fun getItem(id: Long, callback: DataSource.RequestCallback<Note>) {
 		requestUserNote(id).get()
 				.addOnSuccessListener { snapshot ->
-					snapshot.toObject(Note::class.java)?.let {
-						callback.onSuccess(it)
-					} ?: callback.onFailure(EmptyResultException("$TAG: no item with the id $id"))
+					deserialize(snapshot)
+							?.let { callback.onSuccess(it) }
+							?: callback.onFailure(EmptyResultException("$TAG: no item with the id $id"))
 				}
 				.addOnFailureListener { callback.onFailure(it) }
 	}
@@ -144,4 +143,8 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	private fun requestUserNotes() = db.collection(USER_DATA).document(user.uid).collection(USER_NOTES)
 
 	private fun requestUserNote(id: Long) = db.collection(USER_DATA).document(user.uid).collection(USER_NOTES).document(id.toString())
+
+	private fun deserialize(snapshot: DocumentSnapshot) = snapshot.toObject(Note::class.java)
+
+	private fun deserialize(snapshot: QuerySnapshot) = snapshot.toObjects(Note::class.java)
 }
