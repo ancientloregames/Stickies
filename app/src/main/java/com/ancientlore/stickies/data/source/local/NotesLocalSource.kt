@@ -12,7 +12,9 @@ import java.util.concurrent.Executors
 class NotesLocalSource private constructor(private val dao: NotesDao)
 	: NotesSource {
 
-	internal companion object : SingletonHolder<NotesLocalSource, NotesDao>({ NotesLocalSource(it) })
+	internal companion object : SingletonHolder<NotesLocalSource, NotesDao>({ NotesLocalSource(it) }) {
+		private const val TAG = "FirestoreNotesSource"
+	}
 
 	private val executor: ExecutorService = Executors.newSingleThreadExecutor { r -> Thread(r, "db_worker") }
 
@@ -21,7 +23,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 			dao.getAll()
 					.takeIf { it.isNotEmpty() }
 					?.let { callback.onSuccess(it) }
-					?: callback.onFailure(EmptyResultException())
+					?: callback.onFailure(EmptyResultException("$TAG: empty"))
 		}
 	}
 
@@ -30,7 +32,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 			dao.getImportant()
 					.takeIf { it.isNotEmpty() }
 					?.let { callback.onSuccess(it) }
-					?: callback.onFailure(EmptyResultException())
+					?: callback.onFailure(EmptyResultException("$TAG: no important notes"))
 		}
 	}
 
@@ -39,7 +41,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 			dao.getAllByTopic(topic.name)
 					.takeIf { it.isNotEmpty() }
 					?.let { callback.onSuccess(it) }
-					?: callback.onFailure(EmptyResultException())
+					?: callback.onFailure(EmptyResultException("$TAG: no items with the topic ${topic.name}"))
 		}
 	}
 
@@ -47,7 +49,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		executor.submit {
 			dao.findById(id)
 					?.let { callback.onSuccess(it) }
-					?: callback.onFailure(EmptyResultException())
+					?: callback.onFailure(EmptyResultException("$TAG: no item with the id $id"))
 		}
 	}
 
@@ -55,6 +57,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		executor.submit {
 			dao.insert(item)
 					.let { callback?.onSuccess(it) }
+					?: callback?.onFailure(EmptyResultException("$TAG: Item with title ${item.title} hasn't been added"))
 		}
 	}
 
@@ -62,6 +65,7 @@ class NotesLocalSource private constructor(private val dao: NotesDao)
 		executor.submit {
 			dao.insert(items)
 					.let { callback?.onSuccess(it) }
+					?: callback?.onFailure(EmptyResultException("$TAG: ${items.size} items haven't been added"))
 		}
 	}
 

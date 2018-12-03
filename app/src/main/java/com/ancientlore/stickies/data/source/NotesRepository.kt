@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseUser
 
 object NotesRepository: NotesSource {
 
+	private const val TAG = "NotesRepository"
+
 	private var cacheSource = NotesCacheSource
 	private var localSource: NotesSource? = null
 	private var remoteSource: NotesSource? = null
@@ -30,9 +32,7 @@ object NotesRepository: NotesSource {
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w("NotesRepository", "Local database is empty")
-				else error.printStackTrace()
+				error.printStackTrace()
 				getAllRemotely(callback)
 			}
 		})
@@ -47,8 +47,7 @@ object NotesRepository: NotesSource {
 		localSource?.getImportant(object : DataSource.RequestCallback<List<Note>> {
 			override fun onSuccess(result: List<Note>) = callback.onSuccess(result)
 			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w("NotesRepository", "No important notes in the local database")
+				error.printStackTrace()
 				getImportantRemotely(callback)
 			}
 		})
@@ -63,8 +62,7 @@ object NotesRepository: NotesSource {
 		localSource?.getAllByTopic(topic, object : DataSource.RequestCallback<List<Note>> {
 			override fun onSuccess(result: List<Note>) = callback.onSuccess(result)
 			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w("NotesRepository", "No notes with a topic ${topic.name} in the local database")
+				error.printStackTrace()
 				getAllByTopicRemotely(topic, callback)
 			}
 		})
@@ -82,8 +80,7 @@ object NotesRepository: NotesSource {
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w("NotesRepository", "No item with id $id in the local database")
+				error.printStackTrace()
 				getItemRemotly(id, callback)
 			}
 		})
@@ -95,9 +92,7 @@ object NotesRepository: NotesSource {
 				onInsertedLocaly(Note.newInstance(finalId = result, note = item))
 				callback?.onSuccess(result)
 			}
-			override fun onFailure(error: Throwable) {
-				Log.w("NotesRepository", "Item with title ${item.title} hasn't been added to the local database")
-			}
+			override fun onFailure(error: Throwable) = error.printStackTrace()
 		})
 	}
 
@@ -109,9 +104,7 @@ object NotesRepository: NotesSource {
 				onInsertedLocaly(items)
 				callback?.onSuccess(result)
 			}
-			override fun onFailure(error: Throwable) {
-				Log.w("NotesRepository", "Items haven't been added to the local database")
-			}
+			override fun onFailure(error: Throwable) = error.printStackTrace()
 		})
 	}
 
@@ -166,9 +159,7 @@ object NotesRepository: NotesSource {
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w("NotesRepository", "Remote database is empty")
-				else error.printStackTrace()
+				error.printStackTrace()
 				callback.onSuccess(emptyList())
 			}
 		})
@@ -189,9 +180,7 @@ object NotesRepository: NotesSource {
 		remoteSource?.getImportant(object : DataSource.RequestCallback<List<Note>> {
 			override fun onSuccess(result: List<Note>) = callback.onSuccess(result)
 			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w("NotesRepository", "No important notes in the remote database")
-				else error.printStackTrace()
+				error.printStackTrace()
 				callback.onSuccess(emptyList())
 			}
 		})
@@ -201,9 +190,7 @@ object NotesRepository: NotesSource {
 		remoteSource?.getAllByTopic(topic, object : DataSource.RequestCallback<List<Note>> {
 			override fun onSuccess(result: List<Note>) = callback.onSuccess(result)
 			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w("NotesRepository", "No notes with a topic ${topic.name} in the remote database")
-				else error.printStackTrace()
+				error.printStackTrace()
 				callback.onSuccess(emptyList())
 			}
 		})
@@ -213,10 +200,10 @@ object NotesRepository: NotesSource {
 		cacheSource.insertItem(item)
 		remoteSource?.insertItem(item, object : DataSource.RequestCallback<Long> {
 			override fun onSuccess(result: Long) {
-				Log.d("NotesRepository", "Item with title ${item.title} has been added to the remote database")
+				Log.d(TAG, "Item with title ${item.title} has been added to the remote database")
 			}
 			override fun onFailure(error: Throwable) {
-				Log.w("NotesRepository", "Item with title ${item.title} hasn't been added to the remote database", error)
+				Log.w(TAG, "Item with title ${item.title} hasn't been added to the remote database", error)
 			}
 		})
 	}
@@ -225,26 +212,23 @@ object NotesRepository: NotesSource {
 		items.forEach { cacheSource.insertItem(it) }
 		remoteSource?.insertItems(items, object : DataSource.RequestCallback<LongArray> {
 			override fun onSuccess(result: LongArray) {
-				Log.d("NotesRepository", "Items have been added to the remote database")
+				Log.d(TAG, "Items have been added to the remote database")
 			}
 			override fun onFailure(error: Throwable) {
-				Log.w("NotesRepository", "Items haven't been added to the remote database", error)
+				Log.w(TAG, "Items haven't been added to the remote database", error)
 			}
 		})
 	}
 
 	private fun getItemRemotly(id: Long, callback: DataSource.RequestCallback<Note>) {
-		Log.w("NotesRepository", "Getting item with id $id from the remote database")
+		Log.w(TAG, "Getting item with id $id from the remote database")
 		remoteSource?.getItem(id, object : DataSource.RequestCallback<Note> {
 			override fun onSuccess(result: Note) {
 				cacheSource.insertItem(result)
 				localSource?.insertItem(result)
 				callback.onSuccess(result)
 			}
-			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w("NotesRepository", "No item with id $id in the remote database")
-			}
+			override fun onFailure(error: Throwable) = error.printStackTrace()
 		})
 	}
 }

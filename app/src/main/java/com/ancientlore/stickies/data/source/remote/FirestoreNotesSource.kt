@@ -13,8 +13,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 class FirestoreNotesSource private constructor(private val user: FirebaseUser): NotesSource {
 
 	internal companion object : SingletonHolder<FirestoreNotesSource, FirebaseUser>({ FirestoreNotesSource(it) }) {
-		const val USER_DATA = "data"
-		const val USER_NOTES = "notes"
+		private const val TAG = "FirestoreNotesSource"
+
+		private const val USER_DATA = "data"
+		private const val USER_NOTES = "notes"
 
 		private const val FIELD_IMPORTANT = "isImportant"
 		private const val FIELD_COMPLETED = "isCompleted"
@@ -29,7 +31,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 					snapshot.toObjects(Note::class.java)
 							.takeIf { it.isNotEmpty() }
 							?.let { callback.onSuccess(it) }
-							?: callback.onFailure(EmptyResultException())
+							?: callback.onFailure(EmptyResultException("$TAG: empty"))
 				}
 				.addOnFailureListener { callback.onFailure(it) }
 	}
@@ -41,7 +43,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 					snapshot.toObjects(Note::class.java)
 							.takeIf { it.isNotEmpty() }
 							?.let { callback.onSuccess(it) }
-							?: callback.onFailure(EmptyResultException())
+							?: callback.onFailure(EmptyResultException("$TAG: no important notes"))
 				}
 				.addOnFailureListener { callback.onFailure(it) }
 	}
@@ -53,7 +55,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 					snapshot.toObjects(Note::class.java)
 							.takeIf { it.isNotEmpty() }
 							?.let { callback.onSuccess(it) }
-							?: callback.onFailure(EmptyResultException())
+							?: callback.onFailure(EmptyResultException("$TAG: no items with the topic ${topic.name}"))
 				}
 				.addOnFailureListener { callback.onFailure(it) }
 	}
@@ -63,7 +65,7 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 				.addOnSuccessListener { snapshot ->
 					snapshot.toObject(Note::class.java)?.let {
 						callback.onSuccess(it)
-					} ?: callback.onFailure(EmptyResultException())
+					} ?: callback.onFailure(EmptyResultException("$TAG: no item with the id $id"))
 				}
 				.addOnFailureListener { callback.onFailure(it) }
 	}
@@ -86,10 +88,10 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 		requestUserNote(item.id)
 				.set(item)
 				.addOnSuccessListener {
-					Log.d("FirestoreNotesSource", "The note with id ${item.id} has been updated")
+					Log.d(TAG, "The note with id ${item.id} has been updated")
 				}
 				.addOnFailureListener {
-					Log.w("FirestoreNotesSource", "Faild to update the note with id ${item.id}")
+					Log.w(TAG, "Faild to update the note with id ${item.id}")
 				}
 	}
 
@@ -110,10 +112,10 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 		requestUserNote(id)
 				.delete()
 				.addOnSuccessListener {
-					Log.d("FirestoreNotesSource", "The note with id $id has been deleted")
+					Log.d(TAG, "The note with id $id has been deleted")
 				}
 				.addOnFailureListener {
-					Log.w("FirestoreNotesSource", "Faild to delete the note with id $id")
+					Log.w(TAG, "Faild to delete the note with id $id")
 				}
 	}
 
@@ -121,10 +123,10 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 		requestUserNote(id)
 				.update(FIELD_IMPORTANT, isImportant)
 				.addOnSuccessListener {
-					Log.d("FirestoreNotesSource", "The note's $id importance has been set to $isImportant")
+					Log.d(TAG, "The note's $id importance has been set to $isImportant")
 				}
 				.addOnFailureListener {
-					Log.w("FirestoreNotesSource", "Faild to update the note's $id importance")
+					Log.w(TAG, "Faild to update the note's $id importance")
 				}
 	}
 
@@ -132,10 +134,10 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 		requestUserNote(id)
 				.update(FIELD_COMPLETED, isCompleted)
 				.addOnSuccessListener {
-					Log.d("FirestoreNotesSource", "The note's $id completion has been set to $isCompleted")
+					Log.d(TAG, "The note's $id completion has been set to $isCompleted")
 				}
 				.addOnFailureListener {
-					Log.w("FirestoreNotesSource", "Faild to update the note's $id completion")
+					Log.w(TAG, "Faild to update the note's $id completion")
 				}
 	}
 
