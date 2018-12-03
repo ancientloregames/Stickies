@@ -28,9 +28,7 @@ object TopicsRepository: TopicsSource {
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w(TAG, "Local source is empty")
-				else error.printStackTrace()
+				error.printStackTrace()
 				onEmptyLocalSource()
 			}
 		})
@@ -39,7 +37,7 @@ object TopicsRepository: TopicsSource {
 	override fun getTopic(name: String, callback: DataSource.RequestCallback<Topic>) {
 		cacheSource.getTopic(name)?.let {
 			callback.onSuccess(it)
-			return@getTopic
+			return
 		}
 
 		localSource?.getTopic(name, object : DataSource.RequestCallback<Topic> {
@@ -48,8 +46,7 @@ object TopicsRepository: TopicsSource {
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w("TopicsRepository", "No item with id $name in the local database")
+				error.printStackTrace()
 				// TODO load from the remote db
 			}
 		})
@@ -101,11 +98,7 @@ object TopicsRepository: TopicsSource {
 				localSource?.reset(result)
 				resetCache(result)
 			}
-			override fun onFailure(error: Throwable) {
-				if (error is EmptyResultException)
-					Log.w(TAG, "The remote source is empty")
-				else Log.w(TAG, error)
-			}
+			override fun onFailure(error: Throwable) = error.printStackTrace()
 		})
 	}
 

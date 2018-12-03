@@ -26,7 +26,7 @@ class FirestoreTopicsSource private constructor(private val userId: String): Top
 				.addOnSuccessListener { snapshot ->
 					deserialize(snapshot).takeIf { it.isNotEmpty() }
 							?.let { callback.onSuccess(it) }
-							?: callback.onFailure(EmptyResultException())
+							?: callback.onFailure(EmptyResultException("$TAG: empty"))
 				}
 	}
 
@@ -35,7 +35,7 @@ class FirestoreTopicsSource private constructor(private val userId: String): Top
 				.addOnSuccessListener { snapshot ->
 					deserialize(snapshot)
 							?.let { callback.onSuccess(it) }
-							?:callback.onFailure(EmptyResultException())
+							?:callback.onFailure(EmptyResultException("$TAG: no topic with name $name"))
 				}
 				.addOnFailureListener { callback.onFailure(it) }
 	}

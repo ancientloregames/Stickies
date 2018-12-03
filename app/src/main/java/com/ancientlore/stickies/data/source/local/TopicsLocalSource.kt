@@ -11,7 +11,9 @@ import java.util.concurrent.Executors
 class TopicsLocalSource private constructor(private val dao: TopicsDao)
 	: TopicsSource {
 
-	internal companion object : SingletonHolder<TopicsLocalSource, TopicsDao>({ TopicsLocalSource(it) })
+	internal companion object : SingletonHolder<TopicsLocalSource, TopicsDao>({ TopicsLocalSource(it) }) {
+		private const val TAG = "TopicsLocalSource"
+	}
 
 	private val executor: ExecutorService = Executors.newSingleThreadExecutor { r -> Thread(r, "db_worker_topic") }
 
@@ -20,7 +22,7 @@ class TopicsLocalSource private constructor(private val dao: TopicsDao)
 			dao.getAll()
 					.takeIf { it.isNotEmpty() }
 					?.let { callback.onSuccess(it) }
-					?: callback.onFailure(EmptyResultException())
+					?: callback.onFailure(EmptyResultException("$TAG: empty"))
 		}
 	}
 
@@ -28,7 +30,7 @@ class TopicsLocalSource private constructor(private val dao: TopicsDao)
 		executor.submit {
 			dao.findById(name)
 					?.let { callback.onSuccess(it) }
-					?: callback.onFailure(EmptyResultException())
+					?: callback.onFailure(EmptyResultException("$TAG: no topic with name $name"))
 		}
 	}
 
