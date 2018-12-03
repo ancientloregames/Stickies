@@ -27,7 +27,6 @@ import com.ancientlore.stickies.sortdialog.SortDialogFragment
 import com.ancientlore.stickies.topicpicker.TopicPickerActivity
 import com.ancientlore.stickies.utils.tryStartActivity
 import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import kotlinx.android.synthetic.main.activity_noteslist.*
 
@@ -132,8 +131,8 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 		subscriptions.add(viewModel.observeImportNotesRequest()
 				.subscribe { importNotes() })
 
-		subscriptions.add(viewModel.observeCloudSyncRequest()
-				.subscribe { syncWithCloud() })
+		subscriptions.add(viewModel.observeCloudAuthRequest()
+				.subscribe { showCloudAuthForm() })
 	}
 
 	private fun setupList() {
@@ -233,14 +232,7 @@ class NotesListActivity : BasicActivity<ActivityNoteslistBinding, NotesListViewM
 			Toast.makeText(this, R.string.warning_no_app_intent, Toast.LENGTH_SHORT).show()
 	}
 
-	private fun syncWithCloud() {
-		FirebaseAuth.getInstance().currentUser?.let {
-			viewModel.initRemoteNotesRepository(it)
-			//TODO sync
-		} ?:let { showAuthForm() }
-	}
-
-	private fun showAuthForm() {
+	private fun showCloudAuthForm() {
 		val providers = Arrays.asList(
 				AuthUI.IdpConfig.EmailBuilder().build())
 

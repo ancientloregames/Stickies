@@ -14,7 +14,7 @@ import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.utils.marshall
 import com.ancientlore.stickies.utils.split
 import com.ancientlore.stickies.utils.unmarshall
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.BufferedInputStream
@@ -62,7 +62,7 @@ class NotesListViewModel(application: Application,
 	private val showTopicPickerEvent = PublishSubject.create<String>()
 	private val exportNotesEvent = PublishSubject.create<Any>()
 	private val importNotesEvent = PublishSubject.create<Any>()
-	private val cloudSyncEvent = PublishSubject.create<Any>()
+	private val cloudAuthRequest = PublishSubject.create<Any>()
 
 	init {
 		loadAllNotes()
@@ -82,7 +82,7 @@ class NotesListViewModel(application: Application,
 			OPTION_SORT -> showSortMenuEvent.onNext(currentSortOrder)
 			OPTION_EXPORT -> exportNotesEvent.onNext(EmptyObject)
 			OPTION_IMPORT -> importNotesEvent.onNext(EmptyObject)
-			OPTION_CLOUD -> cloudSyncEvent.onNext(EmptyObject)
+			OPTION_CLOUD -> syncOrAuth()
 			else -> return false
 		}
 		return true
@@ -146,7 +146,7 @@ class NotesListViewModel(application: Application,
 
 	fun observeImportNotesRequest() = importNotesEvent as Observable<*>
 
-	fun observeCloudSyncRequest() = cloudSyncEvent as Observable<*>
+	fun observeCloudAuthRequest() = cloudAuthRequest as Observable<*>
 
 	private fun requestQuickNote() {
 		requestScrollToTop.onNext(EmptyObject)
@@ -211,7 +211,8 @@ class NotesListViewModel(application: Application,
 
 	private fun handleCloudAuthResult(resultCode: Int, data: Intent?) {
 		when (resultCode) {
-			Activity.RESULT_OK -> onCloudAuthSuccess()
+			Activity.RESULT_OK -> if (!tryCloudSync())
+				Log.wtf(TAG, "Firebase auth finished with success, but no user was found")
 			else -> Log.w(TAG, "Importing intent finished with resultCode $resultCode")
 		}
 	}
@@ -244,13 +245,19 @@ class NotesListViewModel(application: Application,
 		}
 	}
 
-	private fun onCloudAuthSuccess() {
-		FirebaseAuth.getInstance().currentUser?.let {
-			initRemoteNotesRepository(it)
-			repository.getAllRemotely(object : DataSource.SimpleRequestCallback<List<Note>>()  {
-				override fun onSuccess(result: List<Note>) = setListItems(result)
-			})
-		}
+	private fun syncOrAuth() {
+		val isAuthRequered = !tryCloudSync()
+		if (isAuthRequered) cloudAuthRequest.onNext(EmptyObject)
+	}
+
+	private fun tryCloudSync() = getFirebaseUser()?.let { onCloudAuthSuccess(it);true } ?: false
+
+	private fun onCloudAuthSuccess(user: FirebaseUser) {
+		initRemoteRepositories(user)
+		repository.getAllRemotely(object : DataSource.SimpleRequestCallback<List<Note>>()  {
+			override fun onSuccess(result: List<Note>) = setListItems(result)
+		})
+
 	}
 
 	private fun loadAllNotes() {

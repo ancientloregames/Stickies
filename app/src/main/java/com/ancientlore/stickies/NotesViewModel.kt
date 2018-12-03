@@ -18,20 +18,26 @@ abstract class NotesViewModel(application: Application) : BasicViewModel(applica
 	protected val topicsRep = TopicsRepository
 
 	init {
-		initRepository(application.baseContext)
+		initRepositories(application.baseContext)
 	}
 
-	fun initRemoteNotesRepository(user: FirebaseUser) {
+	protected fun getFirebaseUser() = FirebaseAuth.getInstance().currentUser
+
+	protected fun initRemoteRepositories(user: FirebaseUser) {
 		repository.initRemoteSource(user)
+		topicsRep.initRemoteSource(user.uid)
 	}
 
-	private fun initRepository(context: Context) {
-		val db = NotesDatabase.getInstance(context)
-		repository.initLocalSource(db.notesDao())
-		FirebaseAuth.getInstance().currentUser?.let {
-			initRemoteNotesRepository(it)
+	private fun initLocalRepositories(database: NotesDatabase) {
+		repository.initLocalSource(database.notesDao())
+		topicsRep.initLocalSource(database.topicsDao())
+	}
+
+	private fun initRepositories(context: Context) {
+		initLocalRepositories(NotesDatabase.getInstance(context))
+		getFirebaseUser()?.let {
+			initRemoteRepositories(it)
 		}
-		topicsRep.initLocalSource(db.topicsDao())
 	}
 
 	@CallSuper
