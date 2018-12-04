@@ -149,7 +149,7 @@ object NotesRepository: NotesSource {
 	}
 
 	fun initRemoteSource(user: FirebaseUser) {
-		remoteSource = FirestoreNotesSource.getInstance(user)
+		remoteSource = FirestoreNotesSource.getInstance(user.uid)
 	}
 
 	fun getAllRemotely(callback: DataSource.RequestCallback<List<Note>>) {

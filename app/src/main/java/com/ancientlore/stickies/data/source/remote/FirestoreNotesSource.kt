@@ -7,14 +7,14 @@ import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.data.source.EmptyResultException
 import com.ancientlore.stickies.data.source.NotesSource
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
-class FirestoreNotesSource private constructor(private val user: FirebaseUser): NotesSource {
+class FirestoreNotesSource private constructor(private val userId: String): NotesSource {
 
-	internal companion object : SingletonHolder<FirestoreNotesSource, FirebaseUser>({ FirestoreNotesSource(it) }) {
+	internal companion object : SingletonHolder<FirestoreNotesSource, String>(
+			{ userId -> FirestoreNotesSource(userId) }) {
 		private const val TAG = "FirestoreNotesSource"
 
 		private const val USER_DATA = "data"
@@ -110,39 +110,27 @@ class FirestoreNotesSource private constructor(private val user: FirebaseUser): 
 	override fun deleteItem(id: Long) {
 		requestUserNote(id)
 				.delete()
-				.addOnSuccessListener {
-					Log.d(TAG, "The note with id $id has been deleted")
-				}
-				.addOnFailureListener {
-					Log.w(TAG, "Faild to delete the note with id $id")
-				}
+				.addOnSuccessListener { Log.d(TAG, "The note with id $id has been deleted") }
+				.addOnFailureListener { Log.w(TAG, "Failed to delete the note with id $id") }
 	}
 
 	override fun switchImportance(id: Long, isImportant: Boolean) {
 		requestUserNote(id)
 				.update(FIELD_IMPORTANT, isImportant)
-				.addOnSuccessListener {
-					Log.d(TAG, "The note's $id importance has been set to $isImportant")
-				}
-				.addOnFailureListener {
-					Log.w(TAG, "Faild to update the note's $id importance")
-				}
+				.addOnSuccessListener { Log.d(TAG, "The note's $id importance has been set to $isImportant") }
+				.addOnFailureListener { Log.w(TAG, "Failed to update the note's $id importance") }
 	}
 
 	override fun switchCompletion(id: Long, isCompleted: Boolean) {
 		requestUserNote(id)
 				.update(FIELD_COMPLETED, isCompleted)
-				.addOnSuccessListener {
-					Log.d(TAG, "The note's $id completion has been set to $isCompleted")
-				}
-				.addOnFailureListener {
-					Log.w(TAG, "Faild to update the note's $id completion")
-				}
+				.addOnSuccessListener { Log.d(TAG, "The note's $id completion has been set to $isCompleted") }
+				.addOnFailureListener { Log.w(TAG, "Failed to update the note's $id completion") }
 	}
 
-	private fun requestUserNotes() = db.collection(USER_DATA).document(user.uid).collection(USER_NOTES)
+	private fun requestUserNotes() = db.collection(USER_DATA).document(userId).collection(USER_NOTES)
 
-	private fun requestUserNote(id: Long) = db.collection(USER_DATA).document(user.uid).collection(USER_NOTES).document(id.toString())
+	private fun requestUserNote(id: Long) = requestUserNotes().document(id.toString())
 
 	private fun deserialize(snapshot: DocumentSnapshot) = snapshot.toObject(Note::class.java)
 
