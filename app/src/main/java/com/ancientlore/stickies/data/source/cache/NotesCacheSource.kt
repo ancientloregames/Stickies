@@ -54,11 +54,4 @@ object NotesCacheSource {
 			cache[id]?.isCompleted = isCompleted
 		}
 	}
-
-	fun resetWith(newItems: List<Note>) {
-		cache.clear()
-		for (item in newItems) {
-			cache[item.id] = item
-		}
-	}
 }

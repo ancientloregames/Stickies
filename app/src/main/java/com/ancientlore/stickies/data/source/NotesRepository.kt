@@ -26,8 +26,7 @@ object NotesRepository: NotesSource {
 
 		localSource?.getAll(object : DataSource.RequestCallback<List<Note>> {
 			override fun onSuccess(result: List<Note>) {
-				cacheSource.resetWith(result)
-				isCacheSynced = true
+				syncCache(result)
 				callback.onSuccess(result)
 			}
 			override fun onFailure(error: Throwable) {
@@ -229,5 +228,10 @@ object NotesRepository: NotesSource {
 			}
 			override fun onFailure(error: Throwable) = error.printStackTrace()
 		})
+	}
+
+	private fun syncCache(newNotes: List<Note>) {
+		cacheSource.reset(newNotes)
+		isCacheSynced = true
 	}
 }
