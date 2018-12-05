@@ -24,7 +24,7 @@ abstract class NotesViewModel(application: Application) : BasicViewModel(applica
 	protected fun getFirebaseUser() = FirebaseAuth.getInstance().currentUser
 
 	protected fun initRemoteRepositories(user: FirebaseUser) {
-		repository.initRemoteSource(user)
+		repository.initRemoteSource(user.uid)
 		topicsRep.initRemoteSource(user.uid)
 	}
 

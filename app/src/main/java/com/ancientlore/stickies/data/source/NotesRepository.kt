@@ -7,7 +7,6 @@ import com.ancientlore.stickies.data.source.cache.NotesCacheSource
 import com.ancientlore.stickies.data.source.local.NotesDao
 import com.ancientlore.stickies.data.source.local.NotesLocalSource
 import com.ancientlore.stickies.data.source.remote.FirestoreNotesSource
-import com.google.firebase.auth.FirebaseUser
 
 object NotesRepository: NotesSource {
 
@@ -148,8 +147,8 @@ object NotesRepository: NotesSource {
 		localSource = NotesLocalSource.getInstance(dao)
 	}
 
-	fun initRemoteSource(user: FirebaseUser) {
-		remoteSource = FirestoreNotesSource.getInstance(user.uid)
+	fun initRemoteSource(userId: String) {
+		remoteSource = FirestoreNotesSource.getInstance(userId)
 	}
 
 	fun getAllRemotely(callback: DataSource.RequestCallback<List<Note>>) {
