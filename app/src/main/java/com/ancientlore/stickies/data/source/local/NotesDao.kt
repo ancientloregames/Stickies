@@ -21,7 +21,7 @@ interface NotesDao {
 	@Query("SELECT * FROM notes WHERE id LIKE :id")
 	fun findById(id: Long): Note?
 
-	@Insert(onConflict = OnConflictStrategy.IGNORE)
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	fun insert(note: Note): Long
 
 	@Insert(onConflict = OnConflictStrategy.IGNORE)
