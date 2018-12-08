@@ -148,7 +148,6 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 
 	private fun addNote() {
 		val note = composeNote()
-		topicsRep.insertTopic(Topic(name = note.topic))
 		repository.insertItem(note, object : DataSource.SimpleRequestCallback<Long>() {
 			override fun onSuccess(result: Long) = onNoteIdAssigned(result, note)
 		})
@@ -157,7 +156,13 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 	private fun onNoteIdAssigned(noteId: Long, note: Note) {
 		note.id = noteId
 		note.tryScheduleAlarm(context)
+		addTopic(note.topic)
 		onNoteAdded.onNext(noteId)
+	}
+
+	private fun addTopic(topicName: String) {
+		if (topicName.isNotEmpty())
+			topicsRep.insertTopic(Topic(name = topicName))
 	}
 
 	private fun switchImportance() { isImportant = !isImportant }
