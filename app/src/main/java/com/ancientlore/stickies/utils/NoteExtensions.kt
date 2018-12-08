@@ -33,6 +33,15 @@ fun Note.getListTitle(context: Context): String = getText() ?: context.getString
 fun Note.getTitle(context: Context): String = if (title.isNotEmpty()) title else context.getString(R.string.note_num, id)
 fun Note.spannedBody(): Spanned = Html.fromHtml(body)
 
+fun Note.tryScheduleAlarm(context: Context): Boolean {
+	return if (isNeedAlarm()) {
+		scheduleAlarm(context)
+		true
+	} else false
+}
+
+fun Note.isNeedAlarm() = timeNotify > System.currentTimeMillis()
+
 fun Note.scheduleAlarm(context: Context) {
 	val intent = Intent(context, AlarmReceiver::class.java)
 	intent.putExtra(AlarmReceiver.EXTRA_NOTE_ID, id)

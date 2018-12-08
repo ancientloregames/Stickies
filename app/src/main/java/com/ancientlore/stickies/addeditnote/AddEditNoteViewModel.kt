@@ -14,8 +14,8 @@ import com.ancientlore.stickies.data.model.Note
 import com.ancientlore.stickies.data.model.Topic
 import com.ancientlore.stickies.data.source.DataSource
 import com.ancientlore.stickies.menu.topic.TopicsListAdapter
-import com.ancientlore.stickies.utils.scheduleAlarm
 import com.ancientlore.stickies.utils.spannedBody
+import com.ancientlore.stickies.utils.tryScheduleAlarm
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -154,11 +154,10 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		})
 	}
 
-	private fun onNoteIdAssigned(result: Long, note: Note) {
-		note.id = result
-		if (note.timeNotify > 0)
-			note.scheduleAlarm(context)
-		onNoteAdded.onNext(result)
+	private fun onNoteIdAssigned(noteId: Long, note: Note) {
+		note.id = noteId
+		note.tryScheduleAlarm(context)
+		onNoteAdded.onNext(noteId)
 	}
 
 	private fun switchImportance() { isImportant = !isImportant }
@@ -183,7 +182,7 @@ class AddEditNoteViewModel(application: Application): NotesViewModel(application
 		return Note(id = note.id,
 				timeCreated = note.timeCreated,
 				timeUpdated = System.currentTimeMillis(),
-				timeNotify = note.timeCreated,
+				timeNotify = note.timeNotify,
 				title = noteTitle,
 				body = noteBody,
 				color = noteColor,
