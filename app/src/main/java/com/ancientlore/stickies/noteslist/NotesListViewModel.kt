@@ -299,6 +299,7 @@ class NotesListViewModel(application: Application,
 	private fun resetNotes(newNotes: List<Note>) {
 		repository.reset(newNotes)
 		listAdapter.setItems(newNotes)
+		isEmpty.set(listAdapter.isEmpty())
 	}
 
 	private fun switchImportance(id: Long, isImportant: Boolean) {
